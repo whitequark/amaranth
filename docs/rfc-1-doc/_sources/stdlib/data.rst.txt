@@ -48,7 +48,7 @@ While this implementation works, it is repetitive, error-prone, hard to read, an
 
 .. testcode::
 
-   from amaranth.lib import data
+   from amaranth.lib import data, enum
 
    rgb565_layout = data.StructLayout({
        "red":   5,
@@ -144,6 +144,59 @@ In case the data format is static, :class:`Struct` (or :class:`Union`) can be su
 
        def is_subnormal(self):
            return self.exponent == 0
+
+
+Discriminated unions
+++++++++++++++++++++
+
+This module provides a :class:`UnionLayout`, which is rarely needed by itself, but is very useful in combination with a *discriminant*: a enumeration indicating which field of the union contains valid data.
+
+For example, consider a module that can direct another module to perform one of a few operations, each of which requires its own parameters. The two modules could communicate through a channel with a layout like this:
+
+.. testcode::
+
+   class Command(data.Struct):
+       class Kind(enum.Enum):
+           SET_ADDR  = 0
+           SEND_DATA = 1
+
+       valid  : 1
+       kind   : Kind
+       params : data.UnionLayout({
+           "set_addr": data.StructLayout({
+               "addr": unsigned(32)
+           }),
+           "send_data": data.StructLayout({
+               "byte": unsigned(8)
+           })
+       })
+
+Here, the shape of the ``Command`` is inferred, being large enough to accommodate the biggest of all defined parameter structures, and it is not necessary to manage it manually.
+
+One module could submit a command with:
+
+.. testcode::
+
+   cmd = Command()
+
+   m.d.comb += [
+       cmd.valid.eq(1),
+       cmd.kind.eq(Command.Kind.SET_ADDR),
+       cmd.params.set_addr.addr.eq(0x00001234)
+   ]
+
+The other would react to commands as follows:
+
+.. testcode::
+
+   addr = Signal(32)
+
+   with m.If(cmd.valid):
+       with m.Switch(cmd.kind):
+           with m.Case(Command.Kind.SET_ADDR):
+               m.d.sync += addr.eq(cmd.params.set_addr.addr)
+           with m.Case(Command.Kind.SEND_DATA):
+               ...
 
 
 Modeling structured data

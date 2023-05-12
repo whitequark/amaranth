@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data structures &mdash; Amaranth HDL toolchain 0.4.dev100 documentation</title>
+  <title>Data structures &mdash; Amaranth HDL toolchain 0.4.dev102 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/platformpicker.css" type="text/css" />
@@ -39,7 +39,7 @@
             Amaranth HDL toolchain
           </a>
               <div class="version">
-                0.4.dev100+gd28719a
+                0.4.dev102+g477f511
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -131,7 +131,7 @@
 </pre></div>
 </div>
 <p>While this implementation works, it is repetitive, error-prone, hard to read, and laborous to change; all because the color components are referenced using bit offsets. To improve it, the structure can be described with a <a class="reference internal" href="#amaranth.lib.data.Layout" title="amaranth.lib.data.Layout"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layout</span></code></a> so that the components can be referenced by name:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">amaranth.lib</span> <span class="kn">import</span> <span class="n">data</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">amaranth.lib</span> <span class="kn">import</span> <span class="n">data</span><span class="p">,</span> <span class="n">enum</span>
 
 <span class="n">rgb565_layout</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">StructLayout</span><span class="p">({</span>
     <span class="s2">&quot;red&quot;</span><span class="p">:</span>   <span class="mi">5</span><span class="p">,</span>
@@ -210,6 +210,50 @@
 
     <span class="k">def</span> <span class="nf">is_subnormal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">exponent</span> <span class="o">==</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</section>
+<section id="discriminated-unions">
+<h3>Discriminated unions<a class="headerlink" href="#discriminated-unions" title="Permalink to this heading"></a></h3>
+<p>This module provides a <a class="reference internal" href="#amaranth.lib.data.UnionLayout" title="amaranth.lib.data.UnionLayout"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnionLayout</span></code></a>, which is rarely needed by itself, but is very useful in combination with a <em>discriminant</em>: a enumeration indicating which field of the union contains valid data.</p>
+<p>For example, consider a module that can direct another module to perform one of a few operations, each of which requires its own parameters. The two modules could communicate through a channel with a layout like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Command</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">Struct</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Kind</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="n">SET_ADDR</span>  <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">SEND_DATA</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">valid</span>  <span class="p">:</span> <span class="mi">1</span>
+    <span class="n">kind</span>   <span class="p">:</span> <span class="n">Kind</span>
+    <span class="n">params</span> <span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">UnionLayout</span><span class="p">({</span>
+        <span class="s2">&quot;set_addr&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">StructLayout</span><span class="p">({</span>
+            <span class="s2">&quot;addr&quot;</span><span class="p">:</span> <span class="n">unsigned</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+        <span class="p">}),</span>
+        <span class="s2">&quot;send_data&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">StructLayout</span><span class="p">({</span>
+            <span class="s2">&quot;byte&quot;</span><span class="p">:</span> <span class="n">unsigned</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
+</pre></div>
+</div>
+<p>Here, the shape of the <code class="docutils literal notranslate"><span class="pre">Command</span></code> is inferred, being large enough to accommodate the biggest of all defined parameter structures, and it is not necessary to manage it manually.</p>
+<p>One module could submit a command with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cmd</span> <span class="o">=</span> <span class="n">Command</span><span class="p">()</span>
+
+<span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">comb</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="n">cmd</span><span class="o">.</span><span class="n">valid</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">cmd</span><span class="o">.</span><span class="n">kind</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">Command</span><span class="o">.</span><span class="n">Kind</span><span class="o">.</span><span class="n">SET_ADDR</span><span class="p">),</span>
+    <span class="n">cmd</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">set_addr</span><span class="o">.</span><span class="n">addr</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mh">0x00001234</span><span class="p">)</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The other would react to commands as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">addr</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">m</span><span class="o">.</span><span class="n">If</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">valid</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">m</span><span class="o">.</span><span class="n">Switch</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">kind</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">m</span><span class="o">.</span><span class="n">Case</span><span class="p">(</span><span class="n">Command</span><span class="o">.</span><span class="n">Kind</span><span class="o">.</span><span class="n">SET_ADDR</span><span class="p">):</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="n">addr</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">set_addr</span><span class="o">.</span><span class="n">addr</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">m</span><span class="o">.</span><span class="n">Case</span><span class="p">(</span><span class="n">Command</span><span class="o">.</span><span class="n">Kind</span><span class="o">.</span><span class="n">SEND_DATA</span><span class="p">):</span>
+            <span class="o">...</span>
 </pre></div>
 </div>
 </section>
