@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data structures &mdash; Amaranth HDL toolchain 0.1.dev1228 documentation</title>
+  <title>Data structures &mdash; Amaranth HDL toolchain 0.4.dev100 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/platformpicker.css" type="text/css" />
@@ -39,7 +39,7 @@
             Amaranth HDL toolchain
           </a>
               <div class="version">
-                0.1.dev1228+g141e660
+                0.4.dev100+gd28719a
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -201,6 +201,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">red</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">green</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue</span><span class="p">)[</span><span class="o">-</span><span class="mi">8</span><span class="p">:]</span>
 </pre></div>
 </div>
+<p>Here, the <code class="docutils literal notranslate"><span class="pre">RGBLayout</span></code> class itself is <a class="reference internal" href="../lang.html#lang-shapecasting"><span class="std std-ref">shape-castable</span></a> and can be used anywhere a shape is accepted.</p>
 <p>In case the data format is static, <a class="reference internal" href="#amaranth.lib.data.Struct" title="amaranth.lib.data.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a> (or <a class="reference internal" href="#amaranth.lib.data.Union" title="amaranth.lib.data.Union"><code class="xref py py-class docutils literal notranslate"><span class="pre">Union</span></code></a>) can be subclassed instead of <a class="reference internal" href="#amaranth.lib.data.View" title="amaranth.lib.data.View"><code class="xref py py-class docutils literal notranslate"><span class="pre">View</span></code></a>, to reduce the amount of boilerplate needed:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">IEEE754Single</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">Struct</span><span class="p">):</span>
     <span class="n">fraction</span><span class="p">:</span> <span class="mi">23</span>
@@ -211,7 +212,6 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">exponent</span> <span class="o">==</span> <span class="mi">0</span>
 </pre></div>
 </div>
-<p>Here, the <code class="docutils literal notranslate"><span class="pre">IEEE754Single</span></code> class itself is <a class="reference internal" href="../lang.html#lang-shapecasting"><span class="std std-ref">shape-castable</span></a> and can be used anywhere a shape is accepted.</p>
 </section>
 </section>
 <section id="modeling-structured-data">

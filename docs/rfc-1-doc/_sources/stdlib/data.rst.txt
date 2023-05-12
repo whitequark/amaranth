@@ -131,6 +131,8 @@ In case the data has related operations or transformations, :class:`View` can be
        def brightness(self):
            return (self.red + self.green + self.blue)[-8:]
 
+Here, the ``RGBLayout`` class itself is :ref:`shape-castable <lang-shapecasting>` and can be used anywhere a shape is accepted.
+
 In case the data format is static, :class:`Struct` (or :class:`Union`) can be subclassed instead of :class:`View`, to reduce the amount of boilerplate needed:
 
 .. testcode::
@@ -142,8 +144,6 @@ In case the data format is static, :class:`Struct` (or :class:`Union`) can be su
 
        def is_subnormal(self):
            return self.exponent == 0
-
-Here, the ``IEEE754Single`` class itself is :ref:`shape-castable <lang-shapecasting>` and can be used anywhere a shape is accepted.
 
 
 Modeling structured data
