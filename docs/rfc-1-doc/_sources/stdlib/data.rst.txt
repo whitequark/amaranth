@@ -28,8 +28,8 @@ The fundamental Amaranth type is a :class:`Value`: a sequence of bits that can a
 
 .. testsetup::
 
-   from amaranth import *
-   m = Module()
+    from amaranth import *
+    m = Module()
 
 For example, consider a module that processes pixels, converting them from RGB to grayscale. The color pixel format is RGB565:
 
@@ -39,33 +39,33 @@ This module could be implemented (using a fast but *very* approximate method) as
 
 .. testcode::
 
-   i_color = Signal(16)
-   o_gray  = Signal(8)
+    i_color = Signal(16)
+    o_gray  = Signal(8)
 
-   m.d.comb += o_gray.eq((i_color[0:5] + i_color[5:11] + i_color[11:16]) << 1)
+    m.d.comb += o_gray.eq((i_color[0:5] + i_color[5:11] + i_color[11:16]) << 1)
 
 While this implementation works, it is repetitive, error-prone, hard to read, and laborous to change; all because the color components are referenced using bit offsets. To improve it, the structure can be described with a :class:`Layout` so that the components can be referenced by name:
 
 .. testcode::
 
-   from amaranth.lib import data, enum
+    from amaranth.lib import data, enum
 
-   rgb565_layout = data.StructLayout({
-       "red":   5,
-       "green": 6,
-       "blue":  5
-   })
+    rgb565_layout = data.StructLayout({
+        "red":   5,
+        "green": 6,
+        "blue":  5
+    })
 
-   i_color = data.View(rgb565_layout)
-   o_gray  = Signal(8)
+    i_color = data.View(rgb565_layout)
+    o_gray  = Signal(8)
 
-   m.d.comb += o_gray.eq((i_color.red + i_color.green + i_color.blue) << 1)
+    m.d.comb += o_gray.eq((i_color.red + i_color.green + i_color.blue) << 1)
 
 The :class:`View` is :ref:`value-castable <lang-valuecasting>` and can be used anywhere a plain value can be used. For example, it can be assigned to in the usual way:
 
 .. testcode::
 
-   m.d.comb += i_color.eq(0) # everything is black
+    m.d.comb += i_color.eq(0) # everything is black
 
 
 Composing layouts
@@ -77,20 +77,20 @@ For example, consider a module that processes RGB pixels in groups of up to four
 
 .. testcode::
 
-   input_layout = data.StructLayout({
-       "pixels": data.ArrayLayout(rgb565_layout, 4),
-       "valid":  4
-   })
+    input_layout = data.StructLayout({
+        "pixels": data.ArrayLayout(rgb565_layout, 4),
+        "valid":  4
+    })
 
-   i_stream = data.View(input_layout)
-   r_accum  = Signal(32)
+    i_stream = data.View(input_layout)
+    r_accum  = Signal(32)
 
-   m.d.sync += r_accum.eq(
-       r_accum + sum((i_stream.pixels[n].red +
-                      i_stream.pixels[n].green +
-                      i_stream.pixels[n].blue)
-                     * i_stream.valid[n]
-                     for n in range(len(i_stream.valid))))
+    m.d.sync += r_accum.eq(
+        r_accum + sum((i_stream.pixels[n].red +
+                       i_stream.pixels[n].green +
+                       i_stream.pixels[n].blue)
+                      * i_stream.valid[n]
+                      for n in range(len(i_stream.valid))))
 
 Note how the width of ``i_stream`` is never defined explicitly; it is instead inferred from the shapes of its fields.
 
@@ -106,30 +106,30 @@ In case the data format is defined using a family of layouts instead of a single
 
 .. testcode::
 
-   def rgb_layout(r_bits, g_bits, b_bits):
-       return data.StructLayout({
-           "red":   unsigned(r_bits),
-           "green": unsigned(g_bits),
-           "blue":  unsigned(b_bits)
-       })
+    def rgb_layout(r_bits, g_bits, b_bits):
+        return data.StructLayout({
+            "red":   unsigned(r_bits),
+            "green": unsigned(g_bits),
+            "blue":  unsigned(b_bits)
+        })
 
-   rgb565_layout = rgb_layout(5, 6, 5)
-   rgb24_layout  = rgb_layout(8, 8, 8)
+    rgb565_layout = rgb_layout(5, 6, 5)
+    rgb24_layout  = rgb_layout(8, 8, 8)
 
 In case the data has related operations or transformations, :class:`View` can be subclassed to define methods implementing them:
 
 .. testcode::
 
-   class RGBLayout(data.View):
-       def __init__(self, target=None, *, r_bits, g_bits, b_bits, **kwargs):
-           super().__init__(layout=data.StructLayout({
-               "red":   unsigned(r_bits),
-               "green": unsigned(g_bits),
-               "blue":  unsigned(b_bits)
-           }, target=target, **kwargs))
+    class RGBLayout(data.View):
+        def __init__(self, target=None, *, r_bits, g_bits, b_bits, **kwargs):
+            super().__init__(layout=data.StructLayout({
+                "red":   unsigned(r_bits),
+                "green": unsigned(g_bits),
+                "blue":  unsigned(b_bits)
+            }, target=target, **kwargs))
 
-       def brightness(self):
-           return (self.red + self.green + self.blue)[-8:]
+        def brightness(self):
+            return (self.red + self.green + self.blue)[-8:]
 
 Here, the ``RGBLayout`` class itself is :ref:`shape-castable <lang-shapecasting>` and can be used anywhere a shape is accepted.
 
@@ -137,13 +137,13 @@ In case the data format is static, :class:`Struct` (or :class:`Union`) can be su
 
 .. testcode::
 
-   class IEEE754Single(data.Struct):
-       fraction: 23
-       exponent:  8 = 0x7f
-       sign:      1
+    class IEEE754Single(data.Struct):
+        fraction: 23
+        exponent:  8 = 0x7f
+        sign:      1
 
-       def is_subnormal(self):
-           return self.exponent == 0
+        def is_subnormal(self):
+            return self.exponent == 0
 
 
 Discriminated unions
@@ -155,21 +155,21 @@ For example, consider a module that can direct another module to perform one of 
 
 .. testcode::
 
-   class Command(data.Struct):
-       class Kind(enum.Enum):
-           SET_ADDR  = 0
-           SEND_DATA = 1
+    class Command(data.Struct):
+        class Kind(enum.Enum):
+            SET_ADDR  = 0
+            SEND_DATA = 1
 
-       valid  : 1
-       kind   : Kind
-       params : data.UnionLayout({
-           "set_addr": data.StructLayout({
-               "addr": unsigned(32)
-           }),
-           "send_data": data.StructLayout({
-               "byte": unsigned(8)
-           })
-       })
+        valid  : 1
+        kind   : Kind
+        params : data.UnionLayout({
+            "set_addr": data.StructLayout({
+                "addr": unsigned(32)
+            }),
+            "send_data": data.StructLayout({
+                "byte": unsigned(8)
+            })
+        })
 
 Here, the shape of the ``Command`` is inferred, being large enough to accommodate the biggest of all defined parameter structures, and it is not necessary to manage it manually.
 
@@ -177,25 +177,25 @@ One module could submit a command with:
 
 .. testcode::
 
-   cmd = Command()
+    cmd = Command()
 
-   m.d.comb += [
-       cmd.valid.eq(1),
-       cmd.kind.eq(Command.Kind.SET_ADDR),
-       cmd.params.set_addr.addr.eq(0x00001234)
-   ]
+    m.d.comb += [
+        cmd.valid.eq(1),
+        cmd.kind.eq(Command.Kind.SET_ADDR),
+        cmd.params.set_addr.addr.eq(0x00001234)
+    ]
 
 The other would react to commands as follows:
 
 .. testcode::
 
-   addr = Signal(32)
+    addr = Signal(32)
 
-   with m.If(cmd.valid):
-       with m.Switch(cmd.kind):
-           with m.Case(Command.Kind.SET_ADDR):
-               m.d.sync += addr.eq(cmd.params.set_addr.addr)
-           with m.Case(Command.Kind.SEND_DATA):
+    with m.If(cmd.valid):
+        with m.Switch(cmd.kind):
+            with m.Case(Command.Kind.SET_ADDR):
+                m.d.sync += addr.eq(cmd.params.set_addr.addr)
+            with m.Case(Command.Kind.SEND_DATA):
                ...
 
 
