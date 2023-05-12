@@ -39,7 +39,7 @@
             Amaranth HDL toolchain
           </a>
               <div class="version">
-                0.4.dev103+g30ecaf4
+                0.4.dev103+g5d84cbe
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -539,7 +539,7 @@ layout is the size of its element multiplied by its length.</p>
 <p>The fields of a flexible layout can be located arbitrarily, and its size is explicitly defined.</p>
 <p>For example, the following layout of a 16-bit value:</p>
 <img alt="../_images/flexible_layout.svg" src="../_images/flexible_layout.svg" /><p>can be described with:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">FlexibleLayout</span><span class="p">({</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">FlexibleLayout</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="p">{</span>
     <span class="s2">&quot;first&quot;</span><span class="p">:</span>  <span class="n">data</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">unsigned</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span>
     <span class="s2">&quot;second&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">unsigned</span><span class="p">(</span><span class="mi">7</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span>
     <span class="s2">&quot;third&quot;</span><span class="p">:</span>  <span class="n">data</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">unsigned</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="mi">10</span><span class="p">),</span>
