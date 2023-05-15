@@ -118,22 +118,32 @@ In case the data format is defined using a family of layouts instead of a single
 
 In case the data has related operations or transformations, :class:`View` can be subclassed to define methods implementing them:
 
-.. todo:: fix this
+.. testcode::
 
-    .. code::
+    class RGBLayout(data.StructLayout):
+        def __init__(self, r_bits, g_bits, b_bits):
+            super().__init__({
+                "red":   unsigned(r_bits),
+                "green": unsigned(g_bits),
+                "blue":  unsigned(b_bits)
+            })
 
-        class RGBLayout(data.View):
-            def __init__(self, target=None, *, r_bits, g_bits, b_bits, **kwargs):
-                super().__init__(data.StructLayout({
-                    "red":   unsigned(r_bits),
-                    "green": unsigned(g_bits),
-                    "blue":  unsigned(b_bits)
-                }, target, **kwargs))
+        def __call__(self, value):
+            return RGBView(self, value)
 
-            def brightness(self):
-                return (self.red + self.green + self.blue)[-8:]
+    class RGBView(data.View):
+        def brightness(self):
+            return (self.red + self.green + self.blue)[-8:]
 
-Here, the ``RGBLayout`` class itself is :ref:`shape-castable <lang-shapecasting>` and can be used anywhere a shape is accepted.
+Here, the ``RGBLayout`` class itself is :ref:`shape-castable <lang-shapecasting>` and can be used anywhere a shape is accepted. When a :class:`Signal` is constructed with this layout, the returned value is wrapped in an ``RGBView``:
+
+.. doctest::
+
+   >>> pixel = Signal(RGBLayout(5, 6, 5))
+   >>> len(pixel.as_value())
+   16
+   >>> pixel.red
+   (slice (sig pixel) 0:5)
 
 In case the data format is static, :class:`Struct` (or :class:`Union`) can be subclassed instead of :class:`View`, to reduce the amount of boilerplate needed:
 
