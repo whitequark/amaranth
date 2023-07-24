@@ -24,13 +24,19 @@ The Amaranth codebase uses PDM_ to structure the development workflow. Please `i
 
    $ pdm install --dev
 
-This command creates a :ref:`virtual environment <python:tut-venv>` located at ``./.venv/`` and installs the runtime dependencies of Amaranth as well as the necessary development tools.
+This command creates a :ref:`virtual environment <python:tut-venv>` located at ``./.venv/`` and installs the runtime dependencies of Amaranth as well as the necessary development tools in it.
 
-Amaranth itself is installed in the *editable mode*, meaning that the changes to its source files are immediately reflected in tests and documentation. However, other changes (addition or removal of source files, or changes to dependencies) will not be picked up, and it is a good habit to re-run ``pdm install`` after updating the repository checkout.
+Amaranth itself is installed in the *editable mode*, meaning that the changes to its source files are immediately reflected in running the tests and documentation. However, other changes (addition or removal of source files, or changes to dependencies) will not be picked up, and it is a good habit to run ``pdm install`` each time after updating the source tree.
 
 
 Running the testsuite
 ---------------------
+
+Some of the tests make use of `formal methods`_, and to run the complete testsuite, it is necessary to install the Yosys_ frontend and the yices2_ SMT solver. Without the tools installed, the tests that rely on formal verification will be skipped.
+
+.. _formal methods: https://symbiyosys.readthedocs.io/en/latest/
+.. _Yosys: https://github.com/YosysHQ/yosys
+.. _yices2: https://github.com/SRI-CSL/yices2
 
 To run the testsuite, use:
 
@@ -50,7 +56,7 @@ To build the documentation once, use:
 
 The documentation index is located at ``./docs/_build/index.html``.
 
-Working on documentation usually involves making many small, iterative channels, and it is laborous to rebuild it manually each time. To start a process that rebuilds documentation automatically on change, use:
+Working on documentation usually involves making many small, iterative changes, and it is laborous to rebuild it manually each time. To start a process that rebuilds documentation automatically on change, use:
 
 .. code-block:: console
 

@@ -38,7 +38,7 @@
             Amaranth HDL toolchain
           </a>
               <div class="version">
-                0.4.dev158+g6624494
+                0.4.dev158+gc8ad012
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -114,11 +114,12 @@
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pdm<span class="w"> </span>install<span class="w"> </span>--dev
 </pre></div>
 </div>
-<p>This command creates a <a class="reference external" href="https://docs.python.org/3/tutorial/venv.html#tut-venv" title="(in Python v3.11)"><span class="xref std std-ref">virtual environment</span></a> located at <code class="docutils literal notranslate"><span class="pre">./.venv/</span></code> and installs the runtime dependencies of Amaranth as well as the necessary development tools.</p>
-<p>Amaranth itself is installed in the <em>editable mode</em>, meaning that the changes to its source files are immediately reflected in tests and documentation. However, other changes (addition or removal of source files, or changes to dependencies) will not be picked up, and it is a good habit to re-run <code class="docutils literal notranslate"><span class="pre">pdm</span> <span class="pre">install</span></code> after updating the repository checkout.</p>
+<p>This command creates a <a class="reference external" href="https://docs.python.org/3/tutorial/venv.html#tut-venv" title="(in Python v3.11)"><span class="xref std std-ref">virtual environment</span></a> located at <code class="docutils literal notranslate"><span class="pre">./.venv/</span></code> and installs the runtime dependencies of Amaranth as well as the necessary development tools in it.</p>
+<p>Amaranth itself is installed in the <em>editable mode</em>, meaning that the changes to its source files are immediately reflected in running the tests and documentation. However, other changes (addition or removal of source files, or changes to dependencies) will not be picked up, and it is a good habit to run <code class="docutils literal notranslate"><span class="pre">pdm</span> <span class="pre">install</span></code> each time after updating the source tree.</p>
 </section>
 <section id="running-the-testsuite">
 <h3>Running the testsuite<a class="headerlink" href="#running-the-testsuite" title="Permalink to this heading"></a></h3>
+<p>Some of the tests make use of <a class="reference external" href="https://symbiyosys.readthedocs.io/en/latest/">formal methods</a>, and to run the complete testsuite, it is necessary to install the <a class="reference external" href="https://github.com/YosysHQ/yosys">Yosys</a> frontend and the <a class="reference external" href="https://github.com/SRI-CSL/yices2">yices2</a> SMT solver. Without the tools installed, the tests that rely on formal verification will be skipped.</p>
 <p>To run the testsuite, use:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pdm<span class="w"> </span>run<span class="w"> </span><span class="nb">test</span>
 </pre></div>
@@ -131,7 +132,7 @@
 </pre></div>
 </div>
 <p>The documentation index is located at <code class="docutils literal notranslate"><span class="pre">./docs/_build/index.html</span></code>.</p>
-<p>Working on documentation usually involves making many small, iterative channels, and it is laborous to rebuild it manually each time. To start a process that rebuilds documentation automatically on change, use:</p>
+<p>Working on documentation usually involves making many small, iterative changes, and it is laborous to rebuild it manually each time. To start a process that rebuilds documentation automatically on change, use:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pdm<span class="w"> </span>run<span class="w"> </span>document-live
 </pre></div>
 </div>
