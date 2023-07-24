@@ -1,7 +1,7 @@
 Contributing
 ############
 
-The Amaranth project is a collective work of many people collaborating over the years, and it would not be the same without everyone's unique perspectives and contributions. We are glad that you are considering joining this group! This page will guide you through some of the ways to contribute.
+The Amaranth project is a collective work of many people collaborating over the years, and it would not be the same without everyone's unique perspectives and contributions. We're glad that you are considering joining us! This page will guide you through some of the ways to contribute.
 
 .. warning::
 
