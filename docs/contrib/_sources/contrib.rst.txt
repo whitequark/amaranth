@@ -116,7 +116,7 @@ At the moment there is no formal style guide for source code. We ask that you do
 Weekly meetings
 ===============
 
-Every Tuesday at 17:00 UTC on our IRC channel `#amaranth-lang at libera.chat <irc>`_ or Matrix channel `#amaranth-lang@matrix.org <matrix>`_ (the channels are bridged together: the same messages appear on both), Amaranth maintainers meet with users and contributors to discuss newly submitted Requests for Comments and any other issues that warrant broad attention. These public meetings are the primary avenue of decision making.
+Every Monday at 17:00 UTC on our IRC channel `#amaranth-lang at libera.chat <irc>`_ or Matrix channel `#amaranth-lang@matrix.org <matrix>`_ (the channels are bridged together: the same messages appear on both), Amaranth maintainers meet with users and contributors to discuss newly submitted Requests for Comments and any other issues that warrant broad attention. These public meetings are the primary avenue of decision making.
 
 .. _irc: https://web.libera.chat/#amaranth-lang
 .. _matrix: https://matrix.to/#/#amaranth-lang:matrix.org
