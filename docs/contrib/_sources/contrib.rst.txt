@@ -32,11 +32,12 @@ Amaranth itself is installed in the *editable mode*, meaning that the changes to
 Running the testsuite
 ---------------------
 
-Some of the tests make use of `formal methods`_, and to run the complete testsuite, it is necessary to install the Yosys_ frontend and the yices2_ SMT solver. Without the tools installed, the tests that rely on formal verification will be skipped.
+Some of the tests make use of `formal methods`_, and to run the complete testsuite, it is necessary to install the Yosys_ frontend and the yices2_ SMT solver. These are distributed as a part of the `OSS CAD Suite`_. Without the tools being installed, the tests that rely on formal verification will be skipped.
 
 .. _formal methods: https://symbiyosys.readthedocs.io/en/latest/
 .. _Yosys: https://github.com/YosysHQ/yosys
 .. _yices2: https://github.com/SRI-CSL/yices2
+.. _OSS CAD Suite: https://github.com/YosysHQ/oss-cad-suite-build
 
 To run the testsuite, use:
 
@@ -62,7 +63,7 @@ Working on documentation usually involves making many small, iterative changes, 
 
    $ pdm run document-live
 
-While it is running you can browse the documentation at `https://127.0.0.1:8000 <https://127.0.0.1:8000>`_. The edits you make are reflected on the document open in the browser after a short delay. It is useful to keep an eye on the terminal where this process is running, as any information about syntactic errors, missing references, and other issues will be printed there.
+While it is running you can browse the documentation at `https://127.0.0.1:8000 <https://127.0.0.1:8000>`_. The edits you make are reflected on the document open in the browser after a short delay. It is useful to keep an eye on the terminal where this process is running, as the information about syntactic errors, missing references, and other issues will be printed there.
 
 Occasionally, the documentation builder will persist in rendering an incorrect or outdated version of the contents of a Python source. To fix this, run:
 

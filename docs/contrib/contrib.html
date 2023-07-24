@@ -38,7 +38,7 @@
             Amaranth HDL toolchain
           </a>
               <div class="version">
-                0.4.dev158+gc8ad012
+                0.4.dev158+g204a1e6
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -119,7 +119,7 @@
 </section>
 <section id="running-the-testsuite">
 <h3>Running the testsuite<a class="headerlink" href="#running-the-testsuite" title="Permalink to this heading"></a></h3>
-<p>Some of the tests make use of <a class="reference external" href="https://symbiyosys.readthedocs.io/en/latest/">formal methods</a>, and to run the complete testsuite, it is necessary to install the <a class="reference external" href="https://github.com/YosysHQ/yosys">Yosys</a> frontend and the <a class="reference external" href="https://github.com/SRI-CSL/yices2">yices2</a> SMT solver. Without the tools installed, the tests that rely on formal verification will be skipped.</p>
+<p>Some of the tests make use of <a class="reference external" href="https://symbiyosys.readthedocs.io/en/latest/">formal methods</a>, and to run the complete testsuite, it is necessary to install the <a class="reference external" href="https://github.com/YosysHQ/yosys">Yosys</a> frontend and the <a class="reference external" href="https://github.com/SRI-CSL/yices2">yices2</a> SMT solver. These are distributed as a part of the <a class="reference external" href="https://github.com/YosysHQ/oss-cad-suite-build">OSS CAD Suite</a>. Without the tools being installed, the tests that rely on formal verification will be skipped.</p>
 <p>To run the testsuite, use:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pdm<span class="w"> </span>run<span class="w"> </span><span class="nb">test</span>
 </pre></div>
@@ -136,7 +136,7 @@
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pdm<span class="w"> </span>run<span class="w"> </span>document-live
 </pre></div>
 </div>
-<p>While it is running you can browse the documentation at <a class="reference external" href="https://127.0.0.1:8000">https://127.0.0.1:8000</a>. The edits you make are reflected on the document open in the browser after a short delay. It is useful to keep an eye on the terminal where this process is running, as any information about syntactic errors, missing references, and other issues will be printed there.</p>
+<p>While it is running you can browse the documentation at <a class="reference external" href="https://127.0.0.1:8000">https://127.0.0.1:8000</a>. The edits you make are reflected on the document open in the browser after a short delay. It is useful to keep an eye on the terminal where this process is running, as the information about syntactic errors, missing references, and other issues will be printed there.</p>
 <p>Occasionally, the documentation builder will persist in rendering an incorrect or outdated version of the contents of a Python source. To fix this, run:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pdm<span class="w"> </span>run<span class="w"> </span>document-live<span class="w"> </span>-a
 </pre></div>
