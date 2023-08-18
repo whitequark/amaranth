@@ -39,7 +39,7 @@
             Amaranth HDL toolchain
           </a>
               <div class="version">
-                0.4.dev171+gbfc9e4e
+                0.4.dev171+gdc14a43
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -205,11 +205,22 @@ member raises an <a class="reference external" href="https://docs.python.org/3/l
 the <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a> is created as a signature member), or
 a <a class="reference internal" href="../lang.html#lang-shapecasting"><span class="std std-ref">shape-castable</span></a> object (in which case it is created as a port
 member). After creation the <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a> instance cannot be modified.</p>
-<p>Although instances can be created directly, most often</p>
+<p>Although instances can be created directly, most often they will be created through
+<a class="reference internal" href="#amaranth.lib.wiring.In" title="amaranth.lib.wiring.In"><code class="xref py py-data docutils literal notranslate"><span class="pre">In</span></code></a> and <a class="reference internal" href="#amaranth.lib.wiring.Out" title="amaranth.lib.wiring.Out"><code class="xref py py-data docutils literal notranslate"><span class="pre">Out</span></code></a>, e.g. <code class="code highlight pycode python docutils literal highlight-python"><span class="n">In</span><span class="p">(</span><span class="n">unsigned</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span></code> or
+<code class="code highlight pycode python docutils literal highlight-python"><span class="n">Out</span><span class="p">(</span><span class="n">stream</span><span class="o">.</span><span class="n">Signature</span><span class="p">(</span><span class="n">RGBPixel</span><span class="p">))</span></code>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Member.flip">
 <span class="sig-name descname"><span class="pre">flip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Member.flip" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a</p>
+<dd><p>Flip the data flow of this member.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A new <code class="code highlight pycode python docutils literal highlight-python"><span class="n">member</span></code> with <code class="code highlight pycode python docutils literal highlight-python"><span class="n">member</span><span class="o">.</span><span class="n">flow</span></code> equal to <code class="code highlight pycode python docutils literal highlight-python"><span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span></code>,
+and identical to <code class="code highlight pycode python docutils literal highlight-python"><span class="bp">self</span></code> other than that.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
