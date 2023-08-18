@@ -39,7 +39,7 @@
             Amaranth HDL toolchain
           </a>
               <div class="version">
-                0.4.dev171+g249f186
+                0.4.dev171+gbfc9e4e
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -200,11 +200,12 @@ treated as the <cite>initiator</cite>, the same as in the <a class="reference in
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amaranth.lib.wiring.</span></span><span class="sig-name descname"><span class="pre">Member</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Member" title="Permalink to this definition"></a></dt>
 <dd><p>Description of a signature member. This class is a discriminated union: its instances describe
 either a <cite>port member</cite> or a <cite>signature member</cite>, and accessing properties for the wrong kind of
-member raises a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.11)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a>.</p>
+member raises an <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AttributeError" title="(in Python v3.11)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">AttributeError</span></code></a>.</p>
 <p>The class is created from a <cite>description</cite>: a <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> instance (in which case
-the <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a> is created as a signature member), or</p>
-<p>a <a class="reference internal" href="../lang.html#lang-shapecasting"><span class="std std-ref">shape-castable</span></a> object (in which case it is created as a port
+the <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a> is created as a signature member), or
+a <a class="reference internal" href="../lang.html#lang-shapecasting"><span class="std std-ref">shape-castable</span></a> object (in which case it is created as a port
 member). After creation the <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a> instance cannot be modified.</p>
+<p>Although instances can be created directly, most often</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Member.flip">
 <span class="sig-name descname"><span class="pre">flip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Member.flip" title="Permalink to this definition"></a></dt>
