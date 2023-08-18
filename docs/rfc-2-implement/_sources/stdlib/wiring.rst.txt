@@ -1,0 +1,102 @@
+..
+  finished: 6/16
+
+  xx autoexception:: SignatureError
+  xx autoexception:: ConnectionError
+  xx autoclass:: Flow()
+  xx autodata:: Out
+  xx autodata:: In
+  .. autoclass:: Member(flow, description, *, reset=None)
+  .. autoclass:: SignatureMembers
+  xx autoclass:: FlippedSignatureMembers
+  .. autoclass:: Signature
+  .. autoclass:: FlippedSignature
+  xx autoclass:: SignatureMeta
+  .. autoclass:: Interface
+  .. autoclass:: TransposedInterface
+  .. autofunction:: transpose
+  .. autofunction:: connect
+  .. autoclass:: Component
+
+Components and interfaces
+#########################
+
+.. py:module:: amaranth.lib.wiring
+
+The :mod:`amaranth.lib.wiring` module provides a way to describe the interfaces between components and connect them to each other in a reliable and convenient manner.
+
+.. testsetup::
+
+   from amaranth import *
+   from amaranth.lib import wiring
+   from amaranth.lib.wiring import In, Out
+
+
+Introduction
+============
+
+.. todo::
+
+   Write this section
+
+
+Signatures
+==========
+
+.. autoclass:: Flow()
+   :no-members:
+
+   .. autoattribute:: Out
+      :no-value:
+   .. autoattribute:: In
+      :no-value:
+   .. automethod:: flip
+   .. automethod:: __call__
+
+.. autodata:: Out
+.. autodata:: In
+
+.. autoclass:: Member(flow, description, *, reset=None)
+
+.. autoexception:: SignatureError
+
+.. autoclass:: SignatureMembers
+.. autoclass:: FlippedSignatureMembers
+
+.. autoclass:: Signature
+.. autoclass:: FlippedSignature
+.. autoclass:: SignatureMeta
+
+
+Interfaces
+==========
+
+.. todo::
+
+   Finish this section
+
+.. autoclass:: Interface
+.. autoclass:: TransposedInterface
+.. autofunction:: transpose
+
+
+Making connections
+==================
+
+.. todo::
+
+   Finish this section
+
+.. autoexception:: ConnectionError
+
+.. autofunction:: connect
+
+
+Components
+==========
+
+.. todo::
+
+   Finish this section
+
+.. autoclass:: Component
