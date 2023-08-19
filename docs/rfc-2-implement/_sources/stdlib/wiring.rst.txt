@@ -13,8 +13,8 @@
   .. autoclass:: FlippedSignature
   xx autoclass:: SignatureMeta
   .. autoclass:: Interface
-  .. autoclass:: TransposedInterface
-  .. autofunction:: transpose
+  .. autoclass:: FlippedInterface
+  .. autofunction:: flipped
   .. autofunction:: connect
   .. autoclass:: Component
 
@@ -76,8 +76,8 @@ Interfaces
    Finish this section
 
 .. autoclass:: Interface
-.. autoclass:: TransposedInterface
-.. autofunction:: transpose
+.. autoclass:: FlippedInterface
+.. autofunction:: flipped
 
 
 Making connections
