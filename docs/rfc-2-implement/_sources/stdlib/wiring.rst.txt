@@ -1,12 +1,12 @@
 ..
-  finished: 7/16
+  finished: 8/16
 
   xx autoexception:: SignatureError
   xx autoexception:: ConnectionError
   xx autoclass:: Flow()
   xx autodata:: Out
   xx autodata:: In
-  .. autoclass:: Member(flow, description, *, reset=None)
+  xx autoclass:: Member(flow, description, *, reset=None)
   .. autoclass:: SignatureMembers
   xx autoclass:: FlippedSignatureMembers
   .. autoclass:: Signature
