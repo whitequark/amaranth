@@ -62,6 +62,9 @@ Signatures
 
 .. autoclass:: SignatureMembers
 .. autoclass:: FlippedSignatureMembers
+   :no-members:
+
+   .. automethod:: flip
 
 .. autoclass:: Signature
 .. autoclass:: FlippedSignature
