@@ -1,5 +1,5 @@
 ..
-  finished: 8/16
+  finished: 13/16
 
   xx autoexception:: SignatureError
   xx autoexception:: ConnectionError
@@ -7,18 +7,18 @@
   xx autodata:: Out
   xx autodata:: In
   xx autoclass:: Member(flow, description, *, reset=None)
-  .. autoclass:: SignatureMembers
+  xx autoclass:: SignatureMembers
   xx autoclass:: FlippedSignatureMembers
   .. autoclass:: Signature
-  .. autoclass:: FlippedSignature
+  xx autoclass:: FlippedSignature
   xx autoclass:: SignatureMeta
-  .. autoclass:: Interface
-  .. autoclass:: FlippedInterface
-  .. autofunction:: flipped
+  xx autoclass:: Interface
+  xx autoclass:: FlippedInterface
+  xx autofunction:: flipped
   .. autofunction:: connect
   .. autoclass:: Component
 
-Components and interfaces
+Interfaces and components
 #########################
 
 .. py:module:: amaranth.lib.wiring
@@ -42,6 +42,10 @@ Introduction
 
 Signatures
 ==========
+
+.. todo::
+
+   Finish this section
 
 .. autoclass:: Flow()
    :no-members:
@@ -67,7 +71,14 @@ Signatures
    .. automethod:: flip
 
 .. autoclass:: Signature
-.. autoclass:: FlippedSignature
+.. autoclass:: FlippedSignature(unflipped)
+   :no-members:
+
+   .. automethod:: flip
+   .. automethod:: __getattr__
+   .. automethod:: __setattr__
+   .. automethod:: __delattr__
+
 .. autoclass:: SignatureMeta
 
 
@@ -79,7 +90,8 @@ Interfaces
    Finish this section
 
 .. autoclass:: Interface
-.. autoclass:: FlippedInterface
+.. autoclass:: FlippedInterface(unflipped)
+
 .. autofunction:: flipped
 
 
