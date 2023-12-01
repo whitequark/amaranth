@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Interfaces and components &mdash; Amaranth HDL toolchain 0.4.dev243 documentation</title>
+  <title>Interfaces and components &mdash; Amaranth HDL toolchain 0.4.dev255 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/platformpicker.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=f0cea62c"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=fbf062bc"></script>
         <script src="../_static/doctools.js?v=888ff710"></script>
         <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
         <script src="../_static/platformpicker.js"></script>
@@ -38,7 +38,7 @@
             Amaranth HDL toolchain
           </a>
               <div class="version">
-                0.4.dev243+g245c530c.editable
+                0.4.dev255+gb19483ad.editable
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -384,9 +384,9 @@ In addition, the container can be <cite>frozen</cite>, which disallows addition 
 a container recursively freezes the members of any signatures inside.</p>
 <p>In addition to the use of the superscript operator, multiple members can be added at once with
 the <code class="code highlight pc python docutils literal highlight-python"><span class="o">+=</span></code> opreator.</p>
-<p>The <a class="reference internal" href="#amaranth.lib.wiring.SignatureMembers.create" title="amaranth.lib.wiring.SignatureMembers.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a> converts this mapping into a mapping of names to signature members (signals
-and interface objects) by creating them from their descriptions. The created mapping can be
-used to populate an interface object.</p>
+<p>The <a class="reference internal" href="#amaranth.lib.wiring.SignatureMembers.create" title="amaranth.lib.wiring.SignatureMembers.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a> method converts this mapping into a mapping of names to signature members
+(signals and interface objects) by creating them from their descriptions. The created mapping
+can be used to populate an interface object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.SignatureMembers.flip">
 <span class="sig-name descname"><span class="pre">flip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.SignatureMembers.flip" title="Permalink to this definition"></a></dt>
@@ -563,7 +563,7 @@ a list of members is returned, for two dimensions a list of lists is returned, a
 <dd class="field-odd"><p>Mapping of names to actual signature members.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> to <code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code> or interface object or a potentially nested list of these</p>
+<dd class="field-even"><p>dict of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> to <a class="reference internal" href="../lang.html#lang-valuecasting"><span class="std std-ref">value-castable</span></a> or interface object or a potentially nested list of these</p>
 </dd>
 </dl>
 </dd></dl>
@@ -738,10 +738,6 @@ name or index (correspondingly) using which the member value was retrieved.</p>
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Signature.is_compliant">
 <span class="sig-name descname"><span class="pre">is_compliant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reasons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('obj',)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Signature.is_compliant" title="Permalink to this definition"></a></dt>
 <dd><p>Check whether an object defines values for each member in this signature.</p>
-<div class="admonition-todo admonition" id="id4">
-<p class="admonition-title">Todo</p>
-<p>Must check that <code class="docutils literal notranslate"><span class="pre">obj</span></code> is a signature object with signature equal to self</p>
-</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="code highlight pc python docutils literal highlight-python"><span class="kc">True</span></code> if <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj</span></code> defines attributes TODO</p>
@@ -755,7 +751,7 @@ name or index (correspondingly) using which the member value was retrieved.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Signature.create">
 <span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Signature.create" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id5">
+<dd><div class="admonition-todo admonition" id="id4">
 <p class="admonition-title">Todo</p>
 <p>Document this method</p>
 </div>
@@ -823,8 +819,8 @@ To distinguish being called on the flipped instance from being called on the unf
 <span class="sig-name descname"><span class="pre">__getattr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.FlippedSignature.__getattr__" title="Permalink to this definition"></a></dt>
 <dd><p>Retrieves attribute or method <code class="code highlight pc python docutils literal highlight-python"><span class="n">name</span></code> of the unflipped signature.</p>
 <p>Performs <code class="code highlight pc python docutils literal highlight-python"><span class="nb">getattr</span><span class="p">(</span><span class="n">unflipped</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></code>, ensuring that, if <code class="code highlight pc python docutils literal highlight-python"><span class="n">name</span></code> refers to a property
-getter or a method, its <code class="code highlight pc python docutils literal highlight-python"><span class="bp">self</span></code> argument receives the flipped signature. A class method’s
-<code class="code highlight pc python docutils literal highlight-python"><span class="bp">cls</span></code> argument receives the class of the unflipped signature, as usual.</p>
+getter or a method, its <code class="code highlight pc python docutils literal highlight-python"><span class="bp">self</span></code> argument receives the <em>flipped</em> signature. A class
+method’s <code class="code highlight pc python docutils literal highlight-python"><span class="bp">cls</span></code> argument receives the class of the <em>unflipped</em> signature, as usual.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -881,7 +877,7 @@ described below.</p>
 </section>
 <section id="interfaces">
 <h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id6">
+<div class="admonition-todo admonition" id="id5">
 <p class="admonition-title">Todo</p>
 <p>Finish this section</p>
 </div>
@@ -1004,8 +1000,8 @@ on the flipped interface object from being called on the unflipped one, use
 <ol class="arabic simple">
 <li><p>If <code class="code highlight pc python docutils literal highlight-python"><span class="n">name</span></code> refers to a signature member, the returned interface object is flipped.</p></li>
 <li><p>If <code class="code highlight pc python docutils literal highlight-python"><span class="n">name</span></code> refers to a property getter or a method, its <code class="code highlight pc python docutils literal highlight-python"><span class="bp">self</span></code> argument receives
-the flipped interface. A class method’s <code class="code highlight pc python docutils literal highlight-python"><span class="bp">cls</span></code> argument receives the class of
-the unflipped interface, as usual.</p></li>
+the <em>flipped</em> interface. A class method’s <code class="code highlight pc python docutils literal highlight-python"><span class="bp">cls</span></code> argument receives the class of
+the <em>unflipped</em> interface, as usual.</p></li>
 </ol>
 </dd></dl>
 
@@ -1043,7 +1039,7 @@ a <a class="reference internal" href="#amaranth.lib.wiring.FlippedInterface" tit
 </section>
 <section id="making-connections">
 <h2>Making connections<a class="headerlink" href="#making-connections" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id7">
+<div class="admonition-todo admonition" id="id6">
 <p class="admonition-title">Todo</p>
 <p>Finish this section</p>
 </div>
@@ -1057,7 +1053,7 @@ an impossible, meaningless, or forbidden connection.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.connect">
 <span class="sig-prename descclassname"><span class="pre">amaranth.lib.wiring.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.connect" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id8">
+<dd><div class="admonition-todo admonition" id="id7">
 <p class="admonition-title">Todo</p>
 <p>Write this</p>
 </div>
@@ -1066,21 +1062,21 @@ an impossible, meaningless, or forbidden connection.</p>
 </section>
 <section id="components">
 <h2>Components<a class="headerlink" href="#components" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id9">
+<div class="admonition-todo admonition" id="id8">
 <p class="admonition-title">Todo</p>
 <p>Finish this section</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Component">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amaranth.lib.wiring.</span></span><span class="sig-name descname"><span class="pre">Component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Component" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id10">
+<dd><div class="admonition-todo admonition" id="id9">
 <p class="admonition-title">Todo</p>
 <p>Write this</p>
 </div>
 <dl class="py property">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Component.signature">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#amaranth.lib.wiring.Component.signature" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id11">
+<dd><div class="admonition-todo admonition" id="id10">
 <p class="admonition-title">Todo</p>
 <p>Document this property</p>
 </div>
