@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Interfaces and components &mdash; Amaranth HDL toolchain 0.4.dev255 documentation</title>
+  <title>Interfaces and connections &mdash; Amaranth HDL toolchain 0.4.dev257 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/platformpicker.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=fbf062bc"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=68706ccf"></script>
         <script src="../_static/doctools.js?v=888ff710"></script>
         <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
         <script src="../_static/platformpicker.js"></script>
@@ -38,7 +38,7 @@
             Amaranth HDL toolchain
           </a>
               <div class="version">
-                0.4.dev255+gb19483ad.editable
+                0.4.dev257+g617d5bc3.editable
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -58,7 +58,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../stdlib.html">Standard library</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="enum.html">Enumerations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="data.html">Data structures</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Interfaces and components</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Interfaces and connections</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#signatures">Signatures</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#interfaces">Interfaces</a></li>
@@ -96,7 +96,7 @@
       <li><a href="../cover.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">Language &amp; toolchain</a></li>
           <li class="breadcrumb-item"><a href="../stdlib.html">Standard library</a></li>
-      <li class="breadcrumb-item active">Interfaces and components</li>
+      <li class="breadcrumb-item active">Interfaces and connections</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/stdlib/wiring.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -107,18 +107,252 @@
            <div itemprop="articleBody">
              
   <section id="module-amaranth.lib.wiring">
-<span id="interfaces-and-components"></span><h1>Interfaces and components<a class="headerlink" href="#module-amaranth.lib.wiring" title="Permalink to this heading"></a></h1>
-<p>The <a class="reference internal" href="#module-amaranth.lib.wiring" title="amaranth.lib.wiring"><code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.lib.wiring</span></code></a> module provides a way to describe the interfaces between components and connect them to each other in a reliable and convenient manner.</p>
+<span id="interfaces-and-connections"></span><h1>Interfaces and connections<a class="headerlink" href="#module-amaranth.lib.wiring" title="Permalink to this heading"></a></h1>
+<p>The <a class="reference internal" href="#module-amaranth.lib.wiring" title="amaranth.lib.wiring"><code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.lib.wiring</span></code></a> module provides a way to describe the interfaces between design components and connect them to each other in a reliable and convenient way.</p>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h3>
+<p>This module provides four related facilities:</p>
+<ol class="arabic simple">
+<li><p>Description and construction of interface objects via <a class="reference internal" href="#amaranth.lib.wiring.Flow" title="amaranth.lib.wiring.Flow"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flow</span></code></a> (<a class="reference internal" href="#amaranth.lib.wiring.In" title="amaranth.lib.wiring.In"><code class="xref py py-data docutils literal notranslate"><span class="pre">In</span></code></a> and <a class="reference internal" href="#amaranth.lib.wiring.Out" title="amaranth.lib.wiring.Out"><code class="xref py py-data docutils literal notranslate"><span class="pre">Out</span></code></a>), <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a>, and <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a>, as well as the associated container class <a class="reference internal" href="#amaranth.lib.wiring.SignatureMembers" title="amaranth.lib.wiring.SignatureMembers"><code class="xref py py-class docutils literal notranslate"><span class="pre">SignatureMembers</span></code></a>. These classes provide the syntax used in defining components, and are also useful for introspection.</p></li>
+<li><p>Flipping of signatures and interface objects via <a class="reference internal" href="#amaranth.lib.wiring.FlippedSignature" title="amaranth.lib.wiring.FlippedSignature"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlippedSignature</span></code></a> and <a class="reference internal" href="#amaranth.lib.wiring.FlippedInterface" title="amaranth.lib.wiring.FlippedInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlippedInterface</span></code></a>, as well as the associated container class <a class="reference internal" href="#amaranth.lib.wiring.FlippedSignatureMembers" title="amaranth.lib.wiring.FlippedSignatureMembers"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlippedSignatureMembers</span></code></a>. This facility reduces boilerplate by adapting existing signatures and interface objects: the flip operation changes the <a class="reference internal" href="#amaranth.lib.wiring.In" title="amaranth.lib.wiring.In"><code class="xref py py-data docutils literal notranslate"><span class="pre">In</span></code></a> data flow of a member to <a class="reference internal" href="#amaranth.lib.wiring.Out" title="amaranth.lib.wiring.Out"><code class="xref py py-data docutils literal notranslate"><span class="pre">Out</span></code></a> and vice versa.</p></li>
+<li><p>Connecting interface objects together via <a class="reference internal" href="#amaranth.lib.wiring.connect" title="amaranth.lib.wiring.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a>. The <a class="reference internal" href="#amaranth.lib.wiring.connect" title="amaranth.lib.wiring.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a> function ensures that the provided interface objects can be connected to each other, and adds the necessary <code class="code highlight pc python docutils literal highlight-python"><span class="o">.</span><span class="n">eq</span><span class="p">()</span></code> statements to a <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code>.</p></li>
+<li><p>Defining reusable, self-contained components via <a class="reference internal" href="#amaranth.lib.wiring.Component" title="amaranth.lib.wiring.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a>. Components are <code class="xref py py-class docutils literal notranslate"><span class="pre">Elaboratable</span></code> objects that interact with the rest of the design through an interface specified by their signature.</p></li>
+</ol>
+<p>To use this module, add the following imports to the beginning of the file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">amaranth.lib</span> <span class="kn">import</span> <span class="n">wiring</span>
+<span class="kn">from</span> <span class="nn">amaranth.lib.wiring</span> <span class="kn">import</span> <span class="n">In</span><span class="p">,</span> <span class="n">Out</span>
+</pre></div>
+</div>
+</section>
+<section id="motivation">
+<h3>Motivation<a class="headerlink" href="#motivation" title="Permalink to this heading"></a></h3>
+<p>Consider a reusable counter with an enable input, switchable direction, configurable limit, and overflow/underflow flags. Using only the core Amaranth language and <a class="reference internal" href="enum.html#module-amaranth.lib.enum" title="amaranth.lib.enum"><code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.lib.enum</span></code></a>, it could be implemented as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BasicCounter</span><span class="p">(</span><span class="n">Elaboratable</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">en</span>  <span class="o">=</span> <span class="n">Signal</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">limit</span> <span class="o">=</span> <span class="n">Signal</span><span class="o">.</span><span class="n">like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">overflow</span>  <span class="o">=</span> <span class="n">Signal</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">elaborate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Module</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="n">m</span><span class="o">.</span><span class="n">If</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">en</span><span class="p">):</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">overflow</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">m</span><span class="o">.</span><span class="n">If</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit</span><span class="p">):</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">overflow</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">m</span><span class="o">.</span><span class="n">Else</span><span class="p">():</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">m</span>
+</pre></div>
+</div>
+<p>Nothing in this implementation indicates the directions of its ports (<code class="code highlight pc python docutils literal highlight-python"><span class="n">en</span></code>, <code class="code highlight pc python docutils literal highlight-python"><span class="n">count</span></code>, <code class="code highlight pc python docutils literal highlight-python"><span class="n">limit</span></code>, and <code class="code highlight pc python docutils literal highlight-python"><span class="n">overflow</span></code>) in relation to other parts of the design. To understand whether the value of a port is expected to be provided externally or generated internally, it is first necessary to read the body of the <code class="code highlight pc python docutils literal highlight-python"><span class="n">elaborate</span></code> method. If the port is not used within that method, it is not possible to determine its direction, or whether it is even meant to be connected.</p>
+<p>The <a class="reference internal" href="#module-amaranth.lib.wiring" title="amaranth.lib.wiring"><code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.lib.wiring</span></code></a> module provides a solution for this problem: <em>components</em>. A component is an elaboratable that declares the shapes and directions of its ports in its <em>signature</em>. The example above can be rewritten to use the <a class="reference internal" href="#amaranth.lib.wiring.Component" title="amaranth.lib.wiring.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a> base class (which itself inherits from <code class="xref py py-class docutils literal notranslate"><span class="pre">Elaboratable</span></code>) to be:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ComponentCounter</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">en</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">count</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">limit</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+
+    <span class="n">overflow</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">elaborate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Module</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="n">m</span><span class="o">.</span><span class="n">If</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">en</span><span class="p">):</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">overflow</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">m</span><span class="o">.</span><span class="n">If</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit</span><span class="p">):</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">overflow</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">m</span><span class="o">.</span><span class="n">Else</span><span class="p">():</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">m</span>
+</pre></div>
+</div>
+<p>The code in the constructor <em>creating</em> the signals of the counter’s interface one by one is now gone, replaced with the <a class="reference external" href="https://docs.python.org/3/glossary.html#term-variable-annotation" title="(in Python v3.12)"><span class="xref std std-term">variable annotations</span></a> <em>describing</em> the counter’s interface. The inherited constructor, <code class="xref py py-meth docutils literal notranslate"><span class="pre">Component.__init__()</span></code>, creates the same attributes with the same values as before, and the <code class="code highlight pc python docutils literal highlight-python"><span class="n">elaborate</span></code> method is unchanged.</p>
+<p>The major difference between the two examples is that the <code class="code highlight pc python docutils literal highlight-python"><span class="n">ComponentCounter</span></code> provides unambiguous answers to two questions that previously required examining the <code class="code highlight pc python docutils literal highlight-python"><span class="n">elaborate</span></code> method:</p>
+<ol class="arabic simple">
+<li><p>Which of the Python object’s attributes are ports that are intended to be connected to the rest of the design.</p></li>
+<li><p>What is the direction of the flow of information through the port.</p></li>
+</ol>
+<p>This information, aside from being clear from the source code, can now be retrieved from the <code class="code highlight pc python docutils literal highlight-python"><span class="o">.</span><span class="n">signature</span></code> attribute, which contains an instance of the <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> class:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ComponentCounter</span><span class="p">()</span><span class="o">.</span><span class="n">signature</span>
+<span class="go">Signature({&#39;count&#39;: Out(8), &#39;en&#39;: In(1), &#39;limit&#39;: In(8), &#39;overflow&#39;: Out(1)})</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../lang.html#lang-shapes"><span class="std std-ref">shapes</span></a> of the ports need not be static. The <code class="code highlight pc python docutils literal highlight-python"><span class="n">ComponentCounter</span></code> can be made generic, with its range specified when it is constructed, by creating the signature explicitly in its constructor:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">GenericCounter</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signature</span> <span class="o">=</span> <span class="n">wiring</span><span class="o">.</span><span class="n">Signature</span><span class="p">({</span>
+            <span class="s2">&quot;en&quot;</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="n">width</span><span class="p">),</span>
+            <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="n">width</span><span class="p">),</span>
+
+            <span class="s2">&quot;overflow&quot;</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">})</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signature</span>
+
+    <span class="c1"># The implementation of the `elaborate` method is the same.</span>
+    <span class="n">elaborate</span> <span class="o">=</span> <span class="n">ComponentCounter</span><span class="o">.</span><span class="n">elaborate</span>
+</pre></div>
+</div>
 <div class="admonition-todo admonition" id="id1">
 <p class="admonition-title">Todo</p>
-<p>Write this section</p>
+<p>Once RFC ?? is implemented, drop <code class="code highlight pc python docutils literal highlight-python"><span class="nd">@property</span> <span class="n">signature</span></code>.</p>
 </div>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">GenericCounter</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="o">.</span><span class="n">signature</span>
+<span class="go">Signature({&#39;count&#39;: Out(16), &#39;en&#39;: In(1), &#39;limit&#39;: In(16), &#39;overflow&#39;: Out(1)})</span>
+</pre></div>
+</div>
+<p>Instances of the <code class="xref py py-class docutils literal notranslate"><span class="pre">ComponentCounter</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">GenericCounter</span></code> class are two examples of <em>interface objects</em>. An interface object is a Python object of any type whose a <code class="code highlight pc python docutils literal highlight-python"><span class="n">signature</span></code> attribute contains a <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> with which the interface object is compliant (as determined by the <a class="reference internal" href="#amaranth.lib.wiring.Signature.is_compliant" title="amaranth.lib.wiring.Signature.is_compliant"><code class="xref py py-meth docutils literal notranslate"><span class="pre">is_compliant</span></code></a> method of the signature).</p>
+<p>The next section introduces the concepts of directionality and connection, and discusses interface objects in more detail.</p>
+</section>
+<section id="reusable-interfaces">
+<h3>Reusable interfaces<a class="headerlink" href="#reusable-interfaces" title="Permalink to this heading"></a></h3>
+<p>Consider a more complex example where two components are communicating with a <em>stream</em> that is using <em>ready/valid signaling</em>, where the <code class="code highlight pc python docutils literal highlight-python"><span class="n">valid</span></code> signal indicates that the value of <code class="code highlight pc python docutils literal highlight-python"><span class="n">data</span></code> provided by the source is meaningful, and the <code class="code highlight pc python docutils literal highlight-python"><span class="n">ready</span></code> signal indicates that the sink has consumed the data word:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">DataProducer</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">en</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">data</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">valid</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ready</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">elaborate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">):</span> <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">DataConsumer</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">valid</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ready</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># ... other ports...</span>
+
+    <span class="k">def</span> <span class="nf">elaborate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">):</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>Data would be transferred between these components by assigning the outputs to the inputs elsewhere in the design:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">Module</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">submodules</span><span class="o">.</span><span class="n">producer</span> <span class="o">=</span> <span class="n">producer</span> <span class="o">=</span> <span class="n">DataProducer</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">submodules</span><span class="o">.</span><span class="n">consumer</span> <span class="o">=</span> <span class="n">consumer</span> <span class="o">=</span> <span class="n">DataConsumer</span><span class="p">()</span>
+
+<span class="o">...</span>
+
+<span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">comb</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="n">consumer</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">producer</span><span class="o">.</span><span class="n">data</span><span class="p">),</span>
+    <span class="n">consumer</span><span class="o">.</span><span class="n">valid</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">producer</span><span class="o">.</span><span class="n">valid</span><span class="p">),</span>
+    <span class="n">producer</span><span class="o">.</span><span class="n">ready</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">consumer</span><span class="o">.</span><span class="n">ready</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Although this example is short, it is already repetitive and redundant. The ports on the producer and the consumer, which must match each other for the connection to be made correctly, are described twice; and the connection itself is made in an error-prone manual way even though the signatures include all of the information required to create it.</p>
+<p>The signature of a stream could be defined in a generic way:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SimpleStreamSignature</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">({</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="n">data_shape</span><span class="p">),</span>
+            <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+            <span class="s2">&quot;ready&quot;</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">})</span>
+
+    <span class="c1"># Implementations of __eq__ and __repr__ are omitted for clarity.</span>
+</pre></div>
+</div>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SimpleStreamSignature</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">members</span>
+<span class="go">SignatureMembers({&#39;data&#39;: Out(8), &#39;valid&#39;: Out(1), &#39;ready&#39;: In(1)})</span>
+</pre></div>
+</div>
+<p>A definition like this is usable, depending on the data flow direction of the members, only in the producer (as in the code above) or only in the consumer. To resolve this problem, this module introduces <em>flipping</em>: an operation that reverses the data flow direction of the members of a signature or an interface object while leaving everything else about the object intact. In Amaranth, the (non-flipped) signature definition always describes the data flow directions appropriate for a bus initiator, stream source, controller, and so on. A bus target, stream sink, peripheral, and so on would reuse the source definition by flipping it.</p>
+<p>A signature is flipped by calling <a class="reference internal" href="#amaranth.lib.wiring.Signature.flip" title="amaranth.lib.wiring.Signature.flip"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sig.flip()</span></code></a>, and an interface object is flipped by calling <a class="reference internal" href="#amaranth.lib.wiring.flipped" title="amaranth.lib.wiring.flipped"><code class="xref py py-func docutils literal notranslate"><span class="pre">flipped(intf)</span></code></a>. These calls return instances of the <a class="reference internal" href="#amaranth.lib.wiring.FlippedSignature" title="amaranth.lib.wiring.FlippedSignature"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlippedSignature</span></code></a> and <a class="reference internal" href="#amaranth.lib.wiring.FlippedInterface" title="amaranth.lib.wiring.FlippedInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlippedInterface</span></code></a> classes, respectively, which use metaprogramming to wrap another object, changing only the data flow directions of its members and forwarding all other method calls and attribute accesses to the wrapped object.</p>
+<p>The example above can be rewritten to use this definition of a stream signature as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">StreamProducer</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">en</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="n">SimpleStreamSignature</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">elaborate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">):</span> <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">StreamConsumer</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">sink</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="n">SimpleStreamSignature</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">flip</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">elaborate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">):</span> <span class="o">...</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">Module</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">submodules</span><span class="o">.</span><span class="n">producer</span> <span class="o">=</span> <span class="n">producer</span> <span class="o">=</span> <span class="n">StreamProducer</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">submodules</span><span class="o">.</span><span class="n">consumer</span> <span class="o">=</span> <span class="n">consumer</span> <span class="o">=</span> <span class="n">StreamConsumer</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The producer and the consumer reuse the same signature, relying on flipping to make the port directions complementary:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">producer</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">signature</span><span class="o">.</span><span class="n">members</span>
+<span class="go">SignatureMembers({&#39;data&#39;: Out(8), &#39;valid&#39;: Out(1), &#39;ready&#39;: In(1)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">producer</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">signature</span><span class="o">.</span><span class="n">members</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="go">Out(8)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">consumer</span><span class="o">.</span><span class="n">sink</span><span class="o">.</span><span class="n">signature</span><span class="o">.</span><span class="n">members</span>
+<span class="go">SignatureMembers({&#39;data&#39;: Out(8), &#39;valid&#39;: Out(1), &#39;ready&#39;: In(1)}).flip()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">consumer</span><span class="o">.</span><span class="n">sink</span><span class="o">.</span><span class="n">signature</span><span class="o">.</span><span class="n">members</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="go">In(8)</span>
+</pre></div>
+</div>
+<p>In the <code class="code highlight pc python docutils literal highlight-python"><span class="n">StreamConsumer</span></code> definition above, the <code class="code highlight pc python docutils literal highlight-python"><span class="n">sink</span></code> member has its direction flipped explicitly because the sink is a stream input; this is the case for every interface due to how port directions are defined. Since this operation is so ubiquitous, it is also performed when <code class="code highlight pc python docutils literal highlight-python"><span class="n">In</span><span class="p">(</span><span class="o">...</span><span class="p">)</span></code> is used with a signature rather than a shape. The <code class="code highlight pc python docutils literal highlight-python"><span class="n">StreamConsumer</span></code> definition above should normally be written as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">StreamConsumerUsingIn</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">sink</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="n">SimpleStreamSignature</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">elaborate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">):</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>The data flow directions of the ports are identical between the two definitions:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">consumer</span><span class="o">.</span><span class="n">sink</span><span class="o">.</span><span class="n">signature</span><span class="o">.</span><span class="n">members</span> <span class="o">==</span> <span class="n">StreamConsumerUsingIn</span><span class="p">()</span><span class="o">.</span><span class="n">sink</span><span class="o">.</span><span class="n">signature</span><span class="o">.</span><span class="n">members</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>If signatures are nested within each other multiple levels deep, the final port direction is determined by how many nested <code class="code highlight pc python docutils literal highlight-python"><span class="n">In</span><span class="p">(</span><span class="o">...</span><span class="p">)</span></code> members there are. For each <code class="code highlight pc python docutils literal highlight-python"><span class="n">In</span><span class="p">(</span><span class="o">...</span><span class="p">)</span></code> signature wrapping a port, the data flow direction of the port is flipped once:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span> <span class="o">=</span> <span class="n">wiring</span><span class="o">.</span><span class="n">Signature</span><span class="p">({</span><span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">1</span><span class="p">)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span><span class="o">.</span><span class="n">members</span><span class="p">[</span><span class="s2">&quot;port&quot;</span><span class="p">]</span>
+<span class="go">Out(1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">in1</span> <span class="o">=</span> <span class="n">wiring</span><span class="o">.</span><span class="n">Signature</span><span class="p">({</span><span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="n">sig</span><span class="p">)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">in1</span><span class="o">.</span><span class="n">members</span><span class="p">[</span><span class="s2">&quot;sig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">signature</span><span class="o">.</span><span class="n">members</span><span class="p">[</span><span class="s2">&quot;port&quot;</span><span class="p">]</span>
+<span class="go">In(1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">in2</span> <span class="o">=</span> <span class="n">wiring</span><span class="o">.</span><span class="n">Signature</span><span class="p">({</span><span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="n">in1</span><span class="p">)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">in2</span><span class="o">.</span><span class="n">members</span><span class="p">[</span><span class="s2">&quot;sig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">signature</span><span class="o">.</span><span class="n">members</span><span class="p">[</span><span class="s2">&quot;sig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">signature</span><span class="o">.</span><span class="n">members</span><span class="p">[</span><span class="s2">&quot;port&quot;</span><span class="p">]</span>
+<span class="go">Out(1)</span>
+</pre></div>
+</div>
+<p>Going back to the stream example, the producer and the consumer now communicate with one another using the same set of ports with identical shapes and complementary directions (the auxiliary <code class="code highlight pc python docutils literal highlight-python"><span class="n">en</span></code> port being outside of the stream signature), and can be <em>connected</em> using the <a class="reference internal" href="#amaranth.lib.wiring.connect" title="amaranth.lib.wiring.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a> function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">wiring</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">producer</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">consumer</span><span class="o">.</span><span class="n">sink</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This function examines the signatures of the two provided interface objects, ensuring that they are exactly complementary, and then adds combinatorial <code class="code highlight pc python docutils literal highlight-python"><span class="o">.</span><span class="n">eq</span><span class="p">()</span></code> statements to the module for each of the port pairs to form the connection. Aside from the <em>connectability</em> check, the single line above is equivalent to:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">comb</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="n">consumer</span><span class="o">.</span><span class="n">sink</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">producer</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">data</span><span class="p">),</span>
+    <span class="n">consumer</span><span class="o">.</span><span class="n">sink</span><span class="o">.</span><span class="n">valid</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">producer</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">valid</span><span class="p">),</span>
+    <span class="n">producer</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">ready</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">consumer</span><span class="o">.</span><span class="n">sink</span><span class="o">.</span><span class="n">ready</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Even on the simple example of a stream signature it is clear how using the <a class="reference internal" href="#amaranth.lib.wiring.connect" title="amaranth.lib.wiring.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a> function results in more concise, readable, and robust code. The difference is proportionally more pronounced with more complex signatures. When a signature is being refactored, no changes to the code that uses <a class="reference internal" href="#amaranth.lib.wiring.connect" title="amaranth.lib.wiring.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a> is required.</p>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>Add more sections with advanced use examples:</p>
+<ul class="simple">
+<li><p>Forwarding an interface</p></li>
+<li><p>Using constants in <a class="reference internal" href="#amaranth.lib.wiring.connect" title="amaranth.lib.wiring.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a></p></li>
+<li><p>Gaskets</p></li>
+</ul>
+</div>
+</section>
 </section>
 <section id="signatures">
 <h2>Signatures<a class="headerlink" href="#signatures" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id2">
+<div class="admonition-todo admonition" id="id3">
 <p class="admonition-title">Todo</p>
 <p>Finish this section</p>
 </div>
@@ -620,7 +854,7 @@ Signatures and interface objects are tightly linked: an interface object can be 
 of a signature, and the signature is used when <a class="reference internal" href="#amaranth.lib.wiring.connect" title="amaranth.lib.wiring.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a> ing two interface objects
 together. See the <span class="xref std std-ref">introduction to interfaces</span> for a more detailed
 explanation of why this is useful.</p>
-<div class="admonition-todo admonition" id="id3">
+<div class="admonition-todo admonition" id="id4">
 <p class="admonition-title">Todo</p>
 <p>The link to introduction above does not work</p>
 <p>Explain how to subclass Signature</p>
@@ -632,8 +866,11 @@ explanation of why this is useful.</p>
 <dd><p>Flip the data flow of the members in this signature.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Proxy object <code class="code highlight pc python docutils literal highlight-python"><span class="n">FlippedSignature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code> that flips the data flow of the attributes
+<dd class="field-odd"><p><p>Proxy object <code class="code highlight pc python docutils literal highlight-python"><span class="n">FlippedSignature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code> that flips the data flow of the attributes
 corresponding to the members that are accessed using it.</p>
+<p>See the documentation for the <a class="reference internal" href="#amaranth.lib.wiring.FlippedSignature" title="amaranth.lib.wiring.FlippedSignature"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlippedSignature</span></code></a> class for a detailed discussion
+of how this proxy object works.</p>
+</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#amaranth.lib.wiring.FlippedSignature" title="amaranth.lib.wiring.FlippedSignature"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlippedSignature</span></code></a></p>
@@ -751,7 +988,7 @@ name or index (correspondingly) using which the member value was retrieved.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Signature.create">
 <span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Signature.create" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id4">
+<dd><div class="admonition-todo admonition" id="id5">
 <p class="admonition-title">Todo</p>
 <p>Document this method</p>
 </div>
@@ -877,7 +1114,7 @@ described below.</p>
 </section>
 <section id="interfaces">
 <h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id5">
+<div class="admonition-todo admonition" id="id6">
 <p class="admonition-title">Todo</p>
 <p>Finish this section</p>
 </div>
@@ -1034,12 +1271,14 @@ deleter, its <code class="code highlight pc python docutils literal highlight-py
 <p>If an interface object is flipped twice, returns the original object:
 <code class="code highlight pc python docutils literal highlight-python"><span class="n">flipped</span><span class="p">(</span><span class="n">flipped</span><span class="p">(</span><span class="n">interface</span><span class="p">))</span> <span class="ow">is</span> <span class="n">interface</span></code>. Otherwise, wraps <code class="code highlight pc python docutils literal highlight-python"><span class="n">interface</span></code> in
 a <a class="reference internal" href="#amaranth.lib.wiring.FlippedInterface" title="amaranth.lib.wiring.FlippedInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlippedInterface</span></code></a> proxy object that flips the directions of its members.</p>
+<p>See the documentation for the <a class="reference internal" href="#amaranth.lib.wiring.FlippedInterface" title="amaranth.lib.wiring.FlippedInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlippedInterface</span></code></a> class for a detailed discussion of how
+this proxy object works.</p>
 </dd></dl>
 
 </section>
 <section id="making-connections">
 <h2>Making connections<a class="headerlink" href="#making-connections" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id6">
+<div class="admonition-todo admonition" id="id7">
 <p class="admonition-title">Todo</p>
 <p>Finish this section</p>
 </div>
@@ -1053,7 +1292,7 @@ an impossible, meaningless, or forbidden connection.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.connect">
 <span class="sig-prename descclassname"><span class="pre">amaranth.lib.wiring.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.connect" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id7">
+<dd><div class="admonition-todo admonition" id="id8">
 <p class="admonition-title">Todo</p>
 <p>Write this</p>
 </div>
@@ -1062,21 +1301,21 @@ an impossible, meaningless, or forbidden connection.</p>
 </section>
 <section id="components">
 <h2>Components<a class="headerlink" href="#components" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id8">
+<div class="admonition-todo admonition" id="id9">
 <p class="admonition-title">Todo</p>
 <p>Finish this section</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Component">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amaranth.lib.wiring.</span></span><span class="sig-name descname"><span class="pre">Component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Component" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id9">
+<dd><div class="admonition-todo admonition" id="id10">
 <p class="admonition-title">Todo</p>
 <p>Write this</p>
 </div>
 <dl class="py property">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Component.signature">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#amaranth.lib.wiring.Component.signature" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id10">
+<dd><div class="admonition-todo admonition" id="id11">
 <p class="admonition-title">Todo</p>
 <p>Document this property</p>
 </div>
