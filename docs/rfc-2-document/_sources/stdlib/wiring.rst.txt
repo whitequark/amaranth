@@ -1,5 +1,5 @@
 ..
-  finished: 13/16
+  finished: 14/18
 
   xx autoexception:: SignatureError
   xx autoexception:: ConnectionError
@@ -9,7 +9,9 @@
   xx autoclass:: Member(flow, description, *, reset=None)
   xx autoclass:: SignatureMembers
   xx autoclass:: FlippedSignatureMembers
-  .. autoclass:: Signature
+  xx autoclass:: Signature
+     .. automethod:: Signature.is_compliant
+     .. automethod:: Signature.create
   xx autoclass:: FlippedSignature
   xx autoclass:: SignatureMeta
   xx autoclass:: PureInterface
@@ -559,6 +561,16 @@ The custom properties defined for both the signature and the interface object ca
 .. warning::
 
     While the wrapper object forwards attribute accesses and method calls, it does not currently proxy special methods such as :pc:`__getitem__` or :pc:`__add__` that are rarely, if ever, used with interface objects. This limitation may be lifted in the future.
+
+
+.. _wiring-path:
+
+Paths
++++++
+
+.. todo::
+
+    Write this
 
 
 Signatures

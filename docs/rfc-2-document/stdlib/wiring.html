@@ -38,7 +38,7 @@
             Amaranth HDL toolchain
           </a>
               <div class="version">
-                0.4.dev258+g84c63d17.editable
+                0.4.dev258+gcd2c6277.editable
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -556,10 +556,17 @@
 <p>While the wrapper object forwards attribute accesses and method calls, it does not currently proxy special methods such as <code class="code highlight pc python docutils literal highlight-python"><span class="fm">__getitem__</span></code> or <code class="code highlight pc python docutils literal highlight-python"><span class="fm">__add__</span></code> that are rarely, if ever, used with interface objects. This limitation may be lifted in the future.</p>
 </div>
 </section>
+<section id="paths">
+<span id="wiring-path"></span><h3>Paths<a class="headerlink" href="#paths" title="Permalink to this heading"></a></h3>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>Write this</p>
+</div>
+</section>
 </section>
 <section id="signatures">
 <h2>Signatures<a class="headerlink" href="#signatures" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id3">
+<div class="admonition-todo admonition" id="id4">
 <p class="admonition-title">Todo</p>
 <p>Finish this section</p>
 </div>
@@ -960,7 +967,7 @@ to one.</p>
 <dd><p>Recursively iterate through this collection.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The <span class="xref std std-ref">paths</span> returned by this method and by <a class="reference internal" href="#amaranth.lib.wiring.Signature.flatten" title="amaranth.lib.wiring.Signature.flatten"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Signature.flatten()</span></code></a>
+<p>The <a class="reference internal" href="#wiring-path"><span class="std std-ref">paths</span></a> returned by this method and by <a class="reference internal" href="#amaranth.lib.wiring.Signature.flatten" title="amaranth.lib.wiring.Signature.flatten"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Signature.flatten()</span></code></a>
 differ. This method yields a single result for each <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a> in the collection,
 disregarding their dimensions:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span> <span class="o">=</span> <span class="n">wiring</span><span class="o">.</span><span class="n">Signature</span><span class="p">({</span>
@@ -975,7 +982,7 @@ the documentation for that method for an example.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Pairs of <span class="xref std std-ref">paths</span> and the corresponding members. A path yielded by
+<dd class="field-odd"><p>Pairs of <a class="reference internal" href="#wiring-path"><span class="std std-ref">paths</span></a> and the corresponding members. A path yielded by
 this method is a tuple of strings where each item is a key through which the item may
 be reached.</p>
 </dd>
@@ -991,7 +998,7 @@ be reached.</p>
 <dd><p>Create members from their descriptions.</p>
 <p>For each port member, this function creates a <code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code> with the shape and reset
 value taken from the member description, and the name constructed from
-the <span class="xref std std-ref">paths</span> to the member (by concatenating path items with a double
+the <a class="reference internal" href="#wiring-path"><span class="std std-ref">paths</span></a> to the member (by concatenating path items with a double
 underscore, <code class="docutils literal notranslate"><span class="pre">__</span></code>).</p>
 <p>For each signature member, this function calls <a class="reference internal" href="#amaranth.lib.wiring.Signature.create" title="amaranth.lib.wiring.Signature.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Signature.create()</span></code></a> for that signature.
 The resulting object can have any type if a <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> subclass overrides
@@ -1059,14 +1066,10 @@ for details.</p>
 a <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> object, as well as an attribute for every member of its signature.
 Signatures and interface objects are tightly linked: an interface object can be created out
 of a signature, and the signature is used when <a class="reference internal" href="#amaranth.lib.wiring.connect" title="amaranth.lib.wiring.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a> ing two interface objects
-together. See the <span class="xref std std-ref">introduction to interfaces</span> for a more detailed
+together. See the <a class="reference internal" href="#wiring-intro1"><span class="std std-ref">introduction to interfaces</span></a> for a more detailed
 explanation of why this is useful.</p>
-<div class="admonition-todo admonition" id="id4">
-<p class="admonition-title">Todo</p>
-<p>The link to introduction above does not work</p>
-<p>Explain how to subclass Signature</p>
-<p>Show that methods and properties in subclasses get called with the signature, not the flipped one</p>
-</div>
+<p><a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> can be used as a base class to define <a class="reference internal" href="#wiring-customizing"><span class="std std-ref">customized</span></a>
+signatures and interface objects.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Signature.flip">
 <span class="sig-name descname"><span class="pre">flip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Signature.flip" title="Permalink to this definition"></a></dt>
@@ -1151,7 +1154,7 @@ the overridden method must take that into account.</p>
 object.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The <span class="xref std std-ref">paths</span> returned by this method and by
+<p>The <a class="reference internal" href="#wiring-path"><span class="std std-ref">paths</span></a> returned by this method and by
 <a class="reference internal" href="#amaranth.lib.wiring.SignatureMembers.flatten" title="amaranth.lib.wiring.SignatureMembers.flatten"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SignatureMembers.flatten()</span></code></a> differ. This method yield several results for each
 <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a> in the collection that has a dimension:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span> <span class="o">=</span> <span class="n">wiring</span><span class="o">.</span><span class="n">Signature</span><span class="p">({</span>
@@ -1168,7 +1171,7 @@ the documentation for that method for an example.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Tuples of <span class="xref std std-ref">paths</span>, flow, and the corresponding member values. A path
+<dd class="field-odd"><p>Tuples of <a class="reference internal" href="#wiring-path"><span class="std std-ref">paths</span></a>, flow, and the corresponding member values. A path
 yielded by this method is a tuple of strings or integers where each item is an attribute
 name or index (correspondingly) using which the member value was retrieved.</p>
 </dd>
@@ -1182,6 +1185,10 @@ name or index (correspondingly) using which the member value was retrieved.</p>
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Signature.is_compliant">
 <span class="sig-name descname"><span class="pre">is_compliant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reasons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('obj',)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Signature.is_compliant" title="Permalink to this definition"></a></dt>
 <dd><p>Check whether an object defines values for each member in this signature.</p>
+<div class="admonition-todo admonition" id="id5">
+<p class="admonition-title">Todo</p>
+<p>Finish this documentation</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="code highlight pc python docutils literal highlight-python"><span class="kc">True</span></code> if <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj</span></code> defines attributes TODO</p>
@@ -1195,7 +1202,7 @@ name or index (correspondingly) using which the member value was retrieved.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Signature.create">
 <span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Signature.create" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id5">
+<dd><div class="admonition-todo admonition" id="id6">
 <p class="admonition-title">Todo</p>
 <p>Document this method</p>
 </div>
@@ -1321,7 +1328,7 @@ described below.</p>
 </section>
 <section id="interfaces">
 <h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id6">
+<div class="admonition-todo admonition" id="id7">
 <p class="admonition-title">Todo</p>
 <p>Finish this section</p>
 </div>
@@ -1482,7 +1489,7 @@ this proxy object works.</p>
 </section>
 <section id="making-connections">
 <h2>Making connections<a class="headerlink" href="#making-connections" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id7">
+<div class="admonition-todo admonition" id="id8">
 <p class="admonition-title">Todo</p>
 <p>Finish this section</p>
 </div>
@@ -1496,7 +1503,7 @@ an impossible, meaningless, or forbidden connection.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.connect">
 <span class="sig-prename descclassname"><span class="pre">amaranth.lib.wiring.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.connect" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id8">
+<dd><div class="admonition-todo admonition" id="id9">
 <p class="admonition-title">Todo</p>
 <p>Write this</p>
 </div>
@@ -1505,21 +1512,21 @@ an impossible, meaningless, or forbidden connection.</p>
 </section>
 <section id="components">
 <h2>Components<a class="headerlink" href="#components" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id9">
+<div class="admonition-todo admonition" id="id10">
 <p class="admonition-title">Todo</p>
 <p>Finish this section</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Component">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amaranth.lib.wiring.</span></span><span class="sig-name descname"><span class="pre">Component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Component" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id10">
+<dd><div class="admonition-todo admonition" id="id11">
 <p class="admonition-title">Todo</p>
 <p>Write this</p>
 </div>
 <dl class="py property">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Component.signature">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#amaranth.lib.wiring.Component.signature" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id11">
+<dd><div class="admonition-todo admonition" id="id12">
 <p class="admonition-title">Todo</p>
 <p>Document this property</p>
 </div>
