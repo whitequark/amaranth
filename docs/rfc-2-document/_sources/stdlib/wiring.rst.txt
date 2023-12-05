@@ -541,7 +541,7 @@ This example demonstrates several important principles of use:
     >>> sig24 == SimpleBusSignature(24)
     True
     >>> bus = sig24.create(); bus
-    <PureInterface: SimpleBusSignature(24), addr=(sig addr), en=(sig en), r_data=(sig r_data), rw=EnumView(TransferType, (sig rw)), w_data=(sig w_data)>
+    <SimpleBusInterface: SimpleBusSignature(24), addr=(sig addr), en=(sig en), r_data=(sig r_data), rw=EnumView(TransferType, (sig rw)), w_data=(sig w_data)>
     >>> bus.is_read_xfer()
     (& (sig en) (== (sig rw) (const 1'd1)))
 
