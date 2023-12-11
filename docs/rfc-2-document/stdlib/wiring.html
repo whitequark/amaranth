@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Interfaces and connections &mdash; Amaranth HDL toolchain 0.4.dev259 documentation</title>
+  <title>Interfaces and connections &mdash; Amaranth HDL toolchain 0.4.dev267 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/platformpicker.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=24124b14"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=c5201c03"></script>
         <script src="../_static/doctools.js?v=888ff710"></script>
         <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
         <script src="../_static/platformpicker.js"></script>
@@ -38,7 +38,7 @@
             Amaranth HDL toolchain
           </a>
               <div class="version">
-                0.4.dev259+g2be62a99.editable
+                0.4.dev267+gbb3c8e37.editable
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -191,7 +191,7 @@
 <p>The <a class="reference internal" href="../lang.html#lang-shapes"><span class="std std-ref">shapes</span></a> of the ports need not be static. The <code class="code highlight pc python docutils literal highlight-python"><span class="n">ComponentCounter</span></code> can be made generic, with its range specified when it is constructed, by creating the signature explicitly in its constructor:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">GenericCounter</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_signature</span> <span class="o">=</span> <span class="n">wiring</span><span class="o">.</span><span class="n">Signature</span><span class="p">({</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">({</span>
             <span class="s2">&quot;en&quot;</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
 
             <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="n">width</span><span class="p">),</span>
@@ -199,19 +199,10 @@
 
             <span class="s2">&quot;overflow&quot;</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="p">})</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signature</span>
 
     <span class="c1"># The implementation of the `elaborate` method is the same.</span>
     <span class="n">elaborate</span> <span class="o">=</span> <span class="n">ComponentCounter</span><span class="o">.</span><span class="n">elaborate</span>
 </pre></div>
-</div>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Once RFC ?? is implemented, drop <code class="code highlight pc python docutils literal highlight-python"><span class="nd">@property</span> <span class="n">signature</span></code>.</p>
 </div>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">GenericCounter</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="o">.</span><span class="n">signature</span>
 <span class="go">Signature({&#39;count&#39;: Out(16), &#39;en&#39;: In(1), &#39;limit&#39;: In(16), &#39;overflow&#39;: Out(1)})</span>
@@ -346,8 +337,8 @@
 <p>Even on the simple example of a stream signature it is clear how using the <a class="reference internal" href="#amaranth.lib.wiring.connect" title="amaranth.lib.wiring.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a> function results in more concise, readable, and robust code. The difference is proportionally more pronounced with more complex signatures. When a signature is being refactored, no changes to the code that uses <a class="reference internal" href="#amaranth.lib.wiring.connect" title="amaranth.lib.wiring.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a> is required.</p>
 <p>This explanation concludes the essential knowledge necessary for using this module and writing idiomatic Amaranth code.</p>
 </section>
-<section id="interface-forwarding">
-<span id="wiring-forwarding"></span><h3>Interface forwarding<a class="headerlink" href="#interface-forwarding" title="Permalink to this heading"></a></h3>
+<section id="forwarding-interior-interfaces">
+<span id="wiring-forwarding"></span><h3>Forwarding interior interfaces<a class="headerlink" href="#forwarding-interior-interfaces" title="Permalink to this heading"></a></h3>
 <p>Consider a case where a component includes another component as a part of its implementation, and where it is necessary to <em>forward</em> the ports of the inner component, that is, expose them within the outer component’s signature. To use the <code class="code highlight pc python docutils literal highlight-python"><span class="n">SimpleStreamSignature</span></code> definition above in an example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">DataProcessorImplementation</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
     <span class="n">source</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="n">SimpleStreamSignature</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
@@ -469,15 +460,12 @@
 <span class="n">wiring</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">adapted_data_source</span><span class="p">,</span> <span class="n">data_consumer</span><span class="o">.</span><span class="n">sink</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>When creating an adapted interface, use the <a class="reference internal" href="#amaranth.lib.wiring.Signature.create" title="amaranth.lib.wiring.Signature.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create</span></code></a> method of the signature that is required elsewhere in the design.</p>
 </section>
 <section id="customizing-signatures-and-interfaces">
 <span id="wiring-customizing"></span><h3>Customizing signatures and interfaces<a class="headerlink" href="#customizing-signatures-and-interfaces" title="Permalink to this heading"></a></h3>
 <p>The <a class="reference internal" href="#module-amaranth.lib.wiring" title="amaranth.lib.wiring"><code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.lib.wiring</span></code></a> module encourages creation of reusable building blocks. In the examples above, a custom signature, <code class="code highlight pc python docutils literal highlight-python"><span class="n">SimpleStreamSignature</span></code>, was introduced to illustrate the essential concepts necessary to use this module. While sufficient for that goal, it does not demonstrate the full capabilities provided by the module.</p>
 <p>Consider a simple System-on-Chip memory bus with a configurable address width. In an application like that, additional properties and methods could be usefully defined both on the signature (for example, properties to retrieve the parameters of the interface) and on the created interface object (for example, methods to examine the control and status signals). These can be defined as follows:</p>
-<div class="admonition-todo admonition" id="id2">
-<p class="admonition-title">Todo</p>
-<p>Update after <a class="reference external" href="https://github.com/amaranth-lang/amaranth/issues/987">https://github.com/amaranth-lang/amaranth/issues/987</a> is fixed</p>
-</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">amaranth.lib</span> <span class="kn">import</span> <span class="n">enum</span>
 
 
@@ -507,8 +495,8 @@
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;SimpleBusSignature(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">addr_width</span><span class="si">}</span><span class="s2">)&quot;</span>
 
-    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="p">()):</span>
-        <span class="k">return</span> <span class="n">SimpleBusInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">src_loc_at</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SimpleBusInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">src_loc_at</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="n">src_loc_at</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">SimpleBusInterface</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">PureInterface</span><span class="p">):</span>
@@ -521,7 +509,7 @@
 </div>
 <p>This example demonstrates several important principles of use:</p>
 <ul class="simple">
-<li><p>Defining additional properties for a custom signature. The <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> objects are mutable in a restricted way, and can be frozen with the <a class="reference internal" href="#amaranth.lib.wiring.Signature.freeze" title="amaranth.lib.wiring.Signature.freeze"><code class="xref py py-meth docutils literal notranslate"><span class="pre">freeze</span></code></a> method. In almost all cases, the newly defined properties must be immutable, as shown above.</p></li>
+<li><p>Defining additional properties for a custom signature. The <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> objects are mutable in a restricted way, and can be frozen with the <code class="xref py py-meth docutils literal notranslate"><span class="pre">freeze</span></code> method. In almost all cases, the newly defined properties must be immutable, as shown above.</p></li>
 <li><p>Defining a signature-specific <code class="code highlight pc python docutils literal highlight-python"><span class="fm">__eq__</span></code> method. While anonymous (created from a dictionary of members) instances of <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> compare structurally, instances of <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a>-derived classes compare by identity unless the equality operator is overridden. In almost all cases, the equality operator should compare the parameters of the signatures rather than their structures.</p></li>
 <li><p>Defining a signature-specific <code class="code highlight pc python docutils literal highlight-python"><span class="fm">__repr__</span></code> method. Similarly to <code class="code highlight pc python docutils literal highlight-python"><span class="fm">__eq__</span></code>, the default implementation for <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a>-derived classes uses the signature’s identity. In almost all cases, the representation conversion operator should return an expression that constructs an equivalent signature.</p></li>
 <li><p>Defining a signature-specific <code class="code highlight pc python docutils literal highlight-python"><span class="n">create</span></code> method. The default implementation used in anonymous signatures, <a class="reference internal" href="#amaranth.lib.wiring.Signature.create" title="amaranth.lib.wiring.Signature.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Signature.create()</span></code></a>, returns a new instance of <a class="reference internal" href="#amaranth.lib.wiring.PureInterface" title="amaranth.lib.wiring.PureInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">PureInterface</span></code></a>. Whenever the custom signature has a corresponding custom interface object class, this method should return a new instance of that class. It should not have any required arguments beyond the ones that <a class="reference internal" href="#amaranth.lib.wiring.Signature.create" title="amaranth.lib.wiring.Signature.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Signature.create()</span></code></a> has (required parameters should be provided when creating the signature and not the interface), but may take additional optional arguments, forwarding them to the interface object constructor.</p></li>
@@ -535,16 +523,16 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sig24</span> <span class="o">==</span> <span class="n">SimpleBusSignature</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bus</span> <span class="o">=</span> <span class="n">sig24</span><span class="o">.</span><span class="n">create</span><span class="p">();</span> <span class="n">bus</span>
-<span class="go">&lt;SimpleBusInterface: SimpleBusSignature(24), addr=(sig addr), en=(sig en), r_data=(sig r_data), rw=EnumView(TransferType, (sig rw)), w_data=(sig w_data)&gt;</span>
+<span class="go">&lt;SimpleBusInterface: SimpleBusSignature(24), addr=(sig bus__addr), en=(sig bus__en), r_data=(sig bus__r_data), rw=EnumView(TransferType, (sig bus__rw)), w_data=(sig bus__w_data)&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bus</span><span class="o">.</span><span class="n">is_read_xfer</span><span class="p">()</span>
-<span class="go">(&amp; (sig en) (== (sig rw) (const 1&#39;d1)))</span>
+<span class="go">(&amp; (sig bus__en) (== (sig bus__rw) (const 1&#39;d1)))</span>
 </pre></div>
 </div>
 <p>The custom properties defined for both the signature and the interface object can be used on the flipped signature and the flipped interface in the usual way:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sig32</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span><span class="o">.</span><span class="n">addr_width</span>
 <span class="go">32</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wiring</span><span class="o">.</span><span class="n">flipped</span><span class="p">(</span><span class="n">bus</span><span class="p">)</span><span class="o">.</span><span class="n">is_read_xfer</span><span class="p">()</span>
-<span class="go">(&amp; (sig en) (== (sig rw) (const 1&#39;d1)))</span>
+<span class="go">(&amp; (sig bus__en) (== (sig bus__rw) (const 1&#39;d1)))</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -558,18 +546,12 @@
 </section>
 <section id="paths">
 <span id="wiring-path"></span><h3>Paths<a class="headerlink" href="#paths" title="Permalink to this heading"></a></h3>
-<div class="admonition-todo admonition" id="id3">
-<p class="admonition-title">Todo</p>
-<p>Write this</p>
-</div>
+<p>Whenever an operation in this module needs to refer to the interior of an object, it accepts or produces a <em>path</em>: a tuple of strings and integers denoting the attribute names and indexes through which an interior value can be extracted. For example, the path <code class="code highlight pc python docutils literal highlight-python"><span class="p">(</span><span class="s2">&quot;buses&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;cyc&quot;</span><span class="p">)</span></code> into the object <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj</span></code> corresponds to the Python expression <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj</span><span class="o">.</span><span class="n">buses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cyc</span></code>.</p>
+<p>When they appear in diagnostics, paths are printed as the corresponding Python expression.</p>
 </section>
 </section>
 <section id="signatures">
 <h2>Signatures<a class="headerlink" href="#signatures" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id4">
-<p class="admonition-title">Todo</p>
-<p>Finish this section</p>
-</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Flow">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amaranth.lib.wiring.</span></span><span class="sig-name descname"><span class="pre">Flow</span></span><a class="headerlink" href="#amaranth.lib.wiring.Flow" title="Permalink to this definition"></a></dt>
@@ -654,9 +636,9 @@ reset value.</p>
 a <cite>signature member</cite>, and accessing properties for the wrong kind of member raises
 an <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AttributeError" title="(in Python v3.12)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">AttributeError</span></code></a>.</p>
 <p>The class is created from a <cite>description</cite>: a <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> instance (in which case
-the <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a> is created as a signature member), or
-a <a class="reference internal" href="../lang.html#lang-shapecasting"><span class="std std-ref">shape-castable</span></a> object (in which case it is created as a port
-member). After creation the <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a> instance cannot be modified.</p>
+the <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a> is created as a signature member), or a <a class="reference internal" href="../lang.html#lang-shapelike"><span class="std std-ref">shape-like</span></a>
+object (in which case it is created as a port member). After creation the <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a>
+instance cannot be modified.</p>
 <p>When a <code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code> is created from a description of a port member, the signal’s reset value
 is taken from the member description. If this signal is never explicitly assigned a value, it
 will equal <code class="docutils literal notranslate"><span class="pre">reset</span></code>.</p>
@@ -750,7 +732,7 @@ identical to <code class="code highlight pc python docutils literal highlight-py
 <dd class="field-odd"><p>The shape that was provided when constructing this <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a>.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../lang.html#lang-shapecasting"><span class="std std-ref">shape-castable object</span></a></p>
+<dd class="field-even"><p><a class="reference internal" href="../lang.html#lang-shapelike"><span class="std std-ref">shape-like object</span></a></p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AttributeError" title="(in Python v3.12)"><strong>AttributeError</strong></a> – If <code class="code highlight pc python docutils literal highlight-python"><span class="bp">self</span></code> describes a signature member.</p>
@@ -767,7 +749,7 @@ identical to <code class="code highlight pc python docutils literal highlight-py
 <dd class="field-odd"><p>The reset value that was provided when constructing this <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a>.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../lang.html#lang-shapecasting"><span class="std std-ref">const-castable object</span></a></p>
+<dd class="field-even"><p><a class="reference internal" href="../lang.html#lang-constcasting"><span class="std std-ref">const-castable object</span></a></p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AttributeError" title="(in Python v3.12)"><strong>AttributeError</strong></a> – If <code class="code highlight pc python docutils literal highlight-python"><span class="bp">self</span></code> describes a signature member.</p>
@@ -896,15 +878,10 @@ the members that are accessed using it.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.SignatureMembers.__setitem__">
 <span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">member</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.SignatureMembers.__setitem__" title="Permalink to this definition"></a></dt>
-<dd><p>Associate a member name with a description.</p>
+<dd><p>Stub that forbids addition of members to the collection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.12)"><strong>TypeError</strong></a> – If <code class="code highlight pc python docutils literal highlight-python"><span class="n">name</span></code> is not a string, or <code class="code highlight pc python docutils literal highlight-python"><span class="n">Member</span></code> is not a <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Member</span></code></a>.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NameError" title="(in Python v3.12)"><strong>NameError</strong></a> – If <code class="code highlight pc python docutils literal highlight-python"><span class="n">name</span></code> is not a valid, public Python attribute name.</p></li>
-<li><p><a class="reference internal" href="#amaranth.lib.wiring.SignatureError" title="amaranth.lib.wiring.SignatureError"><strong>SignatureError</strong></a> – If a member called <code class="code highlight pc python docutils literal highlight-python"><span class="n">name</span></code> already exists in the collection, or if the collection
-    has been frozen.</p></li>
-</ul>
+<dd class="field-odd"><p><a class="reference internal" href="#amaranth.lib.wiring.SignatureError" title="amaranth.lib.wiring.SignatureError"><strong>SignatureError</strong></a> – Always.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -926,39 +903,12 @@ the members that are accessed using it.</p>
 <dd><p>Iterate through the names of members in the collection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Names of members, in lexicographical order. (<em>Not</em> the order of insertion.)</p>
+<dd class="field-odd"><p>Names of members, in the order of insertion.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>iterator of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="amaranth.lib.wiring.SignatureMembers.__iadd__">
-<span class="sig-name descname"><span class="pre">__iadd__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">members</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.SignatureMembers.__iadd__" title="Permalink to this definition"></a></dt>
-<dd><p>Add multiple members to this mapping.</p>
-<p><code class="code highlight pc python docutils literal highlight-python"><span class="n">members</span></code> must be another mapping: a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> or anything that can be converted
-to one.</p>
-<p>See <a class="reference internal" href="#amaranth.lib.wiring.SignatureMembers.__setitem__" title="amaranth.lib.wiring.SignatureMembers.__setitem__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__setitem__()</span></code></a> for information about raised exceptions.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="amaranth.lib.wiring.SignatureMembers.frozen">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">frozen</span></span><a class="headerlink" href="#amaranth.lib.wiring.SignatureMembers.frozen" title="Permalink to this definition"></a></dt>
-<dd><p>Whether this collection has been frozen yet.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="amaranth.lib.wiring.SignatureMembers.freeze">
-<span class="sig-name descname"><span class="pre">freeze</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.SignatureMembers.freeze" title="Permalink to this definition"></a></dt>
-<dd><p>Freeze this collection.</p>
-<p>Freezing a collection prevents further modification to it or any signatures contained in it.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -994,7 +944,7 @@ be reached.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.SignatureMembers.create">
-<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.SignatureMembers.create" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.SignatureMembers.create" title="Permalink to this definition"></a></dt>
 <dd><p>Create members from their descriptions.</p>
 <p>For each port member, this function creates a <code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code> with the shape and reset
 value taken from the member description, and the name constructed from
@@ -1011,7 +961,7 @@ a list of members is returned, for two dimensions a list of lists is returned, a
 <dd class="field-odd"><p>Mapping of names to actual signature members.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> to <a class="reference internal" href="../lang.html#lang-valuecasting"><span class="std std-ref">value-castable</span></a> or interface object or a potentially nested list of these</p>
+<dd class="field-even"><p>dict of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> to <a class="reference internal" href="../lang.html#lang-valuelike"><span class="std std-ref">value-like</span></a> or interface object or a potentially nested list of these</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1025,18 +975,11 @@ a list of members is returned, for two dimensions a list of lists is returned, a
 <p>Although an instance of <a class="reference internal" href="#amaranth.lib.wiring.FlippedSignatureMembers" title="amaranth.lib.wiring.FlippedSignatureMembers"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlippedSignatureMembers</span></code></a> could be created directly, it will
 be usually created by a call to <a class="reference internal" href="#amaranth.lib.wiring.SignatureMembers.flip" title="amaranth.lib.wiring.SignatureMembers.flip"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SignatureMembers.flip()</span></code></a>.</p>
 <p>This container is a wrapper around <a class="reference internal" href="#amaranth.lib.wiring.SignatureMembers" title="amaranth.lib.wiring.SignatureMembers"><code class="xref py py-class docutils literal notranslate"><span class="pre">SignatureMembers</span></code></a> that contains the same members
-as the inner mapping, but flips their data flow when they are accessed. It is useful because
-<a class="reference internal" href="#amaranth.lib.wiring.SignatureMembers" title="amaranth.lib.wiring.SignatureMembers"><code class="xref py py-class docutils literal notranslate"><span class="pre">SignatureMembers</span></code></a> is a mutable mapping, and if it was copied (rather than wrapped)
-by <a class="reference internal" href="#amaranth.lib.wiring.SignatureMembers.flip" title="amaranth.lib.wiring.SignatureMembers.flip"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SignatureMembers.flip()</span></code></a>, adding members would cause the flipped copy to become
-outdated.</p>
-<p>For example:</p>
+as the inner mapping, but flips their data flow when they are accessed. For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">members</span> <span class="o">=</span> <span class="n">wiring</span><span class="o">.</span><span class="n">SignatureMembers</span><span class="p">({</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">1</span><span class="p">)})</span>
 
 <span class="n">flipped_members</span> <span class="o">=</span> <span class="n">members</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
 <span class="k">assert</span> <span class="n">flipped_members</span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">flow</span> <span class="o">==</span> <span class="n">In</span>
-
-<span class="n">flipped_members</span><span class="p">[</span><span class="s2">&quot;bar&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">In</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">members</span><span class="p">[</span><span class="s2">&quot;bar&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Out</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This class implements the same methods, with the same functionality (other than the flipping of
@@ -1070,6 +1013,11 @@ together. See the <a class="reference internal" href="#wiring-intro1"><span clas
 explanation of why this is useful.</p>
 <p><a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> can be used as a base class to define <a class="reference internal" href="#wiring-customizing"><span class="std std-ref">customized</span></a>
 signatures and interface objects.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> objects are immutable. Classes inheriting from <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> must
+ensure this remains the case when additional functionality is added.</p>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Signature.flip">
 <span class="sig-name descname"><span class="pre">flip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Signature.flip" title="Permalink to this definition"></a></dt>
@@ -1119,34 +1067,6 @@ the overridden method must take that into account.</p>
 </dl>
 </dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="amaranth.lib.wiring.Signature.frozen">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">frozen</span></span><a class="headerlink" href="#amaranth.lib.wiring.Signature.frozen" title="Permalink to this definition"></a></dt>
-<dd><p>Whether this signature is frozen.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="code highlight pc python docutils literal highlight-python"><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">frozen</span></code></p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="amaranth.lib.wiring.Signature.freeze">
-<span class="sig-name descname"><span class="pre">freeze</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Signature.freeze" title="Permalink to this definition"></a></dt>
-<dd><p>Freeze this signature.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="code highlight pc python docutils literal highlight-python"><span class="bp">self</span></code></p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Self</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Signature.flatten">
 <span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Signature.flatten" title="Permalink to this definition"></a></dt>
@@ -1162,8 +1082,8 @@ object.</p>
 <span class="gp">... </span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
-<span class="go">[((&#39;items&#39;, 0), In(1), (sig items__0)),</span>
-<span class="go"> ((&#39;items&#39;, 1), In(1), (sig items__1))]</span>
+<span class="go">[((&#39;items&#39;, 0), In(1), (sig obj__items__0)),</span>
+<span class="go"> ((&#39;items&#39;, 1), In(1), (sig obj__items__1))]</span>
 </pre></div>
 </div>
 <p>The <a class="reference internal" href="#amaranth.lib.wiring.SignatureMembers.flatten" title="amaranth.lib.wiring.SignatureMembers.flatten"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SignatureMembers.flatten()</span></code></a> method yields one result for such a member; see
@@ -1176,7 +1096,7 @@ yielded by this method is a tuple of strings or integers where each item is an a
 name or index (correspondingly) using which the member value was retrieved.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>iterator of (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference internal" href="#amaranth.lib.wiring.Flow" title="amaranth.lib.wiring.Flow"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flow</span></code></a>, <a class="reference internal" href="../lang.html#lang-valuecasting"><span class="std std-ref">value-castable</span></a>)</p>
+<dd class="field-even"><p>iterator of (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference internal" href="#amaranth.lib.wiring.Flow" title="amaranth.lib.wiring.Flow"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flow</span></code></a>, <a class="reference internal" href="../lang.html#lang-valuelike"><span class="std std-ref">value-like</span></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1184,28 +1104,85 @@ name or index (correspondingly) using which the member value was retrieved.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Signature.is_compliant">
 <span class="sig-name descname"><span class="pre">is_compliant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reasons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('obj',)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Signature.is_compliant" title="Permalink to this definition"></a></dt>
-<dd><p>Check whether an object defines values for each member in this signature.</p>
-<div class="admonition-todo admonition" id="id5">
-<p class="admonition-title">Todo</p>
-<p>Finish this documentation</p>
-</div>
+<dd><p>Check whether an object matches the description in this signature.</p>
+<p>This module places few restrictions on what an interface object may be; it does not
+prescribe a specific base class or a specific way of constructing the object, only
+the values that its attributes should have. This method ensures consistency between
+the signature and the interface object, checking every aspect of the provided interface
+object for compliance with the signature.</p>
+<p>It verifies that:</p>
+<ul class="simple">
+<li><p><code class="code highlight pc python docutils literal highlight-python"><span class="n">obj</span></code> has a <code class="code highlight pc python docutils literal highlight-python"><span class="n">signature</span></code> attribute whose value a <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> instance
+such that <code class="docutils literal notranslate"><span class="pre">self</span> <span class="pre">==</span> <span class="pre">obj.signature</span></code>;</p></li>
+<li><p>for each member, <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj</span></code> has an attribute with the same name, whose value:</p>
+<ul>
+<li><p>for members with <a class="reference internal" href="#amaranth.lib.wiring.Member.dimensions" title="amaranth.lib.wiring.Member.dimensions"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dimensions</span></code></a> specified, contains a list or
+a tuple (or several levels of nested lists or tuples, for multiple dimensions)
+satisfying the requirements below;</p></li>
+<li><p>for port members, is a <a class="reference internal" href="../lang.html#lang-valuelike"><span class="std std-ref">value-like</span></a> object casting to
+a <code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code> or a <code class="xref py py-class docutils literal notranslate"><span class="pre">Const</span></code> whose width and signedness is the same as that
+of the member, and (in case of a <code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code>) which is not reset-less and whose
+reset value is that of the member;</p></li>
+<li><p>for signature members, matches the description in the signature as verified by
+<a class="reference internal" href="#amaranth.lib.wiring.Signature.is_compliant" title="amaranth.lib.wiring.Signature.is_compliant"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Signature.is_compliant()</span></code></a>.</p></li>
+</ul>
+</li>
+</ul>
+<p>If the verification fails, this method reports the reason(s) by filling the <code class="code highlight pc python docutils literal highlight-python"><span class="n">reasons</span></code>
+container. These reasons are intended to be human-readable: more than one reason may be
+reported but only in cases where this is helpful (e.g. the same error message will not
+repeat 10 times for each of the 10 ports in a list).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="code highlight pc python docutils literal highlight-python"><span class="kc">True</span></code> if <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj</span></code> defines attributes TODO</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reasons</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <code class="code highlight pc python docutils literal highlight-python"><span class="kc">None</span></code>) – If provided, a container that receives diagnostic messages.</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The <a class="reference internal" href="#wiring-path"><span class="std std-ref">path</span></a> to <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj</span></code>. Could be set to improve diagnostic
+messages if <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj</span></code> is nested within another object, or for clarity.</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="code highlight pc python docutils literal highlight-python"><span class="kc">True</span></code> if <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj</span></code> matches the description in this signature, <code class="code highlight pc python docutils literal highlight-python"><span class="kc">False</span></code>
+otherwise. If <code class="code highlight pc python docutils literal highlight-python"><span class="kc">False</span></code> and <code class="code highlight pc python docutils literal highlight-python"><span class="n">reasons</span></code> was not <code class="code highlight pc python docutils literal highlight-python"><span class="kc">None</span></code>, it will contain
+a detailed explanation why.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Signature.create">
-<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Signature.create" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id6">
-<p class="admonition-title">Todo</p>
-<p>Document this method</p>
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Signature.create" title="Permalink to this definition"></a></dt>
+<dd><p>Create an interface object from this signature.</p>
+<p>The default <a class="reference internal" href="#amaranth.lib.wiring.Signature.create" title="amaranth.lib.wiring.Signature.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Signature.create()</span></code></a> implementation consists of one line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">src_loc_at</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">PureInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">src_loc_at</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="n">src_loc_at</span><span class="p">)</span>
+</pre></div>
 </div>
+<p>This implementation creates an interface object from this signature that serves purely
+as a container for the attributes corresponding to the signature members, and implements
+no behavior. Such an implementation is sufficient for signatures created ad-hoc using
+the <code class="code highlight pc python docutils literal highlight-python"><span class="n">Signature</span><span class="p">({</span> <span class="o">...</span> <span class="p">})</span></code> constructor as well as simple signature subclasses.</p>
+<p>When defining a <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> subclass that needs to customize the behavior of
+the created interface objects, override this method with a similar implementation
+that references the class of your custom interface object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">CustomSignature</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">src_loc_at</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">CustomInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">src_loc_at</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="n">src_loc_at</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">CustomInterface</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">PureInterface</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">my_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<p>The <code class="code highlight pc python docutils literal highlight-python"><span class="n">path</span></code> and <code class="code highlight pc python docutils literal highlight-python"><span class="n">src_loc_at</span></code> arguments are necessary to ensure the generated signals
+have informative names and accurate source location information.</p>
+<p>The custom <a class="reference internal" href="#amaranth.lib.wiring.Signature.create" title="amaranth.lib.wiring.Signature.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a> method may take positional or keyword arguments in addition to
+the two listed above. Such arguments must have a default value, because
+the <a class="reference internal" href="#amaranth.lib.wiring.SignatureMembers.create" title="amaranth.lib.wiring.SignatureMembers.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SignatureMembers.create()</span></code></a> method will call the <a class="reference internal" href="#amaranth.lib.wiring.Signature.create" title="amaranth.lib.wiring.Signature.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Signature.create()</span></code></a> member
+without these additional arguments when this signature is a member of another signature.</p>
 </dd></dl>
 
 </dd></dl>
@@ -1328,13 +1305,9 @@ described below.</p>
 </section>
 <section id="interfaces">
 <h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id7">
-<p class="admonition-title">Todo</p>
-<p>Finish this section</p>
-</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.PureInterface">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amaranth.lib.wiring.</span></span><span class="sig-name descname"><span class="pre">PureInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signature</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.PureInterface" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amaranth.lib.wiring.</span></span><span class="sig-name descname"><span class="pre">PureInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signature</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.PureInterface" title="Permalink to this definition"></a></dt>
 <dd><p>A helper for constructing ad-hoc interfaces.</p>
 <p>The <a class="reference internal" href="#amaranth.lib.wiring.PureInterface" title="amaranth.lib.wiring.PureInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">PureInterface</span></code></a> helper primarily exists to be used by the default implementation of
 <a class="reference internal" href="#amaranth.lib.wiring.Signature.create" title="amaranth.lib.wiring.Signature.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Signature.create()</span></code></a>, but it can also be used in any other context where an interface
@@ -1343,12 +1316,12 @@ object needs to be created without the overhead of defining a class for it.</p>
 <p class="admonition-title">Important</p>
 <p>Any object can be an interface object; it only needs a <code class="code highlight pc python docutils literal highlight-python"><span class="n">signature</span></code> property containing
 a compliant signature. It is <strong>not</strong> necessary to use <a class="reference internal" href="#amaranth.lib.wiring.PureInterface" title="amaranth.lib.wiring.PureInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">PureInterface</span></code></a> in order to
-create an interface object, but it may be used as a base class whenever it is convenient
-to do so.</p>
+create an interface object, but it may be used either directly or as a base class whenever
+it is convenient to do so.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.PureInterface.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signature</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.PureInterface.__init__" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signature</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.PureInterface.__init__" title="Permalink to this definition"></a></dt>
 <dd><p>Create attributes from a signature.</p>
 <p>The sole method defined by this helper is its constructor, which only defines
 the <code class="code highlight pc python docutils literal highlight-python"><span class="bp">self</span><span class="o">.</span><span class="n">signature</span></code> attribute as well as the attributes created from the signature
@@ -1489,46 +1462,116 @@ this proxy object works.</p>
 </section>
 <section id="making-connections">
 <h2>Making connections<a class="headerlink" href="#making-connections" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id8">
-<p class="admonition-title">Todo</p>
-<p>Finish this section</p>
-</div>
 <dl class="py exception">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.ConnectionError">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amaranth.lib.wiring.</span></span><span class="sig-name descname"><span class="pre">ConnectionError</span></span><a class="headerlink" href="#amaranth.lib.wiring.ConnectionError" title="Permalink to this definition"></a></dt>
-<dd><p>This exception is raised when the <a class="reference internal" href="#amaranth.lib.wiring.connect" title="amaranth.lib.wiring.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a> function is requested to perform
-an impossible, meaningless, or forbidden connection.</p>
+<dd><p>Exception raised when the <a class="reference internal" href="#amaranth.lib.wiring.connect" title="amaranth.lib.wiring.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a> function is requested to perform an impossible,
+meaningless, or forbidden connection.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.connect">
 <span class="sig-prename descclassname"><span class="pre">amaranth.lib.wiring.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.connect" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id9">
-<p class="admonition-title">Todo</p>
-<p>Write this</p>
+<dd><p>Connect interface objects to each other.</p>
+<p>This function creates connections between ports of several interface objects. (Any number of
+interface objects may be provided; in most cases it is two.)</p>
+<p>The connections can be made only if all of the objects satisfy a number of requirements:</p>
+<ul class="simple">
+<li><p>Every interface object must have the same set of port members, and they must have the same
+<a class="reference internal" href="#amaranth.lib.wiring.Member.dimensions" title="amaranth.lib.wiring.Member.dimensions"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dimensions</span></code></a>.</p></li>
+<li><p>For each path, the port members of every interface object must have the same width and reset
+value (for port members corresponding to signals) or constant value (for port members
+corresponding to constants). Signedness may differ.</p></li>
+<li><p>For each path, at most one interface object must have the corresponding port member be
+an output.</p></li>
+<li><p>For a given path, if any of the interface objects has an input port member corresponding
+to a constant value, then the rest of the interface objects must have output port members
+corresponding to the same constant value.</p></li>
+</ul>
+<p>For example, if <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj1</span></code> is being connected to <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj2</span></code> and <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj3</span></code>, and <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj1</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">b</span></code>
+is an output, then <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj2</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">b</span></code> and <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj2</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">b</span></code> must exist and be inputs. If <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj2</span><span class="o">.</span><span class="n">c</span></code>
+is an input and its value is <code class="code highlight pc python docutils literal highlight-python"><span class="n">Const</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></code>, then <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj1</span><span class="o">.</span><span class="n">c</span></code> and <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj3</span><span class="o">.</span><span class="n">c</span></code> must be outputs
+whose value is also <code class="code highlight pc python docutils literal highlight-python"><span class="n">Const</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></code>. If no ports besides <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj1</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">b</span></code> and <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj1</span><span class="o">.</span><span class="n">c</span></code> exist,
+then no ports except for those two must exist on <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj2</span></code> and <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj3</span></code> either.</p>
+<p>Once it is determined that the interface objects can be connected, this function performs
+an equivalent of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">comb</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="n">in1</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">out1</span><span class="p">),</span>
+    <span class="n">in2</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">out1</span><span class="p">),</span>
+    <span class="o">...</span>
+<span class="p">]</span>
+</pre></div>
 </div>
+<p>Where <code class="code highlight pc python docutils literal highlight-python"><span class="n">out1</span></code> is an output and <code class="code highlight pc python docutils literal highlight-python"><span class="n">in1</span></code>, <code class="code highlight pc python docutils literal highlight-python"><span class="n">in2</span></code>, … are the inputs that have the same
+path. (If no interface object has an output for a given path, <strong>no connection at all</strong> is made.)</p>
+<p>The positions (within <code class="code highlight pc python docutils literal highlight-python"><span class="n">args</span></code>) or names (within <code class="code highlight pc python docutils literal highlight-python"><span class="n">kwargs</span></code>) of the arguments do not affect
+the connections that are made. There is no difference in behavior between <code class="code highlight pc python docutils literal highlight-python"><span class="n">connect</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span></code>
+and <code class="code highlight pc python docutils literal highlight-python"><span class="n">connect</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span></code> or <code class="code highlight pc python docutils literal highlight-python"><span class="n">connect</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">arbiter</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">decoder</span><span class="o">=</span><span class="n">b</span><span class="p">)</span></code>. The names of the keyword
+arguments serve only a documentation purpose: they clarify the diagnostic messages when
+a connection cannot be made.</p>
 </dd></dl>
 
 </section>
 <section id="components">
 <h2>Components<a class="headerlink" href="#components" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id10">
-<p class="admonition-title">Todo</p>
-<p>Finish this section</p>
-</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Component">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amaranth.lib.wiring.</span></span><span class="sig-name descname"><span class="pre">Component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.wiring.Component" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id11">
-<p class="admonition-title">Todo</p>
-<p>Write this</p>
+<dd><p>Base class for elaboratable interface objects.</p>
+<p>A component is an <code class="xref py py-class docutils literal notranslate"><span class="pre">Elaboratable</span></code> whose interaction with other parts of the design is
+defined by its signature. Most if not all elaboratables in idiomatic Amaranth code should be
+components, as the signature clarifies the direction of data flow at their boundary. See
+the <a class="reference internal" href="#wiring-intro1"><span class="std std-ref">introduction to interfaces</span></a> section for a practical guide to defining
+and using components.</p>
+<p>There are two ways to define a component. If all instances of a component have the same
+signature, it can be defined using <a class="reference external" href="https://docs.python.org/3/glossary.html#term-variable-annotation" title="(in Python v3.12)"><span class="xref std std-term">variable annotations</span></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FixedComponent</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">en</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+</pre></div>
 </div>
+<p>The variable annotations are collected by the constructor <code class="xref py py-meth docutils literal notranslate"><span class="pre">Component.__init__()</span></code>. Only
+public (not starting with <code class="docutils literal notranslate"><span class="pre">_</span></code>) annotations with <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">In</span></code></a> or <a class="reference internal" href="#amaranth.lib.wiring.Member" title="amaranth.lib.wiring.Member"><code class="xref py py-class docutils literal notranslate"><span class="pre">Out</span></code></a>
+objects are considered; all other annotations are ignored under the assumption that they are
+interpreted by some other tool.</p>
+<p>It is possible to use inheritance to extend a component: the component’s signature is composed
+from the variable annotations in the class that is being constructed as well as all of its
+base classes. It is an error to have more than one variable annotation for the same attribute.</p>
+<p>If different instances of a component may need to have different signatures, variable
+annotations cannot be used. In this case, the constructor should be overridden, and
+the computed signature members should be provided to the superclass constructor:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ParametricComponent</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_width</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">({</span>
+            <span class="s2">&quot;en&quot;</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="n">data_width</span><span class="p">)</span>
+        <span class="p">})</span>
+</pre></div>
+</div>
+<p>It is also possible to pass a <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> instance to the superclass constructor.</p>
+<p>Aside from initializing the <a class="reference internal" href="#amaranth.lib.wiring.Component.signature" title="amaranth.lib.wiring.Component.signature"><code class="xref py py-attr docutils literal notranslate"><span class="pre">signature</span></code></a> attribute, the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Component.__init__()</span></code>
+constructor creates attributes corresponding to all of the members defined in the signature.
+If an attribute with the same name as that of a member already exists, an error is raied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.12)"><strong>TypeError</strong></a> – If the <code class="code highlight pc python docutils literal highlight-python"><span class="n">signature</span></code> object is neither a <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> nor a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.
+    If neither variable annotations nor the <code class="code highlight pc python docutils literal highlight-python"><span class="n">signature</span></code> argument are present, or if
+    both are present.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NameError" title="(in Python v3.12)"><strong>NameError</strong></a> – If a name conflict is detected between two variable annotations, or between a member
+    and an existing attribute.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="amaranth.lib.wiring.Component.signature">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#amaranth.lib.wiring.Component.signature" title="Permalink to this definition"></a></dt>
-<dd><div class="admonition-todo admonition" id="id12">
-<p class="admonition-title">Todo</p>
-<p>Document this property</p>
+<dd><p>The signature of the component.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Do not override this property. Once a component is constructed, its <a class="reference internal" href="#amaranth.lib.wiring.Component.signature" title="amaranth.lib.wiring.Component.signature"><code class="xref py py-attr docutils literal notranslate"><span class="pre">signature</span></code></a>
+property must always return the same <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> instance. The constructor
+can be used to customize a component’s signature.</p>
 </div>
 </dd></dl>
 
