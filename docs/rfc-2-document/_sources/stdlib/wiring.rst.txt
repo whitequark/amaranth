@@ -105,7 +105,7 @@ This information, aside from being clear from the source code, can now be retrie
 .. doctest::
 
     >>> ComponentCounter().signature
-    Signature({'count': Out(8), 'en': In(1), 'limit': In(8), 'overflow': Out(1)})
+    Signature({'en': In(1), 'count': Out(8), 'limit': In(8), 'overflow': Out(1)})
 
 The :ref:`shapes <lang-shapes>` of the ports need not be static. The :pc:`ComponentCounter` can be made generic, with its range specified when it is constructed, by creating the signature explicitly in its constructor:
 
@@ -128,7 +128,7 @@ The :ref:`shapes <lang-shapes>` of the ports need not be static. The :pc:`Compon
 .. doctest::
 
     >>> GenericCounter(16).signature
-    Signature({'count': Out(16), 'en': In(1), 'limit': In(16), 'overflow': Out(1)})
+    Signature({'en': In(1), 'count': Out(16), 'limit': In(16), 'overflow': Out(1)})
 
 Instances of the :class:`ComponentCounter` and :class:`GenericCounter` class are two examples of *interface objects*. An interface object is a Python object of any type whose a :pc:`signature` attribute contains a :class:`Signature` with which the interface object is compliant (as determined by the :meth:`is_compliant <Signature.is_compliant>` method of the signature).
 
@@ -507,7 +507,7 @@ This example demonstrates several important principles of use:
     >>> sig24 == SimpleBusSignature(24)
     True
     >>> bus = sig24.create(); bus
-    <SimpleBusInterface: SimpleBusSignature(24), addr=(sig bus__addr), en=(sig bus__en), r_data=(sig bus__r_data), rw=EnumView(TransferType, (sig bus__rw)), w_data=(sig bus__w_data)>
+    <SimpleBusInterface: SimpleBusSignature(24), en=(sig bus__en), rw=EnumView(TransferType, (sig bus__rw)), addr=(sig bus__addr), r_data=(sig bus__r_data), w_data=(sig bus__w_data)>
     >>> bus.is_read_xfer()
     (& (sig bus__en) (== (sig bus__rw) (const 1'd1)))
 

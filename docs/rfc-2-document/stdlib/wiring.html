@@ -38,7 +38,7 @@
             Amaranth HDL toolchain
           </a>
               <div class="version">
-                0.4.dev267+gbb3c8e37.editable
+                0.4.dev267+g7a8ed0d2.editable
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -185,7 +185,7 @@
 </ol>
 <p>This information, aside from being clear from the source code, can now be retrieved from the <code class="code highlight pc python docutils literal highlight-python"><span class="o">.</span><span class="n">signature</span></code> attribute, which contains an instance of the <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> class:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ComponentCounter</span><span class="p">()</span><span class="o">.</span><span class="n">signature</span>
-<span class="go">Signature({&#39;count&#39;: Out(8), &#39;en&#39;: In(1), &#39;limit&#39;: In(8), &#39;overflow&#39;: Out(1)})</span>
+<span class="go">Signature({&#39;en&#39;: In(1), &#39;count&#39;: Out(8), &#39;limit&#39;: In(8), &#39;overflow&#39;: Out(1)})</span>
 </pre></div>
 </div>
 <p>The <a class="reference internal" href="../lang.html#lang-shapes"><span class="std std-ref">shapes</span></a> of the ports need not be static. The <code class="code highlight pc python docutils literal highlight-python"><span class="n">ComponentCounter</span></code> can be made generic, with its range specified when it is constructed, by creating the signature explicitly in its constructor:</p>
@@ -205,7 +205,7 @@
 </pre></div>
 </div>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">GenericCounter</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="o">.</span><span class="n">signature</span>
-<span class="go">Signature({&#39;count&#39;: Out(16), &#39;en&#39;: In(1), &#39;limit&#39;: In(16), &#39;overflow&#39;: Out(1)})</span>
+<span class="go">Signature({&#39;en&#39;: In(1), &#39;count&#39;: Out(16), &#39;limit&#39;: In(16), &#39;overflow&#39;: Out(1)})</span>
 </pre></div>
 </div>
 <p>Instances of the <code class="xref py py-class docutils literal notranslate"><span class="pre">ComponentCounter</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">GenericCounter</span></code> class are two examples of <em>interface objects</em>. An interface object is a Python object of any type whose a <code class="code highlight pc python docutils literal highlight-python"><span class="n">signature</span></code> attribute contains a <a class="reference internal" href="#amaranth.lib.wiring.Signature" title="amaranth.lib.wiring.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signature</span></code></a> with which the interface object is compliant (as determined by the <a class="reference internal" href="#amaranth.lib.wiring.Signature.is_compliant" title="amaranth.lib.wiring.Signature.is_compliant"><code class="xref py py-meth docutils literal notranslate"><span class="pre">is_compliant</span></code></a> method of the signature).</p>
@@ -523,7 +523,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sig24</span> <span class="o">==</span> <span class="n">SimpleBusSignature</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bus</span> <span class="o">=</span> <span class="n">sig24</span><span class="o">.</span><span class="n">create</span><span class="p">();</span> <span class="n">bus</span>
-<span class="go">&lt;SimpleBusInterface: SimpleBusSignature(24), addr=(sig bus__addr), en=(sig bus__en), r_data=(sig bus__r_data), rw=EnumView(TransferType, (sig bus__rw)), w_data=(sig bus__w_data)&gt;</span>
+<span class="go">&lt;SimpleBusInterface: SimpleBusSignature(24), en=(sig bus__en), rw=EnumView(TransferType, (sig bus__rw)), addr=(sig bus__addr), r_data=(sig bus__r_data), w_data=(sig bus__w_data)&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bus</span><span class="o">.</span><span class="n">is_read_xfer</span><span class="p">()</span>
 <span class="go">(&amp; (sig bus__en) (== (sig bus__rw) (const 1&#39;d1)))</span>
 </pre></div>
