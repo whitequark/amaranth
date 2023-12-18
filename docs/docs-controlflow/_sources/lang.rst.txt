@@ -818,7 +818,7 @@ Control domains
 
 A *control domain* is a named group of :ref:`signals <lang-signals>` that change their value in identical conditions.
 
-All designs have a single predefined *combinatorial domain*, containing all signals that change immediately when any value used to compute them changes. The name ``comb`` is reserved for the combinatorial domain.
+All designs have a single predefined *combinatorial domain*, containing all signals that change immediately when any value used to compute them changes. The name ``comb`` is reserved for the combinatorial domain, and refers to the same domain in all modules.
 
 A design can also have any amount of user-defined *synchronous domains*, also called *clock domains*, containing signals that change when a specific edge occurs on the domain's clock signal or, for domains with asynchronous reset, on the domain's reset signal. Most modules only use a single synchronous domain, conventionally called ``sync``, but the name ``sync`` does not have to be used, and lacks any special meaning beyond being the default.
 
