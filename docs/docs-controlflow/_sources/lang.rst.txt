@@ -814,7 +814,7 @@ Every Amaranth design starts with a fresh module:
 .. _lang-domains:
 
 Control domains
----------------
+===============
 
 A *control domain* is a named group of :ref:`signals <lang-signals>` that change their value in identical conditions.
 
@@ -961,7 +961,7 @@ Multiple assignments to the same signal bits are more useful when combined with 
 .. _lang-control:
 
 Control flow
-------------
+============
 
 Although it is possible to write any decision tree as a combination of :ref:`assignments <lang-assigns>` and :ref:`choice expressions <lang-muxop>`, Amaranth provides *control flow syntax* tailored for this task: :ref:`If/Elif/Else <lang-if>`, :ref:`Switch/Case <lang-switch>`, and :ref:`FSM <lang-fsm>`. The control flow syntax is implemented using :ref:`context managers <python:context-managers>` and uses ``with`` blocks, for example:
 
@@ -1206,7 +1206,7 @@ Note that in Python, assignments made using :pc:`with x() as y:` syntax persist 
 .. _lang-comb:
 
 Combinatorial evaluation
-------------------------
+========================
 
 Signals in the combinatorial :ref:`control domain <lang-domains>` change whenever any value used to compute them changes. The final value of a combinatorial signal is equal to its :ref:`initial value <lang-initial>` updated by the :ref:`active assignments <lang-active>` in the :ref:`assignment order <lang-assignorder>`. Combinatorial signals cannot hold any state.
 
@@ -1243,8 +1243,26 @@ A combinatorial signal that is computed directly or indirectly based on its own 
 .. _lang-sync:
 
 Synchronous evaluation
-----------------------
+======================
 
 Signals in synchronous :ref:`control domains <lang-domains>` change whenever a specific transition (positive or negative edge) occurs on the clock of the synchronous domain. In addition, the signals in clock domains with an asynchronous reset change when such a reset is asserted. The final value of a synchronous signal is equal to its :ref:`initial value <lang-initial>` if the reset (of any type) is asserted, or to its current value updated by the :ref:`active assignments <lang-active>` in the :ref:`assignment order <lang-assignorder>` otherwise. Synchronous signals always hold state.
 
 .. TODO: link to clock domains
+
+Consider the following code:
+
+.. testsetup::
+
+    up = Signal()
+    down = Signal()
+
+.. testcode::
+
+    timer = Signal(8)
+
+    with m.If(up):
+        m.d.sync += timer.eq(timer + 1)
+    with m.Elif(down):
+        m.d.sync += timer.eq(timer - 1)
+
+Whenever there is a transition on the clock of the ``sync`` domain, the :pc:`timer` signal is incremented by one if :pc:`up` is true, decremented by one if :pc:`down` is true, and retains its value otherwise.
