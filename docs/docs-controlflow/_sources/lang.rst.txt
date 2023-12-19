@@ -757,9 +757,9 @@ Amaranth operation        Equivalent Python code
 Match operator
 --------------
 
-The :pc:`val.matches(*patterns)` operator examines a value against a set of patterns. It evaluates to :pc:`C(1)` if any of the patterns *match* the value, and to :pc:`C(0)` otherwise. What it means for a pattern to match a value depends on the type of the pattern.
+The :pc:`val.matches(*patterns)` operator examines a value against a set of patterns. It evaluates to :pc:`Const(1)` if the value *matches* any of the patterns, and to :pc:`Const(0)` otherwise. What it means for a value to match a pattern depends on the type of the pattern.
 
-If the pattern is a :class:`str`, it is treated as a bit mask with "don't care" bits. After removing whitespace, each character of the pattern is compared to the bit of the value at the same position as the character. If the pattern character is ``'0'`` or ``'1'``, the comparison succeeds if the bit equals ``0`` or ``1``. If the pattern character is ``'-'``, the comparison always succeeds. No other characters are accepted, aside from spaces and tabs, which are ignored.
+If the pattern is a :class:`str`, it is treated as a bit mask with "don't care" bits. After removing whitespace, each character of the pattern is compared to the bit of the value in the same position as the character. If the pattern character is ``'0'`` or ``'1'``, the comparison succeeds if the bit equals ``0`` or ``1`` correspondingly. If the pattern character is ``'-'``, the comparison always succeeds. Aside from spaces and tabs, which are ignored, no other characters are accepted.
 
 Otherwise, the pattern is :ref:`cast to a constant <lang-constcasting>` and compared to :pc:`val` using the :ref:`equality operator <lang-cmpops>`.
 
@@ -1050,12 +1050,14 @@ Combining these cases together, the code above is equivalent to:
 
 Conditional control flow is described using a :pc:`with m.If(cond1):` block, which may be followed by one or more :pc:`with m.Elif(cond2):` blocks, and optionally a final :pc:`with m.Else():` block. This structure parallels Python's own :ref:`if/elif/else <python:if>` control flow syntax. For example:
 
-.. testcode::
+.. testsetup::
 
     x_coord = Signal(8)
     is_fporch = Signal()
     is_active = Signal()
     is_bporch = Signal()
+
+.. testcode::
 
     with m.If(x_coord < 4):
         m.d.comb += is_bporch.eq(1)
@@ -1083,12 +1085,15 @@ Case comparison, where a single value is examined against several different *pat
 
 .. TODO: rename `Switch` to `Match`, to mirror `Value.matches()`?
 
-.. testcode::
+.. testsetup::
 
-    value = Signal(4)
     is_even = Signal()
     is_odd  = Signal()
     too_big = Signal()
+
+.. testcode::
+
+    value = Signal(4)
 
     with m.Switch(value):
         with m.Case(0, 2, 4):
