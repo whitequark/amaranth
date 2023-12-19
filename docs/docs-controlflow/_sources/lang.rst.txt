@@ -963,7 +963,7 @@ Multiple assignments to the same signal bits are more useful when combined with 
 Control flow
 ============
 
-Although it is possible to write any decision tree as a combination of :ref:`assignments <lang-assigns>` and :ref:`choice expressions <lang-muxop>`, Amaranth provides *control flow syntax* tailored for this task: :ref:`If/Elif/Else <lang-if>`, :ref:`Switch/Case <lang-switch>`, and :ref:`FSM <lang-fsm>`. The control flow syntax is implemented using :ref:`context managers <python:context-managers>` and uses ``with`` blocks, for example:
+Although it is possible to write any decision tree as a combination of :ref:`assignments <lang-assigns>` and :ref:`choice expressions <lang-muxop>`, Amaranth provides *control flow syntax* tailored for this task: :ref:`If/Elif/Else <lang-if>`, :ref:`Switch/Case <lang-switch>`, and :ref:`FSM/State <lang-fsm>`. The control flow syntax uses :pc:`with` blocks (it is implemented using :ref:`context managers <python:context-managers>`), for example:
 
 .. TODO: link to relevant subsections
 
@@ -975,14 +975,14 @@ Although it is possible to write any decision tree as a combination of :ref:`ass
    with m.Else():
        m.d.sync += timer.eq(timer - 1)
 
-While some Amaranth control structures are superficially similar to imperative control flow statements (such as Python's ``if``), their function---together with :ref:`expressions <lang-abstractexpr>` and :ref:`assignments <lang-assigns>`---is to describe circuits. The code above is equivalent to:
+While some Amaranth control structures are superficially similar to imperative control flow statements (such as Python's :pc:`if`), their function---together with :ref:`expressions <lang-abstractexpr>` and :ref:`assignments <lang-assigns>`---is to describe circuits. The code above is equivalent to:
 
 .. testcode::
 
    timer = Signal(8)
    m.d.sync += timer.eq(Mux(timer == 0, 10, timer - 1))
 
-Because all branches of a decision tree affect the generated circuit, all of the Python code inside Amaranth control structures is always evaluated in the order in which it appears in the program. This can be observed through Python code with side effects, such as ``print()``:
+Because all branches of a decision tree affect the generated circuit, all of the Python code inside Amaranth control structures is always evaluated in the order in which it appears in the program. This can be observed through Python code with side effects, such as :pc:`print()`:
 
 .. testcode::
 
