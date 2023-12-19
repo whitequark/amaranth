@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Language guide &mdash; Amaranth HDL toolchain 0.4.1.dev7 documentation</title>
+  <title>Language guide &mdash; Amaranth HDL toolchain 0.4.1.dev8 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/platformpicker.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=0373f0fe"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=eb69533c"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
         <script src="_static/platformpicker.js"></script>
@@ -38,7 +38,7 @@
             Amaranth HDL toolchain
           </a>
               <div class="version">
-                0.4.1.dev7+gf9c95bf5.editable
+                0.4.1.dev8+ge4dbad26.editable
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -114,7 +114,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#combinatorial-evaluation">Combinatorial evaluation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#synchronous-evaluation">Synchronous evaluation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#clock-domains">Clock domains</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#clocksignal-and-resetsignal"><code class="code highlight pc python docutils literal highlight-python"><span class="n">ClockSignal</span></code> and <code class="code highlight pc python docutils literal highlight-python"><span class="n">ResetSignal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#late-binding-of-clock-and-reset-signals">Late binding of clock and reset signals</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#elaboration">Elaboration</a><ul>
@@ -894,7 +894,7 @@ This happens because, being empty, it does not contain any negative values.</p>
 <span id="lang-domains"></span><h2>Control domains<a class="headerlink" href="#control-domains" title="Permalink to this heading"></a></h2>
 <p>A <em>control domain</em> is a named group of <a class="reference internal" href="#lang-signals"><span class="std std-ref">signals</span></a> that change their value in identical conditions.</p>
 <p>All designs have a single predefined <em>combinatorial domain</em>, containing all signals that change immediately when any value used to compute them changes. The name <code class="docutils literal notranslate"><span class="pre">comb</span></code> is reserved for the combinatorial domain, and refers to the same domain in all modules.</p>
-<p>A design can also have any amount of user-defined <em>synchronous domains</em>, also called <em>clock domains</em>, containing signals that change when a specific edge occurs on the domain’s clock signal or, for domains with asynchronous reset, on the domain’s reset signal. Most modules only use a single synchronous domain, conventionally called <code class="docutils literal notranslate"><span class="pre">sync</span></code>, but the name <code class="docutils literal notranslate"><span class="pre">sync</span></code> does not have to be used, and lacks any special meaning beyond being the default.</p>
+<p>A design can also have any amount of user-defined <em>synchronous domains</em>, also called <a class="reference internal" href="#lang-clockdomains"><span class="std std-ref">clock domains</span></a>, containing signals that change when a specific edge occurs on the domain’s clock signal or, for domains with asynchronous reset, on the domain’s reset signal. Most modules only use a single synchronous domain, conventionally called <code class="docutils literal notranslate"><span class="pre">sync</span></code>, but the name <code class="docutils literal notranslate"><span class="pre">sync</span></code> does not have to be used, and lacks any special meaning beyond being the default.</p>
 <p>The behavior of assignments differs for signals in <a class="reference internal" href="#lang-comb"><span class="std std-ref">combinatorial</span></a> and <a class="reference internal" href="#lang-sync"><span class="std std-ref">synchronous</span></a> domains. Collectively, signals in synchronous domains contain the state of a design, whereas signals in the combinatorial domain cannot form feedback loops or hold state.</p>
 <section id="assigning-to-signals">
 <span id="lang-assigns"></span><h3>Assigning to signals<a class="headerlink" href="#assigning-to-signals" title="Permalink to this heading"></a></h3>
@@ -1183,7 +1183,7 @@ inside `Else`
 </section>
 <section id="synchronous-evaluation">
 <span id="lang-sync"></span><h2>Synchronous evaluation<a class="headerlink" href="#synchronous-evaluation" title="Permalink to this heading"></a></h2>
-<p>Signals in synchronous <a class="reference internal" href="#lang-domains"><span class="std std-ref">control domains</span></a> change whenever a specific transition (positive or negative edge) occurs on the clock of the synchronous domain. In addition, the signals in clock domains with an asynchronous reset change when such a reset is asserted. The final value of a synchronous signal is equal to its <a class="reference internal" href="#lang-initial"><span class="std std-ref">initial value</span></a> if the reset (of any type) is asserted, or to its current value updated by the <a class="reference internal" href="#lang-active"><span class="std std-ref">active assignments</span></a> in the <a class="reference internal" href="#lang-assignorder"><span class="std std-ref">assignment order</span></a> otherwise. Synchronous signals always hold state.</p>
+<p>Signals in synchronous <a class="reference internal" href="#lang-domains"><span class="std std-ref">control domains</span></a> change whenever the <em>active edge</em> (a 0-to-1 or 1-to-0 transition, configured when <a class="reference internal" href="#lang-clockdomains"><span class="std std-ref">creating the domain</span></a>) occurs on the clock of the synchronous domain. In addition, the signals in clock domains with an asynchronous reset change when such a reset is asserted. The final value of a synchronous signal is equal to its <a class="reference internal" href="#lang-initial"><span class="std std-ref">initial value</span></a> if the reset (of any type) is asserted, or to its current value updated by the <a class="reference internal" href="#lang-active"><span class="std std-ref">active assignments</span></a> in the <a class="reference internal" href="#lang-assignorder"><span class="std std-ref">assignment order</span></a> otherwise. Synchronous signals always hold state.</p>
 <p>Consider the following code:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">timer</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
 
@@ -1197,34 +1197,81 @@ inside `Else`
 </section>
 <section id="clock-domains">
 <span id="lang-clockdomains"></span><h2>Clock domains<a class="headerlink" href="#clock-domains" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id14">
-<p class="admonition-title">Todo</p>
-<p>Write this section.</p>
+<p>A new synchronous <a class="reference internal" href="#lang-domains"><span class="std std-ref">control domain</span></a>, which is more often called a <em>clock domain</em>, can be defined in a design by creating a <code class="xref py py-class docutils literal notranslate"><span class="pre">ClockDomain</span></code> object and adding it to the <code class="code highlight pc python docutils literal highlight-python"><span class="n">m</span><span class="o">.</span><span class="n">domains</span></code> collection:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">domains</span><span class="o">.</span><span class="n">video</span> <span class="o">=</span> <span class="n">cd_video</span> <span class="o">=</span> <span class="n">ClockDomain</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
 </div>
-<section id="clocksignal-and-resetsignal">
-<span id="lang-latesignals"></span><h3><code class="code highlight pc python docutils literal highlight-python"><span class="n">ClockSignal</span></code> and <code class="code highlight pc python docutils literal highlight-python"><span class="n">ResetSignal</span></code><a class="headerlink" href="#clocksignal-and-resetsignal" title="Permalink to this heading"></a></h3>
-<div class="admonition-todo admonition" id="id15">
-<p class="admonition-title">Todo</p>
-<p>Write this section.</p>
+<p>If the name of the domain is not known upfront, another, less concise, syntax can be used instead:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_video_domain</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">cd</span> <span class="o">=</span> <span class="n">ClockDomain</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;video_</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">domains</span> <span class="o">+=</span> <span class="n">cd</span>
+    <span class="k">return</span> <span class="n">cd</span>
+
+<span class="n">add_video_domain</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Whenever the created <code class="xref py py-class docutils literal notranslate"><span class="pre">ClockDomain</span></code> object is immediately assigned using the <code class="code highlight pc python docutils literal highlight-python"><span class="n">domain_name</span> <span class="o">=</span> <span class="n">ClockDomain</span><span class="p">(</span><span class="o">...</span><span class="p">)</span></code> or <code class="code highlight pc python docutils literal highlight-python"><span class="n">m</span><span class="o">.</span><span class="n">domains</span><span class="o">.</span><span class="n">domain_name</span> <span class="o">=</span> <span class="n">ClockDomain</span><span class="p">(</span><span class="o">...</span><span class="p">)</span></code> syntax, the name of the domain may be omitted from the <code class="code highlight pc python docutils literal highlight-python"><span class="n">ClockDomain</span><span class="p">()</span></code> invocation. In other cases, it must be provided as the first argument.</p>
+</div>
+<p>A clock domain always has a clock signal, which can be accessed through the <code class="xref py py-attr docutils literal notranslate"><span class="pre">cd.clk</span></code> attribute. By default, the <em>active edge</em> of the clock domain is positive; this means that the signals in the domain change when the clock signal transitions from 0 to 1. A clock domain can be configured to have a negative active edge so that signals in it change when the clock signal transitions from 1 to 0:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">domains</span><span class="o">.</span><span class="n">jtag</span> <span class="o">=</span> <span class="n">ClockDomain</span><span class="p">(</span><span class="n">clk_edge</span><span class="o">=</span><span class="s2">&quot;neg&quot;</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A clock domain also has a reset signal, which can be accessed through the <code class="xref py py-attr docutils literal notranslate"><span class="pre">cd.rst</span></code> attribute. The reset signal is always active-high: the signals in the clock domain are reset if the value of the reset signal is 1. The <a class="reference internal" href="#lang-initial"><span class="std std-ref">initial value</span></a> of this signal is 0, so if the reset signal is never assigned, the signals in the clock domain are never explicitly reset (they are still <a class="reference internal" href="#lang-initial"><span class="std std-ref">reset at power-on</span></a>). Nevertheless, if its existence is undesirable, the clock domain can be configured to omit it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">domains</span><span class="o">.</span><span class="n">startup</span> <span class="o">=</span> <span class="n">ClockDomain</span><span class="p">(</span><span class="n">reset_less</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If a clock domain is defined in a module, it is also available in all of its submodules.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Always provide the <code class="code highlight pc python docutils literal highlight-python"><span class="n">local</span><span class="o">=</span><span class="kc">True</span></code> keyword argument when defining a clock domain. The behavior of clock domains defined without this keyword argument is subject to change in near future, and is intentionally left undocumented.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Clock domains use synchronous reset unless otherwise specified. Clock domains with asynchronous reset are implemented, but their behavior is subject to change in near future, and is intentionally left undocumented.</p>
+</div>
+<section id="late-binding-of-clock-and-reset-signals">
+<span id="lang-latesignals"></span><h3>Late binding of clock and reset signals<a class="headerlink" href="#late-binding-of-clock-and-reset-signals" title="Permalink to this heading"></a></h3>
+<p>Clock domains are <em>late bound</em>, which means that their signals and properties can be referred to using the domain’s name before the <code class="xref py py-class docutils literal notranslate"><span class="pre">ClockDomain</span></code> object with that name is created and added to the design. This happens whenever <a class="reference internal" href="#lang-assigns"><span class="std std-ref">an assignment is added</span></a> to a domain. In some cases, it is necessary to refer to the domain’s clock or reset signal using only the domain’s name. The <code class="xref py py-class docutils literal notranslate"><span class="pre">ClockSignal</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">ResetSignal</span></code> values make this possible:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">comb</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="n">ClockSignal</span><span class="p">()</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">bus_clk</span><span class="p">),</span>
+    <span class="n">ResetSignal</span><span class="p">()</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="o">~</span><span class="n">bus_rstn</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>In this example, once the design is processed, <code class="code highlight pc python docutils literal highlight-python"><span class="n">bus_clk</span></code> will be assigned to the clock signal of the clock domain <cite>sync</cite> found in this module or one of its containing modules. The <code class="code highlight pc python docutils literal highlight-python"><span class="n">bus_rstn</span></code> signal will be assigned to the inverted reset signal of the same clock domain. With the <cite>sync</cite> domain created in the same module, these statements become equivalent to:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">domains</span><span class="o">.</span><span class="n">sync</span> <span class="o">=</span> <span class="n">cd_sync</span> <span class="o">=</span> <span class="n">ClockDomain</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">comb</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="n">cd_sync</span><span class="o">.</span><span class="n">clk</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">bus_clk</span><span class="p">),</span>
+    <span class="n">cd_sync</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="o">~</span><span class="n">bus_rstn</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">ClockSignal</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">ResetSignal</span></code> values may also be assigned to other signals and used in expressions. They take a single argument, which is the name of the domain; if not specified, it defaults to <code class="code highlight pc python docutils literal highlight-python"><span class="s2">&quot;sync&quot;</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Be especially careful when using <code class="xref py py-class docutils literal notranslate"><span class="pre">ClockSignal</span></code> or <code class="xref py py-attr docutils literal notranslate"><span class="pre">cd.clk</span></code> in expressions. Assigning to and from a clock signal is usually safe; any other operations may have unpredictable results. Consult the documentation for your synthesis toolchain and platform to understand which operations with a clock signal are permitted.</p>
+<p>FPGAs usually have dedicated clocking facilities that can be used to disable, divide, or multiplex clock signals. When targeting an FPGA, these facilities should be used if at all possible, and expressions like <code class="code highlight pc python docutils literal highlight-python"><span class="n">ClockSignal</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">en</span></code> or <code class="code highlight pc python docutils literal highlight-python"><span class="n">Mux</span><span class="p">(</span><span class="n">sel</span><span class="p">,</span> <span class="n">ClockSignal</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">),</span> <span class="n">ClockSignal</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">))</span></code> should be avoided.</p>
 </div>
 </section>
 </section>
 <section id="elaboration">
 <span id="lang-elaboration"></span><h2>Elaboration<a class="headerlink" href="#elaboration" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id16">
+<div class="admonition-todo admonition" id="id14">
 <p class="admonition-title">Todo</p>
 <p>Write this section.</p>
 </div>
 <section id="renaming-domains">
 <span id="lang-domainrenamer"></span><h3>Renaming domains<a class="headerlink" href="#renaming-domains" title="Permalink to this heading"></a></h3>
-<div class="admonition-todo admonition" id="id17">
+<div class="admonition-todo admonition" id="id15">
 <p class="admonition-title">Todo</p>
 <p>Write this section about <code class="xref py py-class docutils literal notranslate"><span class="pre">DomainRenamer</span></code></p>
 </div>
 </section>
 <section id="modifying-control-flow">
 <span id="lang-controlinserter"></span><h3>Modifying control flow<a class="headerlink" href="#modifying-control-flow" title="Permalink to this heading"></a></h3>
-<div class="admonition-todo admonition" id="id18">
+<div class="admonition-todo admonition" id="id16">
 <p class="admonition-title">Todo</p>
 <p>Write this section about <code class="xref py py-class docutils literal notranslate"><span class="pre">ResetInserter</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">EnableInserter</span></code></p>
 </div>
@@ -1232,14 +1279,14 @@ inside `Else`
 </section>
 <section id="memory-arrays">
 <span id="lang-memory"></span><h2>Memory arrays<a class="headerlink" href="#memory-arrays" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id19">
+<div class="admonition-todo admonition" id="id17">
 <p class="admonition-title">Todo</p>
 <p>Write this section.</p>
 </div>
 </section>
 <section id="instances">
 <h2>Instances<a class="headerlink" href="#instances" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id20">
+<div class="admonition-todo admonition" id="id18">
 <p class="admonition-title">Todo</p>
 <p>Write this section.</p>
 </div>
