@@ -1,3 +1,6 @@
+/* Match the logo colors in the background. */
+.wy-side-nav-search { background-color: #683a8b; }
+
 /* Make the logo more reasonably sized. */
 .wy-side-nav-search > a img.logo { width: 200px; }
 
