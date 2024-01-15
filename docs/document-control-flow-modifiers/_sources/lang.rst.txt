@@ -1459,6 +1459,11 @@ Control flow modifiers use the syntax :pc:`Modifier(controls)(elaboratable)`, wh
 The result of applying a control flow modifier to an elaboratable is, itself, an elaboratable object. A common way to use a control flow modifier is to apply it to another elaboratable while adding it as a submodule:
 
 .. testcode::
+    :hide:
+
+    m = Module()
+
+.. testcode::
 
     rst = Signal()
     m.submodules.counter = counter = ResetInserter(rst)(Counter())
@@ -1499,7 +1504,7 @@ The application of control flow modifiers in it causes the behavior of the final
     m = Module()
     with m.If(en):
         m.d.sync += n.eq(n + 1)
-    with m.If(rst)
+    with m.If(rst):
         m.d.sync += n.eq(n.reset)
     m.d.comb += z.eq(n == 0)
 
