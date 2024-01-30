@@ -39,7 +39,7 @@
               <img src="_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.4.1.dev49+g25bbb263
+                0.4.1.dev49+g6d02ceac
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -187,14 +187,14 @@
 </section>
 <section id="shapes">
 <span id="lang-shapes"></span><h2>Shapes<a class="headerlink" href="#shapes" title="Permalink to this heading"></a></h2>
-<p>A <code class="docutils literal notranslate"><span class="pre">Shape</span></code> describes the bit width and signedness of an Amaranth value. It can be constructed directly:</p>
+<p>A <a class="reference internal" href="reference.html#amaranth.hdl.Shape" title="amaranth.hdl.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a> describes the bit width and signedness of an Amaranth value. It can be constructed directly:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Shape</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="go">unsigned(5)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Shape</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="go">signed(12)</span>
 </pre></div>
 </div>
-<p>However, in most cases, the signedness of a shape is known upfront, and the convenient aliases <code class="docutils literal notranslate"><span class="pre">signed</span></code> and <code class="docutils literal notranslate"><span class="pre">unsigned</span></code> can be used:</p>
+<p>However, in most cases, the signedness of a shape is known upfront, and the convenient aliases <a class="reference internal" href="reference.html#amaranth.hdl.signed" title="amaranth.hdl.signed"><code class="xref py py-func docutils literal notranslate"><span class="pre">signed()</span></code></a> and <a class="reference internal" href="reference.html#amaranth.hdl.unsigned" title="amaranth.hdl.unsigned"><code class="xref py py-func docutils literal notranslate"><span class="pre">unsigned()</span></code></a> can be used:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">unsigned</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">==</span> <span class="n">Shape</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">signed</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span> <span class="o">==</span> <span class="n">Shape</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -245,10 +245,10 @@
 <section id="shape-casting">
 <span id="lang-shapelike"></span><h2>Shape casting<a class="headerlink" href="#shape-casting" title="Permalink to this heading"></a></h2>
 <p>Shapes can be <em>cast</em> from other objects, which are called <em>shape-like</em>. Casting is a convenient way to specify a shape indirectly, for example, by a range of numbers representable by values with that shape. Shapes are shape-like objects as well.</p>
-<p>Casting to a shape can be done explicitly with <code class="xref py py-meth docutils literal notranslate"><span class="pre">Shape.cast()</span></code>, but is usually implicit, since shape-like objects are accepted anywhere shapes are.</p>
+<p>Casting to a shape can be done explicitly with <a class="reference internal" href="reference.html#amaranth.hdl.Shape.cast" title="amaranth.hdl.Shape.cast"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Shape.cast()</span></code></a>, but is usually implicit, since shape-like objects are accepted anywhere shapes are.</p>
 <section id="shapes-from-integers">
 <span id="lang-shapeint"></span><h3>Shapes from integers<a class="headerlink" href="#shapes-from-integers" title="Permalink to this heading"></a></h3>
-<p>Casting a shape from an integer <code class="docutils literal notranslate"><span class="pre">i</span></code> is a shorthand for constructing a shape with <code class="xref py py-func docutils literal notranslate"><span class="pre">unsigned(i)</span></code>:</p>
+<p>Casting a shape from an integer <code class="docutils literal notranslate"><span class="pre">i</span></code> is a shorthand for constructing a shape with <a class="reference internal" href="reference.html#amaranth.hdl.unsigned" title="amaranth.hdl.unsigned"><code class="xref py py-func docutils literal notranslate"><span class="pre">unsigned(i)</span></code></a>:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">unsigned(5)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
@@ -289,7 +289,7 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>An empty range always casts to an <code class="xref py py-func docutils literal notranslate"><span class="pre">unsigned(0)</span></code>, even if both of its bounds are negative.
+<p>An empty range always casts to an <a href="#id1"><span class="problematic" id="id2">:py:`unsigned(0)`</span></a>, even if both of its bounds are negative.
 This happens because, being empty, it does not contain any negative values.</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
 <span class="go">unsigned(0)</span>
@@ -330,7 +330,7 @@ This happens because, being empty, it does not contain any negative values.</p>
 </section>
 <section id="custom-shapes">
 <span id="lang-shapecustom"></span><h3>Custom shapes<a class="headerlink" href="#custom-shapes" title="Permalink to this heading"></a></h3>
-<p>Any Python value that implements the <code class="xref py py-class docutils literal notranslate"><span class="pre">ShapeCastable</span></code> interface can extend the language with a custom shape-like object. For example, the standard library module <a class="reference internal" href="stdlib/data.html#module-amaranth.lib.data" title="amaranth.lib.data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.lib.data</span></code></a> uses this facility to add support for aggregate data types to the language.</p>
+<p>Any Python value that implements the <a class="reference internal" href="reference.html#amaranth.hdl.ShapeCastable" title="amaranth.hdl.ShapeCastable"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShapeCastable</span></code></a> interface can extend the language with a custom shape-like object. For example, the standard library module <a class="reference internal" href="stdlib/data.html#module-amaranth.lib.data" title="amaranth.lib.data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.lib.data</span></code></a> uses this facility to add support for aggregate data types to the language.</p>
 </section>
 </section>
 <section id="value-casting">
@@ -402,7 +402,7 @@ This happens because, being empty, it does not contain any negative values.</p>
 <p>A <em>signal</em> is a value representing a (potentially) varying number. Signals can be <a class="reference external" href="#lang-assigns"><em>assigned</em></a> in a <a class="reference internal" href="#lang-comb"><span class="std std-ref">combinatorial</span></a> or <a class="reference internal" href="#lang-sync"><span class="std std-ref">synchronous</span></a> domain, in which case they are generated as wires or registers, respectively. Signals always have a well-defined value; they cannot be uninitialized or undefined.</p>
 <section id="signal-shapes">
 <h3>Signal shapes<a class="headerlink" href="#signal-shapes" title="Permalink to this heading"></a></h3>
-<p>A signal can be created with an explicitly specified shape (any <a class="reference internal" href="#lang-shapelike"><span class="std std-ref">shape-like</span></a> object); if omitted, the shape defaults to <code class="xref py py-func docutils literal notranslate"><span class="pre">unsigned(1)</span></code>. Although rarely useful, 0-bit signals are permitted.</p>
+<p>A signal can be created with an explicitly specified shape (any <a class="reference internal" href="#lang-shapelike"><span class="std std-ref">shape-like</span></a> object); if omitted, the shape defaults to <a class="reference internal" href="reference.html#amaranth.hdl.unsigned" title="amaranth.hdl.unsigned"><code class="xref py py-func docutils literal notranslate"><span class="pre">unsigned(1)</span></code></a>. Although rarely useful, 0-bit signals are permitted.</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Signal</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
 <span class="go">unsigned(1)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Signal</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
@@ -609,43 +609,43 @@ This happens because, being empty, it does not contain any negative values.</p>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&gt;&gt;</span> <span class="pre">b</span></code></p></td>
 <td><p>arithmetic right shift by variable amount</p></td>
-<td><p><a class="footnote-reference brackets" href="#opb1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, <a class="footnote-reference brackets" href="#opb2" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td><p><a class="footnote-reference brackets" href="#opb1" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, <a class="footnote-reference brackets" href="#opb2" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&lt;&lt;</span> <span class="pre">b</span></code></p></td>
 <td><p>left shift by variable amount</p></td>
-<td><p><a class="footnote-reference brackets" href="#opb2" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td><p><a class="footnote-reference brackets" href="#opb2" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">a.rotate_left(i)</span></code></p></td>
 <td><p>left rotate by constant amount</p></td>
-<td><p><a class="footnote-reference brackets" href="#opb3" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
+<td><p><a class="footnote-reference brackets" href="#opb3" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">a.rotate_right(i)</span></code></p></td>
 <td><p>right rotate by constant amount</p></td>
-<td><p><a class="footnote-reference brackets" href="#opb3" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
+<td><p><a class="footnote-reference brackets" href="#opb3" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">a.shift_left(i)</span></code></p></td>
 <td><p>left shift by constant amount</p></td>
-<td><p><a class="footnote-reference brackets" href="#opb3" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
+<td><p><a class="footnote-reference brackets" href="#opb3" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">a.shift_right(i)</span></code></p></td>
 <td><p>right shift by constant amount</p></td>
-<td><p><a class="footnote-reference brackets" href="#opb3" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
+<td><p><a class="footnote-reference brackets" href="#opb3" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
 </tr>
 </tbody>
 </table>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="opb1" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">1</a><span class="fn-bracket">]</span></span>
 <p>Logical and arithmetic right shift of an unsigned value are equivalent. Logical right shift of a signed value can be expressed by <a class="reference internal" href="#lang-convops"><span class="std std-ref">converting it to unsigned</span></a> first.</p>
 </aside>
 <aside class="footnote brackets" id="opb2" role="note">
 <span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id3">2</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id4">1</a>,<a role="doc-backlink" href="#id5">2</a>)</span>
 <p>Shift amount must be unsigned; integer shifts in Python require the amount to be positive.</p>
 </aside>
 <aside class="footnote brackets" id="opb3" role="note">
 <span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id4">1</a>,<a role="doc-backlink" href="#id5">2</a>,<a role="doc-backlink" href="#id6">3</a>,<a role="doc-backlink" href="#id7">4</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id6">1</a>,<a role="doc-backlink" href="#id7">2</a>,<a role="doc-backlink" href="#id8">3</a>,<a role="doc-backlink" href="#id9">4</a>)</span>
 <p>Shift and rotate amounts can be negative, in which case the direction is reversed.</p>
 </aside>
 </aside>
@@ -674,11 +674,11 @@ This happens because, being empty, it does not contain any negative values.</p>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">a.all()</span></code></p></td>
 <td><p>reduction AND; are all bits set?</p></td>
-<td><p><a class="footnote-reference brackets" href="#opr1" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p></td>
+<td><p><a class="footnote-reference brackets" href="#opr1" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">a.any()</span></code></p></td>
 <td><p>reduction OR; is any bit set?</p></td>
-<td><p><a class="footnote-reference brackets" href="#opr1" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p></td>
+<td><p><a class="footnote-reference brackets" href="#opr1" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">a.xor()</span></code></p></td>
 <td><p>reduction XOR; is an odd number of bits set?</p></td>
@@ -686,18 +686,18 @@ This happens because, being empty, it does not contain any negative values.</p>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">a.bool()</span></code></p></td>
 <td><p>conversion to boolean; is non-zero?</p></td>
-<td><p><a class="footnote-reference brackets" href="#opr2" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a></p></td>
+<td><p><a class="footnote-reference brackets" href="#opr2" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a></p></td>
 </tr>
 </tbody>
 </table>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="opr1" role="note">
 <span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id8">1</a>,<a role="doc-backlink" href="#id9">2</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id10">1</a>,<a role="doc-backlink" href="#id11">2</a>)</span>
 <p>Conceptually the same as applying the Python <a class="reference external" href="https://docs.python.org/3/library/functions.html#all" title="(in Python v3.12)"><code class="xref py py-func docutils literal notranslate"><span class="pre">all()</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#any" title="(in Python v3.12)"><code class="xref py py-func docutils literal notranslate"><span class="pre">any()</span></code></a> function to the value viewed as a collection of bits.</p>
 </aside>
 <aside class="footnote brackets" id="opr2" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id10">5</a><span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id12">5</a><span class="fn-bracket">]</span></span>
 <p>Conceptually the same as applying the Python <code class="xref py py-func docutils literal notranslate"><span class="pre">bool()</span></code> function to the value viewed as an integer.</p>
 </aside>
 </aside>
@@ -793,11 +793,11 @@ This happens because, being empty, it does not contain any negative values.</p>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">len(a)</span></code></p></td>
 <td><p>bit length; value width</p></td>
-<td><p><a class="footnote-reference brackets" href="#ops1" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a></p></td>
+<td><p><a class="footnote-reference brackets" href="#ops1" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">a[i:j:k]</span></code></p></td>
 <td><p>bit slicing by constant subscripts</p></td>
-<td><p><a class="footnote-reference brackets" href="#ops2" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a></p></td>
+<td><p><a class="footnote-reference brackets" href="#ops2" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">iter(a)</span></code></p></td>
 <td><p>bit iteration</p></td>
@@ -813,7 +813,7 @@ This happens because, being empty, it does not contain any negative values.</p>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Cat(a,</span> <span class="pre">b)</span></code></p></td>
 <td><p>concatenation</p></td>
-<td><p><a class="footnote-reference brackets" href="#ops3" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a></p></td>
+<td><p><a class="footnote-reference brackets" href="#ops3" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">a.replicate(n)</span></code></p></td>
 <td><p>replication</p></td>
@@ -823,15 +823,15 @@ This happens because, being empty, it does not contain any negative values.</p>
 </table>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="ops1" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id11">6</a><span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id13">6</a><span class="fn-bracket">]</span></span>
 <p>Words “length” and “width” have the same meaning when talking about Amaranth values. Conventionally, “width” is used.</p>
 </aside>
 <aside class="footnote brackets" id="ops2" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id12">7</a><span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id14">7</a><span class="fn-bracket">]</span></span>
 <p>All variations of the Python slice notation are supported, including “extended slicing”. E.g. all of <code class="docutils literal notranslate"><span class="pre">a[0]</span></code>, <code class="docutils literal notranslate"><span class="pre">a[1:9]</span></code>, <code class="docutils literal notranslate"><span class="pre">a[2:]</span></code>, <code class="docutils literal notranslate"><span class="pre">a[:-2]</span></code>, <code class="docutils literal notranslate"><span class="pre">a[::-1]</span></code>, <code class="docutils literal notranslate"><span class="pre">a[0:8:2]</span></code> select bits in the same way as other Python sequence types select their elements.</p>
 </aside>
 <aside class="footnote brackets" id="ops3" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id13">8</a><span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id15">8</a><span class="fn-bracket">]</span></span>
 <p>In the concatenated value, <code class="docutils literal notranslate"><span class="pre">a</span></code> occupies the least significant bits, and <code class="docutils literal notranslate"><span class="pre">b</span></code> the most significant bits. Any number of arguments (zero, one, two, or more) are supported.</p>
 </aside>
 </aside>
@@ -1433,7 +1433,7 @@ inside `Else`
 </section>
 <section id="memories">
 <span id="lang-memory"></span><h2>Memories<a class="headerlink" href="#memories" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id14">
+<div class="admonition-todo admonition" id="id16">
 <p class="admonition-title">Todo</p>
 <p>Write this section.</p>
 </div>

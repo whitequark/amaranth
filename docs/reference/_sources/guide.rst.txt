@@ -6,6 +6,8 @@
 Language guide
 ##############
 
+.. py:currentmodule:: amaranth.hdl
+
 .. warning::
 
    This guide is a work in progress and is seriously incomplete!
@@ -44,7 +46,7 @@ All of the examples below assume that a glob import is used.
 Shapes
 ======
 
-A ``Shape`` describes the bit width and signedness of an Amaranth value. It can be constructed directly:
+A :class:`Shape` describes the bit width and signedness of an Amaranth value. It can be constructed directly:
 
 .. doctest::
 
@@ -53,7 +55,7 @@ A ``Shape`` describes the bit width and signedness of an Amaranth value. It can 
    >>> Shape(width=12, signed=True)
    signed(12)
 
-However, in most cases, the signedness of a shape is known upfront, and the convenient aliases ``signed`` and ``unsigned`` can be used:
+However, in most cases, the signedness of a shape is known upfront, and the convenient aliases :func:`signed` and :func:`unsigned` can be used:
 
 .. doctest::
 
@@ -186,7 +188,7 @@ Specifying a shape with a range is convenient for counters, indexes, and all oth
 
 .. note::
 
-   An empty range always casts to an :func:`unsigned(0) <unsigned>`, even if both of its bounds are negative.
+   An empty range always casts to an :py:`unsigned(0)`, even if both of its bounds are negative.
    This happens because, being empty, it does not contain any negative values.
 
    .. doctest::
