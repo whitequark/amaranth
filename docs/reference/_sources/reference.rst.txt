@@ -50,6 +50,7 @@ There are two ways to import the Amaranth syntax into a Python file: by importin
 The prelude exports exactly the following names:
 
 .. must be kept in sync with amaranth/__init__.py!
+
 * :class:`Shape`
 * :func:`unsigned`
 * :func:`signed`
