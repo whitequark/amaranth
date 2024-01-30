@@ -27,7 +27,7 @@ Conversely, any behavior not documented here is subject to change at any time wi
 Importing syntax
 ================
 
-There are two ways to import the Amaranth syntax into a Python file: by importing the :ref:`prelude <lang-prelude>` or by importing individual names from the :mod:`amaranth.hdl` module. Since the prelude is kept small and rarely extended to avoid breaking downstream code that uses a glob import, there are some names that are only available to be imported from the :mod:`amaranth.hdl` module. The following three snippets are equivalent:
+There are two ways to import the Amaranth syntax into a Python file: by importing the :ref:`prelude <lang-prelude>` or by importing individual names from the :mod:`amaranth.hdl` module. Since the prelude is kept small and rarely extended to avoid breaking downstream code that uses a glob import, there are some names that are only exported from the :mod:`amaranth.hdl` module. The following three snippets are equivalent:
 
 .. testcode::
 
@@ -47,8 +47,9 @@ There are two ways to import the Amaranth syntax into a Python file: by importin
 
     m = Module()
 
-The prelude contains exactly the following names:
+The prelude exports exactly the following names:
 
+.. must be kept in sync with amaranth/__init__.py!
 * :class:`Shape`
 * :func:`unsigned`
 * :func:`signed`
