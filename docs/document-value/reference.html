@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Language reference &mdash; Amaranth language &amp; toolchain 0.4.1.dev86 documentation</title>
+  <title>Language reference &mdash; Amaranth language &amp; toolchain 0.4.1.dev87 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/platformpicker.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=3b4b495d"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=9f33cd44"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
         <script src="_static/platformpicker.js"></script>
@@ -39,7 +39,7 @@
               <img src="_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.4.1.dev86+g76387afa
+                0.4.1.dev87+g0aa79aa3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -432,8 +432,8 @@ is a shape that can represent every member of the enumeration;</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.12)"><strong>TypeError</strong></a> – If <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj</span></code> cannot be converted to a <a class="reference internal" href="#amaranth.hdl.Shape" title="amaranth.hdl.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a>.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RecursionError" title="(in Python v3.12)"><strong>RecursionError</strong></a> – If <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj</span></code> is a <a class="reference internal" href="#amaranth.hdl.ShapeCastable" title="amaranth.hdl.ShapeCastable"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShapeCastable</span></code></a> object that casts to itself.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.12)"><strong>TypeError</strong></a> – If <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj</span></code> cannot be converted to a <a class="reference internal" href="#amaranth.hdl.Value" title="amaranth.hdl.Value"><code class="xref py py-class docutils literal notranslate"><span class="pre">Value</span></code></a>.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RecursionError" title="(in Python v3.12)"><strong>RecursionError</strong></a> – If <code class="code highlight pc python docutils literal highlight-python"><span class="n">obj</span></code> is a <a class="reference internal" href="#amaranth.hdl.ValueCastable" title="amaranth.hdl.ValueCastable"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueCastable</span></code></a> object that casts to itself.</p></li>
 </ul>
 </dd>
 </dl>
@@ -931,7 +931,7 @@ been impossible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><ul class="simple">
-<li><p><a class="reference internal" href="#amaranth.hdl.Value" title="amaranth.hdl.Value"><code class="xref py py-class docutils literal notranslate"><span class="pre">Value</span></code></a>, <code class="code highlight pc python docutils literal highlight-python"><span class="n">unsigned</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-</span> <span class="n">amount</span><span class="p">)</span></code> – If <code class="code highlight pc python docutils literal highlight-python"><span class="bp">self</span></code> is unsigned.</p></li>
+<li><p><a class="reference internal" href="#amaranth.hdl.Value" title="amaranth.hdl.Value"><code class="xref py py-class docutils literal notranslate"><span class="pre">Value</span></code></a>, <code class="code highlight pc python docutils literal highlight-python"><span class="n">unsigned</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-</span> <span class="n">amount</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span></code> – If <code class="code highlight pc python docutils literal highlight-python"><span class="bp">self</span></code> is unsigned.</p></li>
 <li><p><a class="reference internal" href="#amaranth.hdl.Value" title="amaranth.hdl.Value"><code class="xref py py-class docutils literal notranslate"><span class="pre">Value</span></code></a>, <code class="code highlight pc python docutils literal highlight-python"><span class="n">signed</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-</span> <span class="n">amount</span><span class="p">)</span></code> – If <code class="code highlight pc python docutils literal highlight-python"><span class="bp">self</span></code> is signed.</p></li>
 </ul>
 </p>
