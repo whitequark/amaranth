@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Language reference &mdash; Amaranth language &amp; toolchain 0.4.1.dev88 documentation</title>
+  <title>Language reference &mdash; Amaranth language &amp; toolchain 0.4.1.dev89 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/platformpicker.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=77296e86"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=d351ea9f"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
         <script src="_static/platformpicker.js"></script>
@@ -39,7 +39,7 @@
               <img src="_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.4.1.dev88+gba45c21d
+                0.4.1.dev89+ga724cf55
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -981,6 +981,7 @@ been impossible.</p>
 <dd><p>Forbidden membership test operator.</p>
 <p>Python requires this operator to return a <a class="reference internal" href="#amaranth.hdl.Value.bool" title="amaranth.hdl.Value.bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>. Since this is not possible
 for Amaranth values, this operator always raises an exception.</p>
+<p>To check membership in a set of constant integer values, use <a class="reference internal" href="#amaranth.hdl.Value.matches" title="amaranth.hdl.Value.matches"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matches()</span></code></a> instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.12)"><strong>TypeError</strong></a> – Always.</p>
