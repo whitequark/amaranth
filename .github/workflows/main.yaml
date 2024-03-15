@@ -148,7 +148,7 @@ jobs:
           folder: pages/
           clean: false
 
-  publish-code:
+  publish-package:
     needs: required
     runs-on: ubuntu-latest
     environment: publish
@@ -166,7 +166,7 @@ jobs:
     - name: Upload package artifact
       uses: actions/upload-artifact@v4
       with:
-        name: code
+        name: package
         path: dist/
     - name: Verify package metadata
       run: |
@@ -182,7 +182,7 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
 
   publish-release:
-    needs: publish-code
+    needs: publish-package
     # if: ${{ github.repository == 'amaranth-lang/amaranth' && github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/') }}
     if: ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/') }}
     runs-on: ubuntu-latest
