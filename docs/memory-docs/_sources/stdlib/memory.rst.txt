@@ -9,7 +9,7 @@ The :mod:`amaranth.lib.memory` module provides a way to efficiently store data o
 Introduction
 ============
 
-A memory :ref:`component <wiring-introduction>` is accessed through read and write *memory ports*, which are :ref:`interface objects <wiring-introduction>` with address, data, and enable ports. The address input selects the memory row to be accessed, the enable input determines whether an access will be made, and the data output (for read ports) or data input (for write ports) transfers data between the memory row and the rest of the design. Read ports can be synchronous (where the memory row access is triggered by the :ref:`active edge <lang-sync>` of a clock) or asynchronous (where the memory row is accessed continuously); write ports are always synchronous.
+A memory :ref:`component <wiring>` is accessed through read and write *memory ports*, which are :ref:`interface objects <wiring>` with address, data, and enable ports. The address input selects the memory row to be accessed, the enable input determines whether an access will be made, and the data output (for read ports) or data input (for write ports) transfers data between the memory row and the rest of the design. Read ports can be synchronous (where the memory row access is triggered by the :ref:`active edge <lang-sync>` of a clock) or asynchronous (where the memory row is accessed continuously); write ports are always synchronous.
 
 .. note::
 
