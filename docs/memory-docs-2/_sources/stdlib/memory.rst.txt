@@ -1,0 +1,111 @@
+Memory arrays
+-------------
+
+.. todo::
+
+    - finish ``Memory`` docstring
+    - add waveform diagrams
+    - note about platform dependent behavior
+        - zero or one write ports + any amount of read ports is always supported
+        - two write ports + any amount of read ports sharing addresses with either of the two is usually supported
+        - more than two write ports is not supported
+        - using asynchronous read ports results in higher, sometimes extremely so, resource usage
+    - note about platform override
+
+.. py:module:: amaranth.lib.memory
+
+The :mod:`amaranth.lib.memory` module provides a way to efficiently store data organized as an array of identically shaped rows, which may be addressed (read and/or written) one at a time. This organization is well suited for an efficient implementation in hardware.
+
+A memory :ref:`component <wiring-introduction>` is accessed through read and write *memory ports*, which are :ref:`interface objects <wiring-introduction>` with address, data, and enable ports. The address input selects the memory row to be accessed, the enable input determines whether an access will be made, and the data output (for read ports) or data input (for write ports) transfers data between the memory row and the rest of the design. Read ports can be synchronous (where the memory row access is triggered by the :ref:`active edge <lang-sync>` of a clock) or asynchronous (where the memory row is accessed continuously); write ports are always synchronous.
+
+.. note::
+
+    Unfortunately, the terminology related to memories has an ambiguity: a "port" could refer to either an *interface port* (:class:`.Signal` objects created by the :mod:`amaranth.lib.wiring` module) or to a *memory port* (:class:`ReadPort` or :class:`WritePort` object created by :class:`amaranth.lib.memory.Memory`).
+
+    Amaranth documentation always uses the term "memory port" when referring to the latter.
+
+To use a memory, first create a :class:`Memory` object, providing a shape, depth (the number of rows), and initial contents. Then, request as many memory ports as the number of concurrent accesses you need to perform by using the :meth:`Memory.read_port` and :meth:`Memory.write_port` methods.
+
+Examples
+========
+
+.. testsetup::
+
+    from amaranth import *
+
+In the following example, a read-only memory is used to output a fixed message in a loop:
+
+.. testcode::
+    :hide:
+
+    m = Module()
+
+.. testcode::
+
+    message = b"Hello, world!\n"
+    m.submodules.memory = memory = \
+        Memory(shape=unsigned(8), depth=len(message), init=message)
+
+    rd_port = memory.read_port(domain="comb")
+    with m.If(rd_port.addr == memory.depth - 1):
+        m.d.sync += rd_port.addr.eq(0)
+    with m.Else():
+        m.d.sync += rd_port.addr.eq(rd_port.addr + 1)
+
+    character = Signal(8)
+    m.d.comb += character.eq(rd_port.data)
+
+In a more complex example, a power-of-2 sized writable memory is used to implement a first-in, first-out queue:
+
+.. testcode::
+    :hide:
+
+    m = Module()
+
+.. testcode::
+
+    push = Signal()
+    pop  = Signal()
+
+    m.submodules.memory = memory = \
+        Memory(shape=unsigned(32), depth=128, init=[])
+
+    wr_port = memory.write_port()
+    with m.If(push):
+        m.d.comb += wr_port.en.eq(1)
+        m.d.sync += wr_port.addr.eq(wr_port.addr + 1)
+
+    rd_port = memory.read_port(transparent_for=(wr_port,))
+    with m.If(pop):
+        m.d.comb += rd_port.en.eq(1)
+        m.d.sync += rd_port.addr.eq(rd_port.addr + 1)
+
+    # Data can be shifted in via `wr_port.data` and out via `rd_port.data`.
+    # This example assumes that empty queue will be never popped from.
+
+In this example, the memory read port is configured to be *transparent* relative to the memory write port. This means that if a write and a read access the same row, the new contents will be read out, reducing the minimum push-to-pop latency by one cycle.
+
+
+Memories
+========
+
+.. autoclass:: Memory(*, depth, shape, init, src_loc_at=0)
+    :no-members:
+
+    .. autoclass:: amaranth.lib.memory::Memory.Init(...)
+
+    .. automethod:: read_port
+
+    .. automethod:: write_port
+
+    .. autoproperty:: r_ports
+
+    .. autoproperty:: w_ports
+
+
+Memory ports
+============
+
+.. autoclass:: ReadPort(...)
+
+.. autoclass:: WritePort(...)
