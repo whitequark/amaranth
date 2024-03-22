@@ -41,7 +41,7 @@
               <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.5.0.dev173+gaada4b6b
+                0.5.0.dev173+geab20f2e
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -218,9 +218,9 @@ the same as the depth of the memory it belongs to.</p>
 <dt class="sig sig-object py" id="amaranth.lib.memory.Memory.read_port">
 <span class="sig-name descname"><span class="pre">read_port</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sync'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transparent_for</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.memory.Memory.read_port" title="Permalink to this definition"></a></dt>
 <dd><p>Request a read port.</p>
-<p>If <code class="code highlight py python docutils literal highlight-python"><span class="n">domain</span></code> is <code class="code highlight py python docutils literal highlight-python"><span class="s2">&quot;comb&quot;</span></code>, an asynchronous read port is created, which is always
-enabled (and its enable input is tied to <code class="code highlight py python docutils literal highlight-python"><span class="n">Const</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></code>), and whose data output always
-reflects the contents of the selected row. Otherwise, the created read port is synchronous,
+<p>If <code class="code highlight py python docutils literal highlight-python"><span class="n">domain</span></code> is <code class="code highlight py python docutils literal highlight-python"><span class="s2">&quot;comb&quot;</span></code>, the created read port is asynchronous and always enabled
+(with its enable input is tied to <code class="code highlight py python docutils literal highlight-python"><span class="n">Const</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></code>), and its data output always reflects
+the contents of the selected row. Otherwise, the created read port is synchronous,
 and its data output is updated with the contents of the selected row at each
 <a class="reference internal" href="../guide.html#lang-sync"><span class="std std-ref">active edge</span></a> of <code class="code highlight py python docutils literal highlight-python"><span class="n">domain</span></code> where the enable input is asserted.</p>
 <p>The <code class="code highlight py python docutils literal highlight-python"><span class="n">transparent_for</span></code> parameter specifies the <em>transparency set</em> of this port: zero or
