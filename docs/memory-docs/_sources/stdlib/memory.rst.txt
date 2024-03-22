@@ -118,6 +118,10 @@ However, the memory read port is also configured to be *transparent* relative to
 Memories
 ========
 
+..
+    attributes are not documented because they can be easily used to break soundness and we don't
+    document them for signals either; they are rarely necessary for interoperability
+
 .. autoclass:: Memory(*, depth, shape, init, src_loc_at=0)
     :no-members:
 
