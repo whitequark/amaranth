@@ -41,7 +41,7 @@
               <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.5.0.dev173+gc323dfe7
+                0.5.0.dev173+ge8bd843c
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -64,6 +64,7 @@
 <li class="toctree-l3"><a class="reference internal" href="data.html">Data structures</a></li>
 <li class="toctree-l3"><a class="reference internal" href="wiring.html">Interfaces and connections</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Memory arrays</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#memories">Memories</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#memory-ports">Memory ports</a></li>
@@ -115,22 +116,12 @@
 <div class="admonition-todo admonition" id="id1">
 <p class="admonition-title">Todo</p>
 <ul class="simple">
-<li><p>finish <code class="docutils literal notranslate"><span class="pre">Memory</span></code> docstring</p></li>
-<li><p>add waveform diagrams</p></li>
-<li><dl class="simple">
-<dt>note about platform dependent behavior</dt><dd><ul>
-<li><p>zero or one write ports + any amount of read ports is always supported</p></li>
-<li><p>two write ports + any amount of read ports sharing addresses with either of the two is usually supported</p></li>
-<li><p>more than two write ports is not supported</p></li>
-<li><p>using asynchronous read ports results in higher, sometimes extremely so, resource usage</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><p>note about platform override</p></li>
+<li><p>add second waveform diagram</p></li>
 </ul>
 </div>
 <span class="target" id="module-amaranth.lib.memory"></span><p>The <a class="reference internal" href="#module-amaranth.lib.memory" title="amaranth.lib.memory"><code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.lib.memory</span></code></a> module provides a way to efficiently store data organized as an array of identically shaped rows, which may be addressed (read and/or written) one at a time. This organization is well suited for an efficient implementation in hardware.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
 <p>A memory <a class="reference internal" href="wiring.html#wiring-introduction"><span class="std std-ref">component</span></a> is accessed through read and write <em>memory ports</em>, which are <a class="reference internal" href="wiring.html#wiring-introduction"><span class="std std-ref">interface objects</span></a> with address, data, and enable ports. The address input selects the memory row to be accessed, the enable input determines whether an access will be made, and the data output (for read ports) or data input (for write ports) transfers data between the memory row and the rest of the design. Read ports can be synchronous (where the memory row access is triggered by the <a class="reference internal" href="../guide.html#lang-sync"><span class="std std-ref">active edge</span></a> of a clock) or asynchronous (where the memory row is accessed continuously); write ports are always synchronous.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -138,8 +129,24 @@
 <p>Amaranth documentation always uses the term “memory port” when referring to the latter.</p>
 </div>
 <p>To use a memory, first create a <a class="reference internal" href="#amaranth.lib.memory.Memory" title="amaranth.lib.memory.Memory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Memory</span></code></a> object, providing a shape, depth (the number of rows), and initial contents. Then, request as many memory ports as the number of concurrent accesses you need to perform by using the <a class="reference internal" href="#amaranth.lib.memory.Memory.read_port" title="amaranth.lib.memory.Memory.read_port"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Memory.read_port()</span></code></a> and <a class="reference internal" href="#amaranth.lib.memory.Memory.write_port" title="amaranth.lib.memory.Memory.write_port"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Memory.write_port()</span></code></a> methods.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>While <a class="reference internal" href="#amaranth.lib.memory.Memory" title="amaranth.lib.memory.Memory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Memory</span></code></a> will provide virtually any memory configuration on request and all will simulate correctly, only a subset of configurations can implemented in hardware efficiently or <cite>at all</cite>. Exactly what any given hardware platform supports is specific to both the device and the toolchain used.</p>
+<p>However, the following two configurations are well-supported on most platforms:</p>
+<ol class="arabic simple">
+<li><p>Zero or one write ports and any amount of read ports. Almost all devices include one or two read ports in a hardware memory block, but the toolchain will replicate memory blocks as needed to meet the requested amount of read ports, using more resources.</p></li>
+<li><p>Two write ports and any amount of read ports whose address input always matches that of the either write port. Most devices include two combined read/write ports in a hardware memory block (known as “true dual-port”, or “TDP”, block RAM), and the toolchain will replicate memory blocks to meet the requested amount of read ports. However, some devices include one read-only and one write-only port in a hardware memory block (known as “simple dual-port”, or “SDP”, block RAM), making this configuration unavailable. Also, the combined (synchronous) read/write port of a TDP block RAM usually does not have independent read enable and write enable inputs; in this configuration, the read enable input should usually be left in the (default if not driven) asserted state.</p></li>
+</ol>
+<p>Most devices include hardware primitives that can efficiently implement memories with asynchronous read ports (known as “LUT RAM”, “distributed RAM”, or “DRAM”; not to be confused with “dynamic RAM”, also abbreviated as “DRAM”). On devices without these hardware primitives, memories with asynchronous read ports are implemented using logic resources, which are consumed at an extremely high rate. Synchronous read ports should be always preferred over asynchronous ones.</p>
+<p>Additionally, some memory configurations (that seem like they should be supported by the device and the toolchain) may fail to be recognized, or may use much more resources than they should. This can happen due to device and/or toolchain errata (including defects in Amaranth). Unfortunately, such issues can only be handled on a case-by-case basis; in general, simpler memory configurations are better and more widely supported.</p>
+</div>
+</section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<p>First, import the <a class="reference internal" href="#amaranth.lib.memory.Memory" title="amaranth.lib.memory.Memory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Memory</span></code></a> class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">amaranth.lib.memory</span> <span class="kn">import</span> <span class="n">Memory</span>
+</pre></div>
+</div>
 <p>In the following example, a read-only memory is used to output a fixed message in a loop:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">message</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;Hello, world!</span><span class="se">\n</span><span class="s2">&quot;</span>
 <span class="n">m</span><span class="o">.</span><span class="n">submodules</span><span class="o">.</span><span class="n">memory</span> <span class="o">=</span> <span class="n">memory</span> <span class="o">=</span> \
@@ -155,7 +162,8 @@
 <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">comb</span> <span class="o">+=</span> <span class="n">character</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">rd_port</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In a more complex example, a power-of-2 sized writable memory is used to implement a first-in, first-out queue:</p>
+<p>In this example, the memory read port is asynchronous, and a change of the address input (labelled <cite>a</cite> on the diagram below) results in an immediate change of the data output (labelled <cite>d</cite>).</p>
+<img alt="../_images/example_async.svg" src="../_images/example_async.svg" /><p>In a more complex example, a power-of-2 sized writable memory is used to implement a first-in, first-out queue:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">push</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">()</span>
 <span class="n">pop</span>  <span class="o">=</span> <span class="n">Signal</span><span class="p">()</span>
 
@@ -163,13 +171,13 @@
     <span class="n">Memory</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">unsigned</span><span class="p">(</span><span class="mi">32</span><span class="p">),</span> <span class="n">depth</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="p">[])</span>
 
 <span class="n">wr_port</span> <span class="o">=</span> <span class="n">memory</span><span class="o">.</span><span class="n">write_port</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">comb</span> <span class="o">+=</span> <span class="n">wr_port</span><span class="o">.</span><span class="n">en</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">push</span><span class="p">)</span>
 <span class="k">with</span> <span class="n">m</span><span class="o">.</span><span class="n">If</span><span class="p">(</span><span class="n">push</span><span class="p">):</span>
-    <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">comb</span> <span class="o">+=</span> <span class="n">wr_port</span><span class="o">.</span><span class="n">en</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="n">wr_port</span><span class="o">.</span><span class="n">addr</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">wr_port</span><span class="o">.</span><span class="n">addr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="n">rd_port</span> <span class="o">=</span> <span class="n">memory</span><span class="o">.</span><span class="n">read_port</span><span class="p">(</span><span class="n">transparent_for</span><span class="o">=</span><span class="p">(</span><span class="n">wr_port</span><span class="p">,))</span>
+<span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">comb</span> <span class="o">+=</span> <span class="n">rd_port</span><span class="o">.</span><span class="n">en</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
 <span class="k">with</span> <span class="n">m</span><span class="o">.</span><span class="n">If</span><span class="p">(</span><span class="n">pop</span><span class="p">):</span>
-    <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">comb</span> <span class="o">+=</span> <span class="n">rd_port</span><span class="o">.</span><span class="n">en</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="n">rd_port</span><span class="o">.</span><span class="n">addr</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">rd_port</span><span class="o">.</span><span class="n">addr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># Data can be shifted in via `wr_port.data` and out via `rd_port.data`.</span>
@@ -183,18 +191,33 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="amaranth.lib.memory.Memory">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amaranth.lib.memory.</span></span><span class="sig-name descname"><span class="pre">Memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.memory.Memory" title="Permalink to this definition"></a></dt>
-<dd><p>A word addressable storage.</p>
+<dd><p>Addressable array of rows.</p>
+<p>This class is used to construct a memory array by first specifying its dimensions and initial
+contents using the <code class="code highlight py python docutils literal highlight-python"><span class="n">shape</span></code>, <code class="code highlight py python docutils literal highlight-python"><span class="n">depth</span></code>, and <code class="code highlight py python docutils literal highlight-python"><span class="n">init</span></code> parameters, and then adding memory
+ports using the <a class="reference internal" href="#amaranth.lib.memory.Memory.read_port" title="amaranth.lib.memory.Memory.read_port"><code class="xref py py-meth docutils literal notranslate"><span class="pre">read_port()</span></code></a> and <a class="reference internal" href="#amaranth.lib.memory.Memory.write_port" title="amaranth.lib.memory.Memory.write_port"><code class="xref py py-meth docutils literal notranslate"><span class="pre">write_port()</span></code></a> methods. Because it is mutable, it
+should be created and used locally within the <a class="reference internal" href="../guide.html#lang-elaboration"><span class="std std-ref">elaborate</span></a> method.</p>
+<p>The <code class="code highlight py python docutils literal highlight-python"><span class="n">init</span></code> parameter and assignment to the <code class="code highlight py python docutils literal highlight-python"><span class="n">init</span></code> attribute have the same effect, with
+<a class="reference internal" href="#amaranth.lib.memory.Memory.Init" title="amaranth.lib.memory.Memory.Init"><code class="xref py py-class docutils literal notranslate"><span class="pre">Memory.Init</span></code></a> converting elements of the iterable to match <code class="code highlight py python docutils literal highlight-python"><span class="n">shape</span></code> and using
+a default value for rows that are not explicitly initialized.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Uninitialized memories (including ASIC memories and some FPGA memories) are
+<a class="reference external" href="https://github.com/amaranth-lang/amaranth/issues/270">not yet supported</a>, and
+the <code class="code highlight py python docutils literal highlight-python"><span class="n">init</span></code> parameter must be always provided, if only as <code class="code highlight py python docutils literal highlight-python"><span class="n">init</span><span class="o">=</span><span class="p">[]</span></code>.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>shape</strong> (<a class="reference internal" href="../guide.html#lang-shapelike"><span class="std std-ref">shape-like</span></a> object) – The shape of a single element of the storage.</p></li>
-<li><p><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Word count. This memory contains <code class="docutils literal notranslate"><span class="pre">depth</span></code> storage elements.</p></li>
-<li><p><strong>init</strong> (iterable of int or of any objects accepted by <code class="docutils literal notranslate"><span class="pre">shape.const()</span></code>) – Initial values. At power on, each storage element in this memory is initialized to
-the corresponding element of <code class="docutils literal notranslate"><span class="pre">init</span></code>, if any, or to the default value of <code class="docutils literal notranslate"><span class="pre">shape</span></code> otherwise.
-Uninitialized memories are not currently supported.</p></li>
+<li><p><strong>shape</strong> (<a class="reference internal" href="../guide.html#lang-shapelike"><span class="std std-ref">shape-like</span></a> object) – Shape of each memory row.</p></li>
+<li><p><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Number of memory rows.</p></li>
+<li><p><strong>init</strong> (<em>iterable</em><em> of </em><em>initial values</em>) – Initial values for memory rows.</p></li>
+<li><p><strong>..</strong> – <code class="xref py py-attr docutils literal notranslate"><span class="pre">attrs</span></code> is intentionally left undocumented</p></li>
 </ul>
 </dd>
 </dl>
+<p class="rubric">Platform overrides</p>
+<p>Define the <code class="code highlight py python docutils literal highlight-python"><span class="n">get_memory</span><span class="p">()</span></code> platform method to override the implementation of
+<a class="reference internal" href="#amaranth.lib.memory.Memory" title="amaranth.lib.memory.Memory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Memory</span></code></a>, e.g. to instantiate library cells directly.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="amaranth.lib.memory.Memory.Init">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.memory.Memory.Init" title="Permalink to this definition"></a></dt>
