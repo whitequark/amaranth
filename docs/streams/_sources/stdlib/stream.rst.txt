@@ -1,0 +1,8 @@
+Data streams
+------------
+
+.. py:module:: amaranth.lib.stream
+
+.. todo::
+
+    Write this section.
