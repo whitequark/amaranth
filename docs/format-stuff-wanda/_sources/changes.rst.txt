@@ -9,6 +9,8 @@ Documentation for past releases
 
 Documentation for past releases of the Amaranth language and toolchain is available online:
 
+* `Amaranth 0.4.5 <https://amaranth-lang.org/docs/amaranth/v0.4.5/>`_
+* `Amaranth 0.4.4 <https://amaranth-lang.org/docs/amaranth/v0.4.4/>`_
 * `Amaranth 0.4.3 <https://amaranth-lang.org/docs/amaranth/v0.4.3/>`_
 * `Amaranth 0.4.2 <https://amaranth-lang.org/docs/amaranth/v0.4.2/>`_
 * `Amaranth 0.4.1 <https://amaranth-lang.org/docs/amaranth/v0.4.1/>`_
@@ -38,6 +40,7 @@ Apply the following changes to code written against Amaranth 0.4 to migrate it t
 * Replace imports of ``amaranth.asserts.{Assert, Assume, Cover}`` with imports from ``amaranth.hdl``
 * Remove any usage of ``name=`` with assertions, possibly replacing them with custom messages
 * Ensure all elaboratables are subclasses of :class:`Elaboratable`
+* Ensure clock domains aren't used outside the module that defines them, or its submodules; move clock domain definitions upwards in the hierarchy as necessary
 
 
 Implemented RFCs
@@ -53,6 +56,9 @@ Implemented RFCs
 .. _RFC 51: https://amaranth-lang.org/rfcs/0051-const-from-bits.html
 .. _RFC 53: https://amaranth-lang.org/rfcs/0053-ioport.html
 .. _RFC 55: https://amaranth-lang.org/rfcs/0055-lib-io.html
+.. _RFC 58: https://amaranth-lang.org/rfcs/0058-valuecastable-format.html
+.. _RFC 59: https://amaranth-lang.org/rfcs/0059-no-domain-upwards-propagation.html
+.. _RFC 62: https://amaranth-lang.org/rfcs/0062-memory-data.html
 
 * `RFC 17`_: Remove ``log2_int``
 * `RFC 27`_: Testbench processes for the simulator
@@ -63,6 +69,9 @@ Implemented RFCs
 * `RFC 50`_: ``Print`` statement and string formatting
 * `RFC 51`_: Add ``ShapeCastable.from_bits`` and ``amaranth.lib.data.Const``
 * `RFC 53`_: Low-level I/O primitives
+* `RFC 58`_: Core support for ``ValueCastable`` formatting
+* `RFC 59`_: Get rid of upwards propagation of clock domains
+* `RFC 62`_: The `MemoryData`` class
 
 
 Language changes
@@ -75,6 +84,7 @@ Language changes
 * Added: :class:`Format` objects, :class:`Print` statements, messages in :class:`Assert`, :class:`Assume` and :class:`Cover`. (`RFC 50`_)
 * Added: :meth:`ShapeCastable.from_bits` method. (`RFC 51`_)
 * Added: IO values, :class:`IOPort` objects, :class:`IOBufferInstance` objects. (`RFC 53`_)
+* Added: :class:`MemoryData` objects. (`RFC 62`_)
 * Changed: ``m.Case()`` with no patterns is never active instead of always active. (`RFC 39`_)
 * Changed: ``Value.matches()`` with no patterns is ``Const(0)`` instead of ``Const(1)``. (`RFC 39`_)
 * Changed: ``Signal(range(stop), init=stop)`` warning has been changed into a hard error and made to trigger on any out-of range value.
@@ -86,6 +96,7 @@ Language changes
 * Changed: :class:`Instance` IO ports now accept only IO values, not plain values. (`RFC 53`_)
 * Deprecated: :func:`amaranth.utils.log2_int`. (`RFC 17`_)
 * Deprecated: :class:`amaranth.hdl.Memory`. (`RFC 45`_)
+* Deprecated: upwards propagation of clock domains. (`RFC 59`_)
 * Removed: (deprecated in 0.4) :meth:`Const.normalize`. (`RFC 5`_)
 * Removed: (deprecated in 0.4) :class:`Repl`. (`RFC 10`_)
 * Removed: (deprecated in 0.4) :class:`ast.Sample`, :class:`ast.Past`, :class:`ast.Stable`, :class:`ast.Rose`, :class:`ast.Fell`.
@@ -101,6 +112,7 @@ Standard library changes
 * Added: :mod:`amaranth.lib.memory`. (`RFC 45`_)
 * Added: :class:`amaranth.lib.data.Const` class. (`RFC 51`_)
 * Changed: :meth:`amaranth.lib.data.Layout.const` returns a :class:`amaranth.lib.data.Const`, not a view (`RFC 51`_)
+* Changed: :meth:`amaranth.lib.wiring.Signature.is_compliant` no longer rejects reset-less signals.
 * Added: :class:`amaranth.lib.io.SingleEndedPort`, :class:`amaranth.lib.io.DifferentialPort`. (`RFC 55`_)
 * Added: :class:`amaranth.lib.io.Buffer`, :class:`amaranth.lib.io.FFBuffer`, :class:`amaranth.lib.io.DDRBuffer`. (`RFC 55`_)
 * Removed: (deprecated in 0.4) :mod:`amaranth.lib.scheduler`. (`RFC 19`_)
