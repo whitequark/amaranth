@@ -41,7 +41,7 @@
               <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.5.0.dev242+gd276908b
+                0.5.0.dev242+g31cff762
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -68,6 +68,8 @@
 <li class="toctree-l3"><a class="reference internal" href="coding.html">Code conversion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fifo.html">First-in first-out queues</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Cyclic redundancy checks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#algorithms-and-parameters">Algorithms and parameters</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#crc-computation">CRC computation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#predefined-crcs">Predefined CRCs</a></li>
@@ -114,6 +116,8 @@
 <span id="cyclic-redundancy-checks"></span><h1>Cyclic redundancy checks<a class="headerlink" href="#module-amaranth.lib.crc" title="Permalink to this heading"></a></h1>
 <p>The <a class="reference internal" href="#module-amaranth.lib.crc" title="amaranth.lib.crc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.lib.crc</span></code></a> module provides facilities for computing cyclic redundancy checks (CRCs)
 in software and in hardware.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
 <p>The essentials of a CRC computation are specified with an <a class="reference internal" href="#amaranth.lib.crc.Algorithm" title="amaranth.lib.crc.Algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">Algorithm</span></code></a> object, which defines
 CRC width, polynomial, initial value, input/output reflection, and output XOR. Many commonly used
 CRC algorithms are available in the <a class="reference internal" href="crc/catalog.html#module-amaranth.lib.crc.catalog" title="amaranth.lib.crc.catalog"><code class="xref py py-mod docutils literal notranslate"><span class="pre">catalog</span></code></a> module, while most other
@@ -121,6 +125,9 @@ CRC designs can be accommodated by manually constructing an <a class="reference 
 <p>An <a class="reference internal" href="#amaranth.lib.crc.Algorithm" title="amaranth.lib.crc.Algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">Algorithm</span></code></a> is specialized for a particular data width to obtain <a class="reference internal" href="#amaranth.lib.crc.Parameters" title="amaranth.lib.crc.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>,
 which fully define a CRC computation. <a class="reference internal" href="#amaranth.lib.crc.Parameters.compute" title="amaranth.lib.crc.Parameters.compute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Parameters.compute()</span></code></a> computes a CRC in software, while
 <a class="reference internal" href="#amaranth.lib.crc.Parameters.create" title="amaranth.lib.crc.Parameters.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Parameters.create()</span></code></a> creates a <a class="reference internal" href="#amaranth.lib.crc.Processor" title="amaranth.lib.crc.Processor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Processor</span></code></a> that computes a CRC in hardware.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">amaranth.lib.crc</span> <span class="kn">import</span> <span class="n">Algorithm</span>
 <span class="kn">from</span> <span class="nn">amaranth.lib.crc.catalog</span> <span class="kn">import</span> <span class="n">CRC16_CCITT</span><span class="p">,</span> <span class="n">CRC16_USB</span>
 
@@ -140,6 +147,7 @@ which fully define a CRC computation. <a class="reference internal" href="#amara
 <span class="k">assert</span> <span class="n">algo</span><span class="p">(</span><span class="n">data_width</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;123456789&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mh">0x29b1</span>
 </pre></div>
 </div>
+</section>
 <section id="algorithms-and-parameters">
 <h2>Algorithms and parameters<a class="headerlink" href="#algorithms-and-parameters" title="Permalink to this heading"></a></h2>
 <dl class="py class">

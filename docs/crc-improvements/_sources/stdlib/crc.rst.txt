@@ -6,6 +6,10 @@ Cyclic redundancy checks
 The :mod:`amaranth.lib.crc` module provides facilities for computing cyclic redundancy checks (CRCs)
 in software and in hardware.
 
+
+Introduction
+============
+
 The essentials of a CRC computation are specified with an :class:`Algorithm` object, which defines
 CRC width, polynomial, initial value, input/output reflection, and output XOR. Many commonly used
 CRC algorithms are available in the :py:mod:`~amaranth.lib.crc.catalog` module, while most other
@@ -14,6 +18,10 @@ CRC designs can be accommodated by manually constructing an :class:`Algorithm`.
 An :class:`Algorithm` is specialized for a particular data width to obtain :class:`Parameters`,
 which fully define a CRC computation. :meth:`Parameters.compute` computes a CRC in software, while
 :meth:`Parameters.create` creates a :class:`Processor` that computes a CRC in hardware.
+
+
+Examples
+========
 
 .. testsetup::
 
