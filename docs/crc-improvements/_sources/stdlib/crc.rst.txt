@@ -65,8 +65,8 @@ CRC computation
 .. autoclass:: Processor()
 
 
-Predefined CRCs
-===============
+Predefined algorithms
+=====================
 
 The following predefined CRC algorithms are available:
 
