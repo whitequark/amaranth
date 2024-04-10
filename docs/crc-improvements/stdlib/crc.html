@@ -41,7 +41,7 @@
               <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.5.0.dev242+g416ff983
+                0.5.0.dev242+gd276908b
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -221,8 +221,8 @@ reflect the input or output words, and any output XOR.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="amaranth.lib.crc.Parameters.residue">
 <span class="sig-name descname"><span class="pre">residue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.lib.crc.Parameters.residue" title="Permalink to this definition"></a></dt>
-<dd><p>Obtain the value left in the CRC register after processing any valid trailing CRC
-(also known as a codeword).</p>
+<dd><p>Obtain the residual value left in the CRC register after processing a valid trailing CRC.</p>
+<p>A trailing CRC data word is also known as a codeword.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -261,7 +261,7 @@ reflect the input or output words, and any output XOR.</p></li>
 <dd><p>Hardware cyclic redundancy check generator.</p>
 <p>This module generates CRCs from an input data stream, which can be used to validate an existing
 CRC or generate a new CRC. It is configured by the <a class="reference internal" href="#amaranth.lib.crc.Parameters" title="amaranth.lib.crc.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> class, which can handle
-most types of CRCs. Refer to that class’s documentation for a description of the parameters.</p>
+most types of CRCs.</p>
 <p>The CRC value is updated on any clock cycle where <code class="code highlight py python docutils literal highlight-python"><span class="n">valid</span></code> is asserted, with the updated
 value available on the <code class="code highlight py python docutils literal highlight-python"><span class="n">crc</span></code> output on the subsequent clock cycle. The latency is therefore
 one clock cycle, and the throughput is one data word per clock cycle.</p>
