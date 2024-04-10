@@ -1,0 +1,4 @@
+Predefined algorithms
+#####################
+
+.. automodule:: amaranth.lib.crc.catalog
