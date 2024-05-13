@@ -917,10 +917,6 @@ This happens because, being empty, it does not contain any negative values.</p>
 <p class="admonition-title">Note</p>
 <p>An array becomes immutable after it is indexed for the first time. The elements of the array do not themselves become immutable, but it is not recommended to mutate them as the behavior can become unpredictable.</p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Each time an array proxy object with <code class="code highlight py python docutils literal highlight-python"><span class="n">n</span></code> elements is used in an expression, it generates a multiplexer with <code class="code highlight py python docutils literal highlight-python"><span class="n">n</span></code> branches. However, using <code class="code highlight py python docutils literal highlight-python"><span class="n">k</span></code> of such array proxy objects in a single expression generates a multiplexer with <code class="code highlight py python docutils literal highlight-python"><span class="n">n</span><span class="o">**</span><span class="n">k</span></code> branches. This can produce extremely large circuits that may quickly exhaust the resources of the synthesis target or even the available RAM.</p>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Arrays, <code class="xref py py-class docutils literal notranslate"><span class="pre">amaranth.hdl.Array</span></code>, are distinct from and serve a different function than <a class="reference internal" href="stdlib/data.html#amaranth.lib.data.ArrayLayout" title="amaranth.lib.data.ArrayLayout"><code class="xref py py-class docutils literal notranslate"><span class="pre">amaranth.lib.data.ArrayLayout</span></code></a>.</p>
