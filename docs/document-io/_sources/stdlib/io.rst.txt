@@ -32,7 +32,7 @@ All of the following examples assume that one of the built-in FPGA platforms is 
 
 .. testcode::
 
-    from amaranth.lib import io
+    from amaranth.lib import io, wiring
 
 
 LED output
