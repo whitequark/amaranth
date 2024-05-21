@@ -573,8 +573,8 @@ for this diagram.</p>
 labelled <em>5</em>, <em>6</em>, and output to <code class="code highlight py python docutils literal highlight-python"><span class="n">i</span></code> during the next clock cycle (labelled <em>d</em>, <em>e</em>).
 The input latency <em>t2</em> is defined as the amount of cycles between the time of reception of
 rising edge data and the time of update of <code class="code highlight py python docutils literal highlight-python"><span class="n">i</span></code>, and is 1 for this diagram.</p>
-<p>The output enable signal is captured once per cycle and affects the entire cycle it applies to.
-Its latency is defined in the same way as the output latency, and is equal to <em>t1</em>.</p>
+<p>The output enable signal is input from <code class="code highlight py python docutils literal highlight-python"><span class="n">oe</span></code> once per cycle and affects the entire cycle it
+applies to. Its latency is defined in the same way as the output latency, and is equal to <em>t1</em>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Some platforms include additional pipeline registers that may cause latencies <em>t1</em> and <em>t2</em>
