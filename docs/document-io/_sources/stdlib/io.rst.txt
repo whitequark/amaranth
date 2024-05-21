@@ -140,7 +140,7 @@ In this example of a `source-synchronous interface <https://en.wikipedia.org/wik
 
             return m
 
-This component transmits :py:`dout` on each cycle as two halves: the low 8 bits on the rising edge of the data clock, and the high 8 bits on the falling edge of the data clock. The transmission is *edge-aligned*, meaning that the data edges coincide with the clock edges.
+This component transmits :py:`dout` on each cycle as two halves: the low 8 bits on the rising edge of the data clock, and the high 8 bits on the falling edge of the data clock. The transmission is *edge-aligned*, meaning that the data edges exactly coincide with the clock edges.
 
 
 Ports
