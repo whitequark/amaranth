@@ -28,6 +28,34 @@ Examples
 
     from amaranth import *
 
+    class MockPlatform:
+        def request(self, name, *, dir):
+            from amaranth.hdl import IOPort
+            from amaranth.lib import io
+            if name == "led":
+                return io.SingleEndedPort(IOPort(1, name=name), direction="o")
+            if name == "clk24":
+                return io.SingleEndedPort(IOPort(1, name=name), direction="i")
+            if name == "d":
+                return io.SingleEndedPort(IOPort(8, name=name), direction="io")
+            if name == "re":
+                return io.SingleEndedPort(IOPort(1, name=name), direction="i")
+            if name == "we":
+                return io.SingleEndedPort(IOPort(1, name=name), direction="i")
+            if name == "dclk":
+                return io.SingleEndedPort(IOPort(1, name=name), direction="o")
+            if name == "dout":
+                return io.SingleEndedPort(IOPort(8, name=name), direction="o")
+            raise NameError
+
+        def get_io_buffer(self, buffer):
+            return Fragment()
+
+        def build(self, top):
+            from amaranth.back import rtlil
+            return rtlil.convert(Fragment.get(top, self), ports=[])
+
+
 All of the following examples assume that one of the built-in FPGA platforms is used.
 
 .. testcode::
@@ -60,6 +88,11 @@ In this example, a library I/O port for a LED is requested from the platform and
 
             return m
 
+.. testcode::
+    :hide:
+
+    MockPlatform().build(Toplevel())
+
 
 Clock input
 +++++++++++
@@ -81,11 +114,16 @@ In this example, a clock domain is created and driven from an external clock sou
 
             return m
 
+.. testcode::
+    :hide:
+
+    MockPlatform().build(Toplevel())
+
 
 Bidirectional bus
 +++++++++++++++++
 
-This example implements a peripheral for a clocked parallel bus that can store and recall one byte of data. The data is stored with a write enable pulse, and recalled with a read enable pulse:
+This example implements a peripheral for a clocked parallel bus. This peripheral can store and recall one byte of data. The data is stored with a write enable pulse, and recalled with a read enable pulse:
 
 .. testcode::
 
@@ -105,6 +143,11 @@ This example implements a peripheral for a clocked parallel bus that can store a
                 m.d.sync += data.eq(bus_d.i)
 
             return m
+
+.. testcode::
+    :hide:
+
+    MockPlatform().build(Toplevel())
 
 This bus requires a turn-around time of at least 1 cycle to avoid electrical contention.
 
@@ -139,6 +182,11 @@ In this example of a `source-synchronous interface <https://en.wikipedia.org/wik
             ]
 
             return m
+
+.. testcode::
+    :hide:
+
+    MockPlatform().build(SourceSynchronousOutput())
 
 This component transmits :py:`dout` on each cycle as two halves: the low 8 bits on the rising edge of the data clock, and the high 8 bits on the falling edge of the data clock. The transmission is *edge-aligned*, meaning that the data edges exactly coincide with the clock edges.
 

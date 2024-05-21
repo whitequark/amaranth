@@ -178,7 +178,7 @@
 </section>
 <section id="bidirectional-bus">
 <h3>Bidirectional bus<a class="headerlink" href="#bidirectional-bus" title="Permalink to this heading"></a></h3>
-<p>This example implements a peripheral for a clocked parallel bus that can store and recall one byte of data. The data is stored with a write enable pulse, and recalled with a read enable pulse:</p>
+<p>This example implements a peripheral for a clocked parallel bus. This peripheral can store and recall one byte of data. The data is stored with a write enable pulse, and recalled with a read enable pulse:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Toplevel</span><span class="p">(</span><span class="n">Elaboratable</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">elaborate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">):</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">Module</span><span class="p">()</span>
