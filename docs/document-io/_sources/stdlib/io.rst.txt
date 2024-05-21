@@ -114,7 +114,7 @@ Note that data appears on the bus one cycle after the read enable input is asser
 Clock forwarding
 ++++++++++++++++
 
-In this example that describes a part of a `source-synchronous interface <https://en.wikipedia.org/wiki/Source-synchronous>`__, a clock signal is generated with the same phase as DDR data signals associated with it:
+In this example of a `source-synchronous interface <https://en.wikipedia.org/wiki/Source-synchronous>`__, a clock signal is generated with the same phase as the DDR data signals associated with it:
 
 .. testcode::
 
