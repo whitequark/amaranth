@@ -137,7 +137,7 @@
 </div>
 <section id="led-output">
 <h3>LED output<a class="headerlink" href="#led-output" title="Permalink to this heading"></a></h3>
-<p>In this example, a library I/O port for a LED is requested from the platform and blinked:</p>
+<p>In this example, a library I/O port for a LED is requested from the platform and driven to blink the LED:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Toplevel</span><span class="p">(</span><span class="n">Elaboratable</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">elaborate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">):</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">Module</span><span class="p">()</span>

@@ -38,7 +38,7 @@ All of the following examples assume that one of the built-in FPGA platforms is 
 LED output
 ++++++++++
 
-In this example, a library I/O port for a LED is requested from the platform and blinked:
+In this example, a library I/O port for a LED is requested from the platform and driven to blink the LED:
 
 .. testcode::
 
