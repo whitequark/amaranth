@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulator &mdash; Amaranth language &amp; toolchain 0.5.0.dev306 documentation</title>
+  <title>Simulator &mdash; Amaranth language &amp; toolchain 0.5.0.dev307 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/platformpicker.css" />
@@ -17,7 +17,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=dc1c45c0"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=7864c1d9"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
         <script src="_static/platformpicker.js"></script>
@@ -41,7 +41,7 @@
               <img src="_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.5.0.dev306
+                0.5.0.dev307
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -67,7 +67,12 @@
 <li class="toctree-l4"><a class="reference internal" href="#testing-combinational-circuits">Testing combinational circuits</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#replacing-circuits-with-code">Replacing circuits with code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replacing-circuits-with-code">Replacing circuits with code</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#replacing-synchronous-circuits">Replacing synchronous circuits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#replacing-combinational-circuits">Replacing combinational circuits</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#reference">Reference</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="platform.html">Platform integration</a></li>
@@ -126,7 +131,7 @@
 <span class="k">class</span> <span class="nc">Adder</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
     <span class="n">a</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
     <span class="n">b</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
-    <span class="n">o</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+    <span class="n">o</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">elaborate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">):</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">Module</span><span class="p">()</span>
@@ -167,7 +172,7 @@
 <p>The following example simulates a counter and verifies that it can be stopped using its <code class="code highlight py python docutils literal highlight-python"><span class="n">en</span></code> input:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dut</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
 
-<span class="k">async</span> <span class="k">def</span> <span class="nf">tb_example2</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">testbench_example2</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
     <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>     <span class="c1"># wait until after the 5th edge of the `sync` domain clock</span>
     <span class="k">assert</span> <span class="n">ctx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dut</span><span class="o">.</span><span class="n">count</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span> <span class="c1"># verify that the counter has the expected value</span>
     <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">dut</span><span class="o">.</span><span class="n">en</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>         <span class="c1"># deassert `dut.en`, disabling the counter</span>
@@ -177,7 +182,7 @@
 
 <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulator</span><span class="p">(</span><span class="n">dut</span><span class="p">)</span>
 <span class="n">sim</span><span class="o">.</span><span class="n">add_clock</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">)</span>
-<span class="n">sim</span><span class="o">.</span><span class="n">add_testbench</span><span class="p">(</span><span class="n">tb_example2</span><span class="p">)</span> <span class="c1"># add a testbench; it will be executed on run() or run_until()</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">add_testbench</span><span class="p">(</span><span class="n">testbench_example2</span><span class="p">)</span> <span class="c1"># add the testbench; run_until() calls the function</span>
 <span class="k">with</span> <span class="n">sim</span><span class="o">.</span><span class="n">write_vcd</span><span class="p">(</span><span class="s2">&quot;example2.vcd&quot;</span><span class="p">):</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">run_until</span><span class="p">(</span><span class="mf">1e-6</span> <span class="o">*</span> <span class="mi">15</span><span class="p">)</span>
 </pre></div>
@@ -190,7 +195,7 @@
 <p>The following example simulates an adder:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dut</span> <span class="o">=</span> <span class="n">Adder</span><span class="p">()</span>
 
-<span class="k">async</span> <span class="k">def</span> <span class="nf">tb_example3</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">testbench_example3</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
     <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">)</span>
     <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">dut</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">dut</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
@@ -204,7 +209,7 @@
     <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="mf">2e-6</span><span class="p">)</span>
 
 <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulator</span><span class="p">(</span><span class="n">dut</span><span class="p">)</span>
-<span class="n">sim</span><span class="o">.</span><span class="n">add_testbench</span><span class="p">(</span><span class="n">tb_example3</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">add_testbench</span><span class="p">(</span><span class="n">testbench_example3</span><span class="p">)</span>
 <span class="k">with</span> <span class="n">sim</span><span class="o">.</span><span class="n">write_vcd</span><span class="p">(</span><span class="s2">&quot;example3.vcd&quot;</span><span class="p">):</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
@@ -214,6 +219,90 @@
 </section>
 <section id="replacing-circuits-with-code">
 <h2>Replacing circuits with code<a class="headerlink" href="#replacing-circuits-with-code" title="Permalink to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section describes an advanced technique that is not commonly used. If you are first learning how to use the simulator, you can skip it.</p>
+</div>
+<p>During simulation, it is possible to replace an Amaranth circuit with the equivalent Python code. This can be used to improve simulation performance, or to avoid reimplementing complex Python algorithms in Amaranth if they do not need to be synthesized.</p>
+<p>This is done by adding a <em>process</em> to the simulator: an <code class="code highlight py python docutils literal highlight-python"><span class="k">async</span></code> Python function that runs as an integral part of the simulation, simultaneously with the DUT. A process is added using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.add_process()</span></code> method, and receives a <code class="xref py py-class docutils literal notranslate"><span class="pre">SimulatorContext</span></code> object through which it can interact with the simulator. A process is conceptually similar to a testbench but differs from it in two important ways:</p>
+<ul class="simple">
+<li><p>Testbenches run in a well-defined order (from first to last in the order they were added, yielding control only at <code class="code highlight py python docutils literal highlight-python"><span class="k">await</span></code> points) and cannot observe inconsistent intermediate states of a design, but processes run in an undefined order while the design is converging after a change to its inputs.</p></li>
+<li><p>In a process, it is not possible to inspect the value of a signal using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code> method, which guarantees that inconsistent intermediate states of a design cannot be observed by a process either.</p></li>
+</ul>
+<p>A process communicates with the rest of the design in the same way an elaboratable would: through <code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code>s.</p>
+<section id="replacing-synchronous-circuits">
+<h3>Replacing synchronous circuits<a class="headerlink" href="#replacing-synchronous-circuits" title="Permalink to this heading"></a></h3>
+<p>Processes cannot inspect values of signals using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code> method. Instead, values of signals in a synchronous process are sampled at each active edge of the clock domain (or, for domains with asynchronous reset, at the assertion of the reset signal) using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">tick()</span></code> method.</p>
+<p>The following code replaces the <code class="code highlight py python docutils literal highlight-python"><span class="n">Counter</span></code> elaboratable with the equivalent Python code in a process, and uses a testbench to verify its correct operation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">Module</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">domains</span><span class="o">.</span><span class="n">sync</span> <span class="o">=</span> <span class="n">cd_sync</span> <span class="o">=</span> <span class="n">ClockDomain</span><span class="p">()</span>
+<span class="n">en</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">count</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">process_example4</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
+    <span class="n">count_value</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># initialize counter to 0</span>
+    <span class="k">async</span> <span class="k">for</span> <span class="n">clk_edge</span><span class="p">,</span> <span class="n">rst_value</span><span class="p">,</span> <span class="n">en_value</span> <span class="ow">in</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">en</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">rst_value</span><span class="p">:</span> <span class="c1"># can be asserted with or without clk_edge</span>
+            <span class="n">count_value</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># re-initialize counter</span>
+        <span class="k">elif</span> <span class="n">clk_edge</span> <span class="ow">and</span> <span class="n">en_value</span><span class="p">:</span>
+            <span class="n">count_value</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># advance the counter</span>
+            <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">count_value</span><span class="p">)</span> <span class="c1"># publish its value to the simulation</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">testbench_example4</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
+    <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">ctx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">en</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">ctx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">en</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="n">sim</span> <span class="o">=</span> <span class="n">Simulator</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">add_clock</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="n">process_example4</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">add_testbench</span><span class="p">(</span><span class="n">testbench_example4</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">sim</span><span class="o">.</span><span class="n">write_vcd</span><span class="p">(</span><span class="s2">&quot;example4.vcd&quot;</span><span class="p">,</span> <span class="n">traces</span><span class="o">=</span><span class="p">[</span><span class="n">cd_sync</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="n">cd_sync</span><span class="o">.</span><span class="n">rst</span><span class="p">,</span> <span class="n">en</span><span class="p">,</span> <span class="n">count</span><span class="p">]):</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Unless otherwise instructed, <code class="xref py py-meth docutils literal notranslate"><span class="pre">write_vcd()</span></code> only captures values of signals that appear in a circuit. The <code class="code highlight py python docutils literal highlight-python"><span class="n">en</span></code> and <code class="code highlight py python docutils literal highlight-python"><span class="n">count</span></code> signals do not, and are added explicitly so that they will appear in the VCD file.</p>
+</section>
+<section id="replacing-combinational-circuits">
+<h3>Replacing combinational circuits<a class="headerlink" href="#replacing-combinational-circuits" title="Permalink to this heading"></a></h3>
+<p>Values of signals in a combinational process are sampled anytime they change using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">changed()</span></code> method.</p>
+<p>The following code replaces the <code class="code highlight py python docutils literal highlight-python"><span class="n">Adder</span></code> elaboratable with the equivalent Python code in a process, and uses a testbench to verify its correct operation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">Module</span><span class="p">()</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">o</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">process_example5</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">for</span> <span class="n">a_value</span><span class="p">,</span> <span class="n">b_value</span> <span class="ow">in</span> <span class="n">ctx</span><span class="o">.</span><span class="n">changed</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">a_value</span> <span class="o">+</span> <span class="n">b_value</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">testbench_example5</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
+    <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">)</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">ctx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+
+    <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">)</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">1717</span><span class="p">)</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">420</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">ctx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2137</span>
+
+    <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="mf">2e-6</span><span class="p">)</span>
+
+<span class="n">sim</span> <span class="o">=</span> <span class="n">Simulator</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="n">process_example5</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">add_testbench</span><span class="p">(</span><span class="n">testbench_example5</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">sim</span><span class="o">.</span><span class="n">write_vcd</span><span class="p">(</span><span class="s2">&quot;example5.vcd&quot;</span><span class="p">,</span> <span class="n">traces</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">o</span><span class="p">]):</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="reference">
+<h2>Reference<a class="headerlink" href="#reference" title="Permalink to this heading"></a></h2>
 <div class="admonition-todo admonition" id="id1">
 <p class="admonition-title">Todo</p>
 <p>Write this</p>

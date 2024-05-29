@@ -33,7 +33,7 @@ The following examples simulate one of the two designs below: synchronous counte
     class Adder(wiring.Component):
         a: In(16)
         b: In(16)
-        o: Out(32)
+        o: Out(17)
 
         def elaborate(self, platform):
             m = Module()
@@ -102,7 +102,7 @@ The following example simulates a counter and verifies that it can be stopped us
 
     dut = Counter()
 
-    async def tb_example2(ctx):
+    async def testbench_example2(ctx):
         await ctx.tick().repeat(5)     # wait until after the 5th edge of the `sync` domain clock
         assert ctx.get(dut.count) == 5 # verify that the counter has the expected value
         ctx.set(dut.en, False)         # deassert `dut.en`, disabling the counter
@@ -112,7 +112,7 @@ The following example simulates a counter and verifies that it can be stopped us
 
     sim = Simulator(dut)
     sim.add_clock(1e-6)
-    sim.add_testbench(tb_example2) # add a testbench; it will be executed on run() or run_until()
+    sim.add_testbench(testbench_example2) # add the testbench; run_until() calls the function
     with sim.write_vcd("example2.vcd"):
         sim.run_until(1e-6 * 15)
 
@@ -143,7 +143,7 @@ The following example simulates an adder:
 
     dut = Adder()
 
-    async def tb_example3(ctx):
+    async def testbench_example3(ctx):
         await ctx.delay(1e-6)
         ctx.set(dut.a, 2)
         ctx.set(dut.b, 2)
@@ -157,7 +157,7 @@ The following example simulates an adder:
         await ctx.delay(2e-6)
 
     sim = Simulator(dut)
-    sim.add_testbench(tb_example3)
+    sim.add_testbench(testbench_example3)
     with sim.write_vcd("example3.vcd"):
         sim.run()
 
@@ -177,4 +177,102 @@ Since this circuit is entirely combinational, and the Amaranth simulator uses a 
 Replacing circuits with code
 ----------------------------
 
-.. todo:: Write this
+.. note::
+
+    This section describes an advanced technique that is not commonly used. If you are first learning how to use the simulator, you can skip it.
+
+During simulation, it is possible to replace an Amaranth circuit with the equivalent Python code. This can be used to improve simulation performance, or to avoid reimplementing complex Python algorithms in Amaranth if they do not need to be synthesized.
+
+This is done by adding a *process* to the simulator: an :py:`async` Python function that runs as an integral part of the simulation, simultaneously with the DUT. A process is added using the :meth:`Simulator.add_process` method, and receives a :class:`SimulatorContext` object through which it can interact with the simulator. A process is conceptually similar to a testbench but differs from it in two important ways:
+
+* Testbenches run in a well-defined order (from first to last in the order they were added, yielding control only at :py:`await` points) and cannot observe inconsistent intermediate states of a design, but processes run in an undefined order while the design is converging after a change to its inputs.
+* In a process, it is not possible to inspect the value of a signal using the :meth:`~SimulatorContext.get` method, which guarantees that inconsistent intermediate states of a design cannot be observed by a process either.
+
+A process communicates with the rest of the design in the same way an elaboratable would: through :class:`Signal`\ s.
+
+
+Replacing synchronous circuits
+++++++++++++++++++++++++++++++
+
+Processes cannot inspect values of signals using the :meth:`~SimulatorContext.get` method. Instead, values of signals in a synchronous process are sampled at each active edge of the clock domain (or, for domains with asynchronous reset, at the assertion of the reset signal) using the :meth:`~SimulatorContext.tick` method.
+
+The following code replaces the :py:`Counter` elaboratable with the equivalent Python code in a process, and uses a testbench to verify its correct operation:
+
+.. testcode::
+
+    m = Module()
+    m.domains.sync = cd_sync = ClockDomain()
+    en = Signal(init=1)
+    count = Signal(4)
+
+    async def process_example4(ctx):
+        count_value = 0 # initialize counter to 0
+        async for clk_edge, rst_value, en_value in ctx.tick().sample(en):
+            if rst_value: # can be asserted with or without clk_edge
+                count_value = 0 # re-initialize counter
+            elif clk_edge and en_value:
+                count_value += 1 # advance the counter
+                ctx.set(count, count_value) # publish its value to the simulation
+
+    async def testbench_example4(ctx):
+        await ctx.tick().repeat(5)
+        assert ctx.get(count) == 5
+        ctx.set(en, False)
+        await ctx.tick().repeat(5)
+        assert ctx.get(count) == 5
+        ctx.set(en, True)
+
+    sim = Simulator(m)
+    sim.add_clock(1e-6)
+    sim.add_process(process_example4)
+    sim.add_testbench(testbench_example4)
+    with sim.write_vcd("example4.vcd", traces=[cd_sync.clk, cd_sync.rst, en, count]):
+        sim.run()
+
+Unless otherwise instructed, :meth:`~Simulator.write_vcd` only captures values of signals that appear in a circuit. The :py:`en` and :py:`count` signals do not, and are added explicitly so that they will appear in the VCD file.
+
+
+Replacing combinational circuits
+++++++++++++++++++++++++++++++++
+
+Values of signals in a combinational process are sampled anytime they change using the :meth:`~SimulatorContext.changed` method.
+
+The following code replaces the :py:`Adder` elaboratable with the equivalent Python code in a process, and uses a testbench to verify its correct operation:
+
+.. testcode::
+
+    m = Module()
+    a = Signal(16)
+    b = Signal(16)
+    o = Signal(17)
+
+    async def process_example5(ctx):
+        async for a_value, b_value in ctx.changed(a, b):
+            ctx.set(o, a_value + b_value)
+
+    async def testbench_example5(ctx):
+        await ctx.delay(1e-6)
+        ctx.set(a, 2)
+        ctx.set(b, 2)
+        assert ctx.get(o) == 4
+
+        await ctx.delay(1e-6)
+        ctx.set(a, 1717)
+        ctx.set(b, 420)
+        assert ctx.get(o) == 2137
+
+        await ctx.delay(2e-6)
+
+    sim = Simulator(m)
+    sim.add_process(process_example5)
+    sim.add_testbench(testbench_example5)
+    with sim.write_vcd("example5.vcd", traces=[a, b, o]):
+        sim.run()
+
+
+Reference
+---------
+
+.. todo::
+
+    Write this
