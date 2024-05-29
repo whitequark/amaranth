@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulator &mdash; Amaranth language &amp; toolchain 0.5.0.dev306 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/platformpicker.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d131d90a" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=dc1c45c0"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/platformpicker.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Platform integration" href="platform.html" />
+    <link rel="prev" title="Algorithm catalog" href="stdlib/crc/catalog.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="cover.html" class="icon icon-home">
+            Amaranth language & toolchain
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.0.dev306
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Language &amp; toolchain</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start.html">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide.html">Language guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html">Language reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stdlib.html">Standard library</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Simulator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#simulating-circuits">Simulating circuits</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#running-a-simulation">Running a simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-synchronous-circuits">Testing synchronous circuits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-combinational-circuits">Testing combinational circuits</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#replacing-circuits-with-code">Replacing circuits with code</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="platform.html">Platform integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html">Changelog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contrib.html">Contributing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://amaranth-lang.org/docs/amaranth-stdio/latest/">Standard I/O components</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://amaranth-lang.org/docs/amaranth-soc/latest/">System on Chip toolkit</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="cover.html">Amaranth language & toolchain</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="cover.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Language &amp; toolchain</a></li>
+      <li class="breadcrumb-item active">Simulator</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/simulator.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-amaranth.sim">
+<span id="simulator"></span><h1>Simulator<a class="headerlink" href="#module-amaranth.sim" title="Permalink to this heading"></a></h1>
+<p>Testing and debugging a design using hardware is often difficult, lengthy, and costly. The <a class="reference internal" href="#module-amaranth.sim" title="amaranth.sim"><code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.sim</span></code></a> module, also known as the simulator, makes it possible to evaluate a design’s functionality in an artificial environment before synthesis.</p>
+<section id="simulating-circuits">
+<h2>Simulating circuits<a class="headerlink" href="#simulating-circuits" title="Permalink to this heading"></a></h2>
+<p>The following examples simulate one of the two designs below: synchronous counter running in the <code class="docutils literal notranslate"><span class="pre">sync</span></code> clock domain, and combinational adder. They assume familiarity with the <a class="reference internal" href="guide.html"><span class="doc">language guide</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">amaranth.lib</span> <span class="kn">import</span> <span class="n">wiring</span>
+<span class="kn">from</span> <span class="nn">amaranth.lib.wiring</span> <span class="kn">import</span> <span class="n">In</span><span class="p">,</span> <span class="n">Out</span>
+
+<span class="k">class</span> <span class="nc">Counter</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">en</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">count</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">elaborate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Module</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">m</span><span class="o">.</span><span class="n">If</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">en</span><span class="p">):</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">m</span>
+
+<span class="k">class</span> <span class="nc">Adder</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">a</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">b</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">o</span><span class="p">:</span> <span class="n">Out</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">elaborate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Module</span><span class="p">()</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">comb</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">o</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">m</span>
+</pre></div>
+</div>
+<section id="running-a-simulation">
+<h3>Running a simulation<a class="headerlink" href="#running-a-simulation" title="Permalink to this heading"></a></h3>
+<p>Simulating a design always requires the three basic steps: constructing the <abbr title="Design Under Test">DUT</abbr>, constructing a <code class="xref py py-class docutils literal notranslate"><span class="pre">Simulator</span></code> for it, and running the simulation with the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.run()</span></code> or <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.run_until()</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">amaranth.sim</span> <span class="kn">import</span> <span class="n">Simulator</span>
+
+<span class="n">dut</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">Simulator</span><span class="p">(</span><span class="n">dut</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>However, the code above neither stimulates the DUT’s inputs nor measures the DUT’s outputs; the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.run()</span></code> method also immediately returns if no stimulus is added to the simulation. To make it useful, several changes are necessary:</p>
+<ul class="simple">
+<li><p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.add_clock()</span></code> method adds a <em>stimulus</em>: a process external to the DUT that manipulates its inputs (in this case, toggles the clock of the <code class="docutils literal notranslate"><span class="pre">sync</span></code> domain).</p></li>
+<li><p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.run_until()</span></code> method runs the simulation until a specific deadline is reached.</p></li>
+<li><p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.write_vcd()</span></code> method captures the DUT’s inputs, state, and outputs, and writes it to a <abbr title="Value Change Dump">VCD</abbr> file.</p></li>
+</ul>
+<p>The following code simulates a design and capture the values of all the signals used in the design for each moment of simulation time:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dut</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">Simulator</span><span class="p">(</span><span class="n">dut</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">add_clock</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">)</span> <span class="c1"># 1 µs period, or 1 MHz</span>
+<span class="k">with</span> <span class="n">sim</span><span class="o">.</span><span class="n">write_vcd</span><span class="p">(</span><span class="s2">&quot;example1.vcd&quot;</span><span class="p">):</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">run_until</span><span class="p">(</span><span class="mf">1e-6</span> <span class="o">*</span> <span class="mi">15</span><span class="p">)</span> <span class="c1"># 15 periods of the clock</span>
+</pre></div>
+</div>
+<p>The captured data is saved to a <abbr>VCD</abbr> file <code class="file docutils literal notranslate"><span class="pre">example1.vcd</span></code>, which can be displayed with a <em>waveform viewer</em> such as <a class="reference external" href="https://surfer-project.org/">Surfer</a> or <a class="reference external" href="https://gtkwave.sourceforge.net/">GTKWave</a>:</p>
+<img src="_images/simulator/example1.svg" class="wavedrom wavedrom-signal" alt="{'head': {'tock': 0}, 'signal': [{'name': 'clk', 'wave': 'lp..............'}, {'name': 'rst', 'wave': 'l...............'}, {'name': 'en', 'wave': 'h...............'}, {'name': 'count', 'wave': '================', 'data': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']}], 'config': {'skin': 'default'}}"></section>
+<section id="testing-synchronous-circuits">
+<h3>Testing synchronous circuits<a class="headerlink" href="#testing-synchronous-circuits" title="Permalink to this heading"></a></h3>
+<p>To verify that the DUT works as intended during a simulation, known values are provided as the inputs, and the outputs are compared with the expected results.</p>
+<p>This is done by adding a different type of stimulus to the simulator, a <em>testbench</em>: an <code class="code highlight py python docutils literal highlight-python"><span class="k">async</span></code> Python function that runs concurrently with the DUT and can manipulate the signals used in the simulation. A testbench is added using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.add_testbench()</span></code> method, and receives a <code class="xref py py-class docutils literal notranslate"><span class="pre">SimulatorContext</span></code> object through which it can interact with the simulator: inspect the value of signals using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code> method, change the value of signals using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">set()</span></code> method, or wait for an active edge of a <a class="reference internal" href="guide.html#lang-clockdomains"><span class="std std-ref">clock domain</span></a> using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">tick()</span></code> method.</p>
+<p>The following example simulates a counter and verifies that it can be stopped using its <code class="code highlight py python docutils literal highlight-python"><span class="n">en</span></code> input:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dut</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">tb_example2</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
+    <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>     <span class="c1"># wait until after the 5th edge of the `sync` domain clock</span>
+    <span class="k">assert</span> <span class="n">ctx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dut</span><span class="o">.</span><span class="n">count</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span> <span class="c1"># verify that the counter has the expected value</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">dut</span><span class="o">.</span><span class="n">en</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>         <span class="c1"># deassert `dut.en`, disabling the counter</span>
+    <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>     <span class="c1"># wait until after the 10th edge of clock</span>
+    <span class="k">assert</span> <span class="n">ctx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dut</span><span class="o">.</span><span class="n">count</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span> <span class="c1"># verify that the counter has not been incrementing</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">dut</span><span class="o">.</span><span class="n">en</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>          <span class="c1"># assert `dut.en`, enabling the counter again</span>
+
+<span class="n">sim</span> <span class="o">=</span> <span class="n">Simulator</span><span class="p">(</span><span class="n">dut</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">add_clock</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">add_testbench</span><span class="p">(</span><span class="n">tb_example2</span><span class="p">)</span> <span class="c1"># add a testbench; it will be executed on run() or run_until()</span>
+<span class="k">with</span> <span class="n">sim</span><span class="o">.</span><span class="n">write_vcd</span><span class="p">(</span><span class="s2">&quot;example2.vcd&quot;</span><span class="p">):</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">run_until</span><span class="p">(</span><span class="mf">1e-6</span> <span class="o">*</span> <span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Since this circuit is synchronous, and the <code class="xref py py-meth docutils literal notranslate"><span class="pre">tick()</span></code> method waits until after the circuit has reacted to the clock edge, the change to the <code class="code highlight py python docutils literal highlight-python"><span class="n">en</span></code> input affects the behavior of the circuit on the next clock cycle after the change:</p>
+<img src="_images/simulator/example2.svg" class="wavedrom wavedrom-signal" alt="{'head': {'tock': 0}, 'signal': [{'name': 'clk', 'wave': 'lp..............'}, {'name': 'rst', 'wave': 'l...............'}, {'name': 'en', 'wave': 'h....0....1.....'}, {'name': 'count', 'wave': '======.....=====', 'data': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']}], 'config': {'skin': 'default'}}"></section>
+<section id="testing-combinational-circuits">
+<h3>Testing combinational circuits<a class="headerlink" href="#testing-combinational-circuits" title="Permalink to this heading"></a></h3>
+<p>A testbench that tests a combinational circuit advances simulation time using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">delay()</span></code> method instead of the <code class="xref py py-meth docutils literal notranslate"><span class="pre">tick()</span></code> method, since the simulation does not contain a clock in this case. The <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.run()</span></code> method stops the simulation and returns once all testbenches finish executing.</p>
+<p>The following example simulates an adder:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dut</span> <span class="o">=</span> <span class="n">Adder</span><span class="p">()</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">tb_example3</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
+    <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">)</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">dut</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">dut</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">ctx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dut</span><span class="o">.</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+
+    <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">)</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">dut</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="mi">1717</span><span class="p">)</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">dut</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="mi">420</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">ctx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dut</span><span class="o">.</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2137</span>
+
+    <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="mf">2e-6</span><span class="p">)</span>
+
+<span class="n">sim</span> <span class="o">=</span> <span class="n">Simulator</span><span class="p">(</span><span class="n">dut</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">add_testbench</span><span class="p">(</span><span class="n">tb_example3</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">sim</span><span class="o">.</span><span class="n">write_vcd</span><span class="p">(</span><span class="s2">&quot;example3.vcd&quot;</span><span class="p">):</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Since this circuit is entirely combinational, and the Amaranth simulator uses a <em>zero-delay model</em> of combinational circuits, the outputs change in the same instant as the inputs do:</p>
+<img src="_images/simulator/example3.svg" class="wavedrom wavedrom-signal" alt="{'signal': [{'name': 'a', 'wave': '===.', 'data': [0, 2, 1717]}, {'name': 'b', 'wave': '===.', 'data': [0, 2, 420]}, {'name': 'o', 'wave': '===.', 'data': [0, 4, 2137]}], 'config': {'skin': 'default'}}"></section>
+</section>
+<section id="replacing-circuits-with-code">
+<h2>Replacing circuits with code<a class="headerlink" href="#replacing-circuits-with-code" title="Permalink to this heading"></a></h2>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Write this</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="stdlib/crc/catalog.html" class="btn btn-neutral float-left" title="Algorithm catalog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="platform.html" class="btn btn-neutral float-right" title="Platform integration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020—2024, Amaranth project contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
