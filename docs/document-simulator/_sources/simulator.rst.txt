@@ -5,6 +5,10 @@ Simulator
 
 Testing and debugging a design using hardware is often difficult, lengthy, and costly. The :mod:`amaranth.sim` module, also known as the simulator, makes it possible to evaluate a design's functionality in an artificial environment before synthesis.
 
+.. todo::
+
+    Document how multiple testbenches work
+
 
 Simulating circuits
 -------------------
@@ -276,3 +280,5 @@ Reference
 .. todo::
 
     Write this
+
+.. autoclass:: Simulator

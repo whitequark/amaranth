@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulator &mdash; Amaranth language &amp; toolchain 0.5.0.dev307 documentation</title>
+  <title>Simulator &mdash; Amaranth language &amp; toolchain 0.5.0.dev312 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/platformpicker.css" />
@@ -17,7 +17,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=7864c1d9"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=44a28f23"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
         <script src="_static/platformpicker.js"></script>
@@ -41,7 +41,7 @@
               <img src="_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.5.0.dev307
+                0.5.0.dev312
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -72,7 +72,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#replacing-combinational-circuits">Replacing combinational circuits</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#reference">Reference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reference">Reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#amaranth.sim.Simulator"><code class="docutils literal notranslate"><span class="pre">Simulator</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="platform.html">Platform integration</a></li>
@@ -112,6 +115,10 @@
   <section id="module-amaranth.sim">
 <span id="simulator"></span><h1>Simulator<a class="headerlink" href="#module-amaranth.sim" title="Permalink to this heading"></a></h1>
 <p>Testing and debugging a design using hardware is often difficult, lengthy, and costly. The <a class="reference internal" href="#module-amaranth.sim" title="amaranth.sim"><code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.sim</span></code></a> module, also known as the simulator, makes it possible to evaluate a design’s functionality in an artificial environment before synthesis.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Document how multiple testbenches work</p>
+</div>
 <section id="simulating-circuits">
 <h2>Simulating circuits<a class="headerlink" href="#simulating-circuits" title="Permalink to this heading"></a></h2>
 <p>The following examples simulate one of the two designs below: synchronous counter running in the <code class="docutils literal notranslate"><span class="pre">sync</span></code> clock domain, and combinational adder. They assume familiarity with the <a class="reference internal" href="guide.html"><span class="doc">language guide</span></a>.</p>
@@ -141,7 +148,7 @@
 </div>
 <section id="running-a-simulation">
 <h3>Running a simulation<a class="headerlink" href="#running-a-simulation" title="Permalink to this heading"></a></h3>
-<p>Simulating a design always requires the three basic steps: constructing the <abbr title="Design Under Test">DUT</abbr>, constructing a <code class="xref py py-class docutils literal notranslate"><span class="pre">Simulator</span></code> for it, and running the simulation with the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.run()</span></code> or <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.run_until()</span></code> method:</p>
+<p>Simulating a design always requires the three basic steps: constructing the <abbr title="Design Under Test">DUT</abbr>, constructing a <a class="reference internal" href="#amaranth.sim.Simulator" title="amaranth.sim.Simulator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulator</span></code></a> for it, and running the simulation with the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.run()</span></code> or <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.run_until()</span></code> method:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">amaranth.sim</span> <span class="kn">import</span> <span class="n">Simulator</span>
 
 <span class="n">dut</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
@@ -151,7 +158,7 @@
 </div>
 <p>However, the code above neither stimulates the DUT’s inputs nor measures the DUT’s outputs; the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.run()</span></code> method also immediately returns if no stimulus is added to the simulation. To make it useful, several changes are necessary:</p>
 <ul class="simple">
-<li><p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.add_clock()</span></code> method adds a <em>stimulus</em>: a process external to the DUT that manipulates its inputs (in this case, toggles the clock of the <code class="docutils literal notranslate"><span class="pre">sync</span></code> domain).</p></li>
+<li><p>The <a class="reference internal" href="#amaranth.sim.Simulator.add_clock" title="amaranth.sim.Simulator.add_clock"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.add_clock()</span></code></a> method adds a <em>stimulus</em>: a process external to the DUT that manipulates its inputs (in this case, toggles the clock of the <code class="docutils literal notranslate"><span class="pre">sync</span></code> domain).</p></li>
 <li><p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.run_until()</span></code> method runs the simulation until a specific deadline is reached.</p></li>
 <li><p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.write_vcd()</span></code> method captures the DUT’s inputs, state, and outputs, and writes it to a <abbr title="Value Change Dump">VCD</abbr> file.</p></li>
 </ul>
@@ -168,7 +175,7 @@
 <section id="testing-synchronous-circuits">
 <h3>Testing synchronous circuits<a class="headerlink" href="#testing-synchronous-circuits" title="Permalink to this heading"></a></h3>
 <p>To verify that the DUT works as intended during a simulation, known values are provided as the inputs, and the outputs are compared with the expected results.</p>
-<p>This is done by adding a different type of stimulus to the simulator, a <em>testbench</em>: an <code class="code highlight py python docutils literal highlight-python"><span class="k">async</span></code> Python function that runs concurrently with the DUT and can manipulate the signals used in the simulation. A testbench is added using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.add_testbench()</span></code> method, and receives a <code class="xref py py-class docutils literal notranslate"><span class="pre">SimulatorContext</span></code> object through which it can interact with the simulator: inspect the value of signals using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code> method, change the value of signals using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">set()</span></code> method, or wait for an active edge of a <a class="reference internal" href="guide.html#lang-clockdomains"><span class="std std-ref">clock domain</span></a> using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">tick()</span></code> method.</p>
+<p>This is done by adding a different type of stimulus to the simulator, a <em>testbench</em>: an <code class="code highlight py python docutils literal highlight-python"><span class="k">async</span></code> Python function that runs concurrently with the DUT and can manipulate the signals used in the simulation. A testbench is added using the <a class="reference internal" href="#amaranth.sim.Simulator.add_testbench" title="amaranth.sim.Simulator.add_testbench"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.add_testbench()</span></code></a> method, and receives a <code class="xref py py-class docutils literal notranslate"><span class="pre">SimulatorContext</span></code> object through which it can interact with the simulator: inspect the value of signals using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code> method, change the value of signals using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">set()</span></code> method, or wait for an active edge of a <a class="reference internal" href="guide.html#lang-clockdomains"><span class="std std-ref">clock domain</span></a> using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">tick()</span></code> method.</p>
 <p>The following example simulates a counter and verifies that it can be stopped using its <code class="code highlight py python docutils literal highlight-python"><span class="n">en</span></code> input:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dut</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
 
@@ -303,10 +310,72 @@
 </section>
 <section id="reference">
 <h2>Reference<a class="headerlink" href="#reference" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id1">
+<div class="admonition-todo admonition" id="id2">
 <p class="admonition-title">Todo</p>
 <p>Write this</p>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="amaranth.sim.Simulator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amaranth.sim.</span></span><span class="sig-name descname"><span class="pre">Simulator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">toplevel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.sim.Simulator" title="Permalink to this definition"></a></dt>
+<dd><p>Simulator for Amaranth designs.</p>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>Write this</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>toplevel</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Elaboratable</span></code>) – Simulated design.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="amaranth.sim.Simulator.add_clock">
+<span class="sig-name descname"><span class="pre">add_clock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sync'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_exists</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.sim.Simulator.add_clock" title="Permalink to this definition"></a></dt>
+<dd><p>Add a clock to the simulation.</p>
+<p>Adds a stimulus that toggles the clock signal of <code class="code highlight py python docutils literal highlight-python"><span class="n">domain</span></code> at a 50% duty cycle.</p>
+<p>The driven clock signal will toggle every <code class="code highlight py python docutils literal highlight-python"><span class="n">period</span> <span class="o">/</span> <span class="mi">2</span></code> seconds starting at <code class="code highlight py python docutils literal highlight-python"><span class="n">phase</span></code>
+seconds after the beginning of the simulation; if not specified, <code class="code highlight py python docutils literal highlight-python"><span class="n">phase</span></code> defaults to
+<code class="code highlight py python docutils literal highlight-python"><span class="n">period</span> <span class="o">/</span> <span class="mi">2</span></code> to avoid coinciding the first transition with the beginning of
+the simulation.</p>
+<p>The clock domain to drive is selected by the <code class="code highlight py python docutils literal highlight-python"><span class="n">domain</span></code> argument, which may be
+a <code class="xref py py-class docutils literal notranslate"><span class="pre">ClockDomain</span></code> instance or a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>. If it is a string,
+the clock domain with that name is retrieved from the <code class="code highlight py python docutils literal highlight-python"><span class="n">toplevel</span></code> elaboratable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NameError" title="(in Python v3.12)"><strong>NameError</strong></a> – If <code class="code highlight py python docutils literal highlight-python"><span class="n">domain</span></code> is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> and the <code class="code highlight py python docutils literal highlight-python"><span class="n">toplevel</span></code> elaboratable does not have
+    a clock domain with that name.</p></li>
+<li><p><strong>DriverConflict</strong> – If <code class="code highlight py python docutils literal highlight-python"><span class="n">domain</span></code> already has a clock driving it.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amaranth.sim.Simulator.add_testbench">
+<span class="sig-name descname"><span class="pre">add_testbench</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constructor</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.sim.Simulator.add_testbench" title="Permalink to this definition"></a></dt>
+<dd><p>Add a testbench to simulation.</p>
+<p>Adds a testbench that runs concurrently with the <code class="code highlight py python docutils literal highlight-python"><span class="n">toplevel</span></code> elaboratable and is able to
+manipulate its inputs, outputs, and state.</p>
+<div class="admonition-todo admonition" id="id4">
+<p class="admonition-title">Todo</p>
+<p>write this</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amaranth.sim.Simulator.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.sim.Simulator.reset" title="Permalink to this definition"></a></dt>
+<dd><p>Reset the simulation.</p>
+<p>This method reverts the simulation to its initial state:</p>
+<ul class="simple">
+<li><p>The value of each signal is changed to its initial value.</p></li>
+<li><p>The contents of each memory is changed to its initial contents.</p></li>
+<li><p>Each testbench and process is restarted.</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
