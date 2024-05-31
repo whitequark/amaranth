@@ -3,13 +3,23 @@ Simulator
 
 .. py:module:: amaranth.sim
 
-Testing and debugging a design using hardware is often difficult, lengthy, and costly. The :mod:`amaranth.sim` module, also known as the simulator, makes it possible to evaluate a design's functionality in an artificial environment before synthesis.
+The :mod:`amaranth.sim` module, also known as the simulator, makes it possible to evaluate a design's functionality in a virtual environment before it is implemented in hardware.
 
 .. todo::
 
     Document how multiple testbenches work
 
     Deprecate using generator functions
+
+    Update "Getting started" to use the new behavior
+
+    Update "Getting started" to not include a GTKWave screenshot
+
+    Update "Getting started" to include a link to the playground?
+
+    Update memory documentation with explanation of how to simulate memories
+
+    Update changelog
 
 
 Simulating circuits
