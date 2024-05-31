@@ -9,6 +9,8 @@ Testing and debugging a design using hardware is often difficult, lengthy, and c
 
     Document how multiple testbenches work
 
+    Deprecate using generator functions
+
 
 Simulating circuits
 -------------------
@@ -98,7 +100,7 @@ Testing synchronous circuits
 
 To verify that the DUT works as intended during a simulation, known values are provided as the inputs, and the outputs are compared with the expected results.
 
-This is done by adding a different type of stimulus to the simulator, a *testbench*: an :py:`async` Python function that runs concurrently with the DUT and can manipulate the signals used in the simulation. A testbench is added using the :meth:`Simulator.add_testbench` method, and receives a :class:`SimulatorContext` object through which it can interact with the simulator: inspect the value of signals using the :meth:`~SimulatorContext.get` method, change the value of signals using the :meth:`~SimulatorContext.set` method, or wait for an active edge of a :ref:`clock domain <lang-clockdomains>` using the :meth:`~SimulatorContext.tick` method.
+This is done by adding a different type of stimulus to the simulator, a *testbench*: an :py:`async` Python function that runs concurrently with the DUT and can manipulate the signals used in the simulation. A testbench is added using the :meth:`Simulator.add_testbench` method, and receives a :class:`SimulatorContext` object through which it can interact with the simulator: inspect the value of signals using the :meth:`ctx.get() <SimulatorContext.get>` method, change the value of signals using the :meth:`ctx.set() <SimulatorContext.set>` method, or wait for an active edge of a :ref:`clock domain <lang-clockdomains>` using the :meth:`ctx.tick() <SimulatorContext.tick>` method.
 
 The following example simulates a counter and verifies that it can be stopped using its :py:`en` input:
 
@@ -120,7 +122,7 @@ The following example simulates a counter and verifies that it can be stopped us
     with sim.write_vcd("example2.vcd"):
         sim.run_until(1e-6 * 15)
 
-Since this circuit is synchronous, and the :meth:`~SimulatorContext.tick` method waits until after the circuit has reacted to the clock edge, the change to the :py:`en` input affects the behavior of the circuit on the next clock cycle after the change:
+Since this circuit is synchronous, and the :meth:`ctx.tick() <SimulatorContext.tick>` method waits until after the circuit has reacted to the clock edge, the change to the :py:`en` input affects the behavior of the circuit on the next clock cycle after the change:
 
 .. wavedrom:: simulator/example2
 
@@ -139,7 +141,7 @@ Since this circuit is synchronous, and the :meth:`~SimulatorContext.tick` method
 Testing combinational circuits
 ++++++++++++++++++++++++++++++
 
-A testbench that tests a combinational circuit advances simulation time using the :meth:`~SimulatorContext.delay` method instead of the :meth:`~SimulatorContext.tick` method, since the simulation does not contain a clock in this case. The :meth:`Simulator.run` method stops the simulation and returns once all testbenches finish executing.
+A testbench that tests a combinational circuit advances simulation time using the :meth:`ctx.delay() <SimulatorContext.delay>` method instead of the :meth:`ctx.tick() <SimulatorContext.tick>` method, since the simulation does not contain a clock in this case. The :meth:`Simulator.run` method stops the simulation and returns once all testbenches finish executing.
 
 The following example simulates an adder:
 
@@ -190,7 +192,7 @@ During simulation, it is possible to replace an Amaranth circuit with the equiva
 This is done by adding a *process* to the simulator: an :py:`async` Python function that runs as an integral part of the simulation, simultaneously with the DUT. A process is added using the :meth:`Simulator.add_process` method, and receives a :class:`SimulatorContext` object through which it can interact with the simulator. A process is conceptually similar to a testbench but differs from it in two important ways:
 
 * Testbenches run in a well-defined order (from first to last in the order they were added, yielding control only at :py:`await` points) and cannot observe inconsistent intermediate states of a design, but processes run in an undefined order while the design is converging after a change to its inputs.
-* In a process, it is not possible to inspect the value of a signal using the :meth:`~SimulatorContext.get` method, which guarantees that inconsistent intermediate states of a design cannot be observed by a process either.
+* In a process, it is not possible to inspect the value of a signal using the :meth:`ctx.get() <SimulatorContext.get>` method, which guarantees that inconsistent intermediate states of a design cannot be observed by a process either.
 
 A process communicates with the rest of the design in the same way an elaboratable would: through :class:`Signal`\ s.
 
@@ -198,7 +200,7 @@ A process communicates with the rest of the design in the same way an elaboratab
 Replacing synchronous circuits
 ++++++++++++++++++++++++++++++
 
-Processes cannot inspect values of signals using the :meth:`~SimulatorContext.get` method. Instead, values of signals in a synchronous process are sampled at each active edge of the clock domain (or, for domains with asynchronous reset, at the assertion of the reset signal) using the :meth:`~SimulatorContext.tick` method.
+Processes cannot inspect values of signals using the :meth:`ctx.get() <SimulatorContext.get>` method. Instead, values of signals in a synchronous process are sampled at each active edge of the clock domain (or, for domains with asynchronous reset, at the assertion of the reset signal) using the :meth:`ctx.tick() <SimulatorContext.tick>` method.
 
 The following code replaces the :py:`Counter` elaboratable with the equivalent Python code in a process, and uses a testbench to verify its correct operation:
 
@@ -230,16 +232,16 @@ The following code replaces the :py:`Counter` elaboratable with the equivalent P
     sim.add_clock(1e-6)
     sim.add_process(process_example4)
     sim.add_testbench(testbench_example4)
-    with sim.write_vcd("example4.vcd", traces=[cd_sync.clk, cd_sync.rst, en, count]):
+    with sim.write_vcd("example4.vcd", traces=(cd_sync.clk, cd_sync.rst, en, count)):
         sim.run()
 
-Unless otherwise instructed, :meth:`~Simulator.write_vcd` only captures values of signals that appear in a circuit. The :py:`en` and :py:`count` signals do not, and are added explicitly so that they will appear in the VCD file.
+Unless it is instructed otherwise, the :meth:`Simulator.write_vcd` method only captures values of signals that appear in the circuit provided to the simulator when it is created. The :py:`en` and :py:`count` signals do not, and are added explicitly using the :py:`traces` argument so that they will appear in the VCD file.
 
 
 Replacing combinational circuits
 ++++++++++++++++++++++++++++++++
 
-Values of signals in a combinational process are sampled anytime they change using the :meth:`~SimulatorContext.changed` method.
+Values of signals in a combinational process are sampled anytime they change using the :meth:`ctx.changed() <SimulatorContext.changed>` method.
 
 The following code replaces the :py:`Adder` elaboratable with the equivalent Python code in a process, and uses a testbench to verify its correct operation:
 
@@ -279,6 +281,8 @@ Reference
 
 .. todo::
 
-    Write this
+    Finish this
 
 .. autoclass:: Simulator
+
+.. autoclass:: SimulatorContext
