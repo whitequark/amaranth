@@ -7,19 +7,13 @@ The :mod:`amaranth.sim` module, also known as the simulator, makes it possible t
 
 .. todo::
 
-    Document how multiple testbenches work
-
-    Deprecate using generator functions
-
-    Update "Getting started" to use the new behavior
-
-    Update "Getting started" to not include a GTKWave screenshot
-
-    Update "Getting started" to include a link to the playground?
-
-    Update memory documentation with explanation of how to simulate memories
-
-    Update changelog
+    - Deprecate using generator functions
+    - Update "Getting started" to use the new behavior
+    - Update "Getting started" to not include a GTKWave screenshot
+    - Update "Getting started" to include a link to the playground?
+    - Update memory documentation with explanation of how to simulate memories
+    - Update ``examples/`` directory with the new interface
+    - Update changelog
 
 
 Simulating circuits
