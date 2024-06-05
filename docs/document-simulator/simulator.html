@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulator &mdash; Amaranth language &amp; toolchain 0.5.0.dev313 documentation</title>
+  <title>Simulator &mdash; Amaranth language &amp; toolchain 0.5.0.dev314 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/platformpicker.css" />
@@ -17,7 +17,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e0da0b3a"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2b539bf7"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
         <script src="_static/platformpicker.js"></script>
@@ -41,7 +41,7 @@
               <img src="_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.5.0.dev313
+                0.5.0.dev314
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -182,7 +182,7 @@
 <section id="testing-synchronous-circuits">
 <h3>Testing synchronous circuits<a class="headerlink" href="#testing-synchronous-circuits" title="Permalink to this heading"></a></h3>
 <p>To verify that the DUT works as intended during a simulation, known values are provided as the inputs, and the outputs are compared with the expected results.</p>
-<p>This is done by adding a different type of stimulus to the simulator, a <em>testbench</em>: an <code class="code highlight py python docutils literal highlight-python"><span class="k">async</span></code> Python function that runs concurrently with the DUT and can manipulate the signals used in the simulation. A testbench is added using the <a class="reference internal" href="#amaranth.sim.Simulator.add_testbench" title="amaranth.sim.Simulator.add_testbench"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.add_testbench()</span></code></a> method, and receives a <a class="reference internal" href="#amaranth.sim.SimulatorContext" title="amaranth.sim.SimulatorContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimulatorContext</span></code></a> object through which it can interact with the simulator: inspect the value of signals using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">ctx.get()</span></code> method, change the value of signals using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">ctx.set()</span></code> method, or wait for an active edge of a <a class="reference internal" href="guide.html#lang-clockdomains"><span class="std std-ref">clock domain</span></a> using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">ctx.tick()</span></code> method.</p>
+<p>This is done by adding a different type of stimulus to the simulator, a <em>testbench</em>: an <code class="code highlight py python docutils literal highlight-python"><span class="k">async</span></code> Python function that runs concurrently with the DUT and can manipulate the signals used in the simulation. A testbench is added using the <a class="reference internal" href="#amaranth.sim.Simulator.add_testbench" title="amaranth.sim.Simulator.add_testbench"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.add_testbench()</span></code></a> method, and receives a <a class="reference internal" href="#amaranth.sim.SimulatorContext" title="amaranth.sim.SimulatorContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimulatorContext</span></code></a> object through which it can interact with the simulator: inspect the value of signals using the <a class="reference internal" href="#amaranth.sim.SimulatorContext.get" title="amaranth.sim.SimulatorContext.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ctx.get()</span></code></a> method, change the value of signals using the <a class="reference internal" href="#amaranth.sim.SimulatorContext.set" title="amaranth.sim.SimulatorContext.set"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ctx.set()</span></code></a> method, or wait for an active edge of a <a class="reference internal" href="guide.html#lang-clockdomains"><span class="std std-ref">clock domain</span></a> using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">ctx.tick()</span></code> method.</p>
 <p>The following example simulates a counter and verifies that it can be stopped using its <code class="code highlight py python docutils literal highlight-python"><span class="n">en</span></code> input:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dut</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
 
@@ -241,12 +241,12 @@
 <p>This is done by adding a <em>process</em> to the simulator: an <code class="code highlight py python docutils literal highlight-python"><span class="k">async</span></code> Python function that runs as an integral part of the simulation, simultaneously with the DUT. A process is added using the <a class="reference internal" href="#amaranth.sim.Simulator.add_process" title="amaranth.sim.Simulator.add_process"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.add_process()</span></code></a> method, and receives a <a class="reference internal" href="#amaranth.sim.SimulatorContext" title="amaranth.sim.SimulatorContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimulatorContext</span></code></a> object through which it can interact with the simulator. A process is conceptually similar to a testbench but differs from it in two important ways:</p>
 <ul class="simple">
 <li><p>Testbenches run in a well-defined order (from first to last in the order they were added, yielding control only at <code class="code highlight py python docutils literal highlight-python"><span class="k">await</span></code> points) and cannot observe inconsistent intermediate states of a design, but processes run in an undefined order while the design is converging after a change to its inputs.</p></li>
-<li><p>In a process, it is not possible to inspect the value of a signal using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">ctx.get()</span></code> method, which guarantees that inconsistent intermediate states of a design cannot be observed by a process either.</p></li>
+<li><p>In a process, it is not possible to inspect the value of a signal using the <a class="reference internal" href="#amaranth.sim.SimulatorContext.get" title="amaranth.sim.SimulatorContext.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ctx.get()</span></code></a> method, which guarantees that inconsistent intermediate states of a design cannot be observed by a process either.</p></li>
 </ul>
 <p>A process communicates with the rest of the design in the same way an elaboratable would: through <code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code>s.</p>
 <section id="replacing-synchronous-circuits">
 <h3>Replacing synchronous circuits<a class="headerlink" href="#replacing-synchronous-circuits" title="Permalink to this heading"></a></h3>
-<p>Processes cannot inspect values of signals using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">ctx.get()</span></code> method. Instead, values of signals in a synchronous process are sampled at each active edge of the clock domain (or, for domains with asynchronous reset, at the assertion of the reset signal) using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">ctx.tick()</span></code> method.</p>
+<p>Processes cannot inspect values of signals using the <a class="reference internal" href="#amaranth.sim.SimulatorContext.get" title="amaranth.sim.SimulatorContext.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ctx.get()</span></code></a> method. Instead, values of signals in a synchronous process are sampled at each active edge of the clock domain (or, for domains with asynchronous reset, at the assertion of the reset signal) using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">ctx.tick()</span></code> method.</p>
 <p>The following code replaces the <code class="code highlight py python docutils literal highlight-python"><span class="n">Counter</span></code> elaboratable with the equivalent Python code in a process, and uses a testbench to verify its correct operation:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">Module</span><span class="p">()</span>
 <span class="n">m</span><span class="o">.</span><span class="n">domains</span><span class="o">.</span><span class="n">sync</span> <span class="o">=</span> <span class="n">cd_sync</span> <span class="o">=</span> <span class="n">ClockDomain</span><span class="p">()</span>
@@ -414,7 +414,10 @@ by the <a class="reference internal" href="#amaranth.sim.Simulator.reset" title=
 argument is specified). The <a class="reference internal" href="#amaranth.sim.Simulator.run" title="amaranth.sim.Simulator.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> method will continue advancing the simulation while
 any critical testbenches or processes are running, and will exit when only background
 testbenches or processes remain. A background testbench can temporarily become critical
-using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">critical()</span></code> context manager.</p>
+using the <a class="reference internal" href="#amaranth.sim.SimulatorContext.critical" title="amaranth.sim.SimulatorContext.critical"><code class="xref py py-meth docutils literal notranslate"><span class="pre">critical()</span></code></a> context manager.</p>
+<p>At each point in time, all of the non-waiting testbenches are executed in the order in
+which they were added. If two testbenches share state, or must manipulate the design in
+a coordinated way, they may rely on this execution order for correctness.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -439,7 +442,14 @@ by the <a class="reference internal" href="#amaranth.sim.Simulator.reset" title=
 The <a class="reference internal" href="#amaranth.sim.Simulator.run" title="amaranth.sim.Simulator.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> method will continue advancing the simulation while any critical testbenches
 or processes are running, and will exit when only background testbenches or processes
 remain. A background process can temporarily become critical using
-the <code class="xref py py-meth docutils literal notranslate"><span class="pre">critical()</span></code> context manager.</p>
+the <a class="reference internal" href="#amaranth.sim.SimulatorContext.critical" title="amaranth.sim.SimulatorContext.critical"><code class="xref py py-meth docutils literal notranslate"><span class="pre">critical()</span></code></a> context manager.</p>
+<p>At each point in time, all of the non-waiting processes are executed in an arbitrary order
+that may be different between individual simulation runs.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If two processes share state, they must do so in a way that does not rely on
+a particular order of execution for correctness.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -465,6 +475,8 @@ without regard for whether there are critical testbenches or processes executing
 <p>This method advances the simulation by one time step. After this method completes, all of
 the events scheduled for the current point in time have taken effect, and the current point
 in time is advanced to the next point in time for which events are scheduled.</p>
+<p>Returns <code class="code highlight py python docutils literal highlight-python"><span class="kc">True</span></code> if the simulation contains any critical testbenches or processes, and
+<code class="code highlight py python docutils literal highlight-python"><span class="kc">False</span></code> otherwise.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -509,8 +521,57 @@ or a filename. If a file object is provided, it is closed when exiting the conte
 
 <dl class="py class">
 <dt class="sig sig-object py" id="amaranth.sim.SimulatorContext">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amaranth.sim.</span></span><span class="sig-name descname"><span class="pre">SimulatorContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BaseEngine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BaseProcess</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.sim.SimulatorContext" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amaranth.sim.</span></span><span class="sig-name descname"><span class="pre">SimulatorContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.sim.SimulatorContext" title="Permalink to this definition"></a></dt>
+<dd><p>Simulator context.</p>
+<p>Simulator processes and testbenches are <code class="code highlight py python docutils literal highlight-python"><span class="k">async</span></code> Python functions that interact with the simulation using the only argument they receive: the <em>context</em>. Using a context, it is possible to sample or update signals and wait for events to occur in the simulation.</p>
+<p>The context has two kinds of methods: <code class="code highlight py python docutils literal highlight-python"><span class="k">async</span></code> methods and non-<code class="code highlight py python docutils literal highlight-python"><span class="k">async</span></code> methods. Calling an <code class="code highlight py python docutils literal highlight-python"><span class="k">async</span></code> method may cause the caller to be preempted (be paused such that another process or testbench can execute), while calling non-<code class="code highlight py python docutils literal highlight-python"><span class="k">async</span></code> methods never causes that.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="amaranth.sim.SimulatorContext.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.sim.SimulatorContext.get" title="Permalink to this definition"></a></dt>
+<dd><p>Sample the value of an expression.</p>
+<p>The behavior of this method depends on the type of <code class="code highlight py python docutils literal highlight-python"><span class="n">expr</span></code>:</p>
+<ul class="simple">
+<li><p>If it is a <a class="reference internal" href="reference.html#amaranth.hdl.ValueCastable" title="amaranth.hdl.ValueCastable"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueCastable</span></code></a> whose shape is a <a class="reference internal" href="reference.html#amaranth.hdl.ShapeCastable" title="amaranth.hdl.ShapeCastable"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShapeCastable</span></code></a>, its numeric value is converted to a higher-level representation using <a class="reference internal" href="reference.html#amaranth.hdl.ShapeCastable.from_bits" title="amaranth.hdl.ShapeCastable.from_bits"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_bits()</span></code></a> and then returned.</p></li>
+<li><p>If it is a <a class="reference internal" href="reference.html#amaranth.hdl.Value" title="amaranth.hdl.Value"><code class="xref py py-class docutils literal notranslate"><span class="pre">Value</span></code></a> or a <a class="reference internal" href="reference.html#amaranth.hdl.ValueCastable" title="amaranth.hdl.ValueCastable"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueCastable</span></code></a> whose shape is a <a class="reference internal" href="reference.html#amaranth.hdl.Shape" title="amaranth.hdl.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a>, the numeric value is returned as an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>.</p></li>
+</ul>
+<p>This method is only available in testbenches. In a process, it raises <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.12)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amaranth.sim.SimulatorContext.set">
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.sim.SimulatorContext.set" title="Permalink to this definition"></a></dt>
+<dd><p>Update the value of an expression.</p>
+<p>The behavior of this method depends on the type of <code class="code highlight py python docutils literal highlight-python"><span class="n">expr</span></code>:</p>
+<ul class="simple">
+<li><p>If it is a <a class="reference internal" href="reference.html#amaranth.hdl.ValueCastable" title="amaranth.hdl.ValueCastable"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueCastable</span></code></a> whose shape is a <a class="reference internal" href="reference.html#amaranth.hdl.ShapeCastable" title="amaranth.hdl.ShapeCastable"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShapeCastable</span></code></a>, <code class="code highlight py python docutils literal highlight-python"><span class="n">value</span></code> is converted to a numeric representation using <a class="reference internal" href="reference.html#amaranth.hdl.ShapeCastable.const" title="amaranth.hdl.ShapeCastable.const"><code class="xref py py-meth docutils literal notranslate"><span class="pre">const()</span></code></a> and then assigned.</p></li>
+<li><p>If it is a <a class="reference internal" href="reference.html#amaranth.hdl.Value" title="amaranth.hdl.Value"><code class="xref py py-class docutils literal notranslate"><span class="pre">Value</span></code></a> or a <a class="reference internal" href="reference.html#amaranth.hdl.ValueCastable" title="amaranth.hdl.ValueCastable"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueCastable</span></code></a> whose shape is a <a class="reference internal" href="reference.html#amaranth.hdl.Shape" title="amaranth.hdl.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a>, <code class="code highlight py python docutils literal highlight-python"><span class="n">value</span></code> is assigned as-is.</p></li>
+</ul>
+<p>This method is only available in both processes and testbenches. When used in a testbench, it returns only after the change propagates through the simulated circuits, and may cause processes to be executed if they were waiting, directly or indirectly, for the signals in <code class="code highlight py python docutils literal highlight-python"><span class="n">expr</span></code> to change. In any case, the calling testbench resumes executing afterwards.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amaranth.sim.SimulatorContext.critical">
+<span class="sig-name descname"><span class="pre">critical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#amaranth.sim.SimulatorContext.critical" title="Permalink to this definition"></a></dt>
+<dd><p>Context manager that temporarily makes the caller critical.</p>
+<p>Testbenches and processes may be <em>background</em> or <em>critical</em>, where critical ones prevent <a class="reference internal" href="#amaranth.sim.Simulator.run" title="amaranth.sim.Simulator.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Simulator.run()</span></code></a> from finishing. Processes are always created background, while testbenches are created critical by default, but may also be created background. This context manager makes the caller critical for the span of the <code class="code highlight py python docutils literal highlight-python"><span class="k">with</span></code> statement.</p>
+<p>This may be useful in cases where an operation (for example, a bus transaction) takes multiple clock cycles to complete, and must be completed after starting, but the testbench or process performing it never finishes, always waiting for the next operation to arrive. In this case, the caller would elevate itself to become critical only for the duration of the operation itself using this context manager, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">testbench_bus_transaction</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
+    <span class="c1"># On every cycle, check whether the bus has an active transaction...</span>
+    <span class="k">async</span> <span class="k">for</span> <span class="n">clk_edge</span><span class="p">,</span> <span class="n">rst_value</span><span class="p">,</span> <span class="n">bus_active_value</span> <span class="ow">in</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">bus</span><span class="o">.</span><span class="n">active</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">bus_active_value</span><span class="p">:</span> <span class="c1"># ... if it does...</span>
+            <span class="k">with</span> <span class="n">ctx</span><span class="o">.</span><span class="n">critical</span><span class="p">():</span> <span class="c1"># ... make this testbench critical...</span>
+                <span class="n">addr_value</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">bus</span><span class="o">.</span><span class="n">r_addr</span><span class="p">)</span>
+                <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bus</span><span class="o">.</span><span class="n">r_data</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="c1"># ... perform the access...</span>
+                <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+                <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bus</span><span class="o">.</span><span class="n">done</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+                <span class="n">ctx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bus</span><span class="o">.</span><span class="n">done</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="c1"># ... and complete the transaction later.</span>
+            <span class="c1"># The `run()` method could return at this point, but not before.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
 
 </section>
 </section>
