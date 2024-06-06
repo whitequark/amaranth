@@ -7,13 +7,11 @@ The :mod:`amaranth.sim` module, also known as the simulator, makes it possible t
 
 .. todo::
 
-    - Deprecate using generator functions
-    - Update "Getting started" to use the new behavior
-    - Update "Getting started" to not include a GTKWave screenshot
-    - Update "Getting started" to include a link to the playground?
+    - Finish reference documentation
     - Update memory documentation with explanation of how to simulate memories
-    - Update ``examples/`` directory with the new interface
-    - Update changelog
+    - Move all the docstrings in this document to be proper docstrings (incl. add ``get``/``set`` to ``SimulatorContext``)
+    - Check what happens when a testbench encounters a glitch and add a test
+    - Raise :class:`NameError` rather than :class:`KeyError` in :py:`tick` if domain is not found
 
 
 Simulating circuits
@@ -283,15 +281,13 @@ The following code replaces the :py:`Adder` elaboratable with the equivalent Pyt
 Reference
 ---------
 
-.. todo::
-
-    Finish this
-
 .. autoclass:: Simulator
 
-.. The simulator contexts have a complex interface that resides in a private module. As such they are documented in this file instead.
 
-.. autoclass:: SimulatorContext(...)
+..
+    The simulator contexts have a complex interface that resides in a private module. As such they are documented in this file instead of docstrings being used.
+
+.. class:: SimulatorContext(...)
 
     Simulator context.
 
@@ -308,7 +304,10 @@ Reference
         - If it is a :class:`~.hdl.ValueCastable` whose shape is a :class:`~.hdl.ShapeCastable`, its numeric value is converted to a higher-level representation using :meth:`~.hdl.ShapeCastable.from_bits` and then returned.
         - If it is a :class:`~.hdl.Value` or a :class:`~.hdl.ValueCastable` whose shape is a :class:`~.hdl.Shape`, the numeric value is returned as an :class:`int`.
 
-        This method is only available in testbenches. In a process, it raises :exc:`TypeError`.
+        This method is only available in testbenches.
+
+        :raises:
+            :exc:`TypeError` – If the caller is a process.
 
     .. method:: set(expr, value)
 
@@ -319,7 +318,9 @@ Reference
         - If it is a :class:`~.hdl.ValueCastable` whose shape is a :class:`~.hdl.ShapeCastable`, :py:`value` is converted to a numeric representation using :meth:`~.hdl.ShapeCastable.const` and then assigned.
         - If it is a :class:`~.hdl.Value` or a :class:`~.hdl.ValueCastable` whose shape is a :class:`~.hdl.Shape`, :py:`value` is assigned as-is.
 
-        This method is only available in both processes and testbenches. When used in a testbench, it returns only after the change propagates through the simulated circuits, and may cause processes to be executed if they were waiting, directly or indirectly, for the signals in :py:`expr` to change. In any case, the calling testbench resumes executing afterwards.
+        This method is available in both processes and testbenches.
+
+        When used in a testbench, it returns only after the change propagates through the simulated circuits, and may cause processes to be executed if they were waiting, directly or indirectly, for the signals in :py:`expr` to change. In any case, the calling testbench resumes executing afterwards.
 
     .. method:: critical()
 
@@ -341,3 +342,235 @@ Reference
                             await ctx.tick()
                             ctx.set(bus.done, 0) # ... and complete the transaction later.
                         # The `run()` method could return at this point, but not before.
+
+    .. method:: tick(domain, *, context=None)
+        :async:
+
+        Wait until an active clock edge or an asynchronous reset occurs.
+
+        This method returns a :class:`TickTrigger` object that, when awaited, pauses the execution of the calling process or testbench until the active edge of the clock, or the asynchronous reset (if applicable), occurs. This trigger captures two values, :py:`clk_edge` and :py:`rst_value`. If the active edge of the clock has occurred when the wait has completed, :py:`clk_edge` is :py:`True`, otherwise it is :py:`False`. If the asynchronous reset has occurred, or the active edge of the clock has occurred while the synchronous reset has been asserted, :py:`rst_value` is :py:`True`, otherwise it is :py:`False`. The returned object may be used to repeatedly wait for one of these events until a condition to be satisfied and/or until the event happens a specific number of times.
+
+        The :py:`domain` may be either a :class:`ClockDomain` object or a :class:`str`. If it is a :class:`str`, a clock domain with this name is looked up in the elaboratable :py:`context`, or in :py:`toplevel` if :py:`context` is not provided.
+
+        .. note::
+
+            The exact behavior of :py:`rst_value` differs depending on whether :py:`domain` uses synchronous or asynchronous reset; in both cases it is :py:`True` if and only if the domain reset has been asserted. Reusable processes and testbenches, as well as their building blocks, should handle both cases.
+
+        :raises:
+            - :exc:`ValueError` – If :py:`domain` is :py:`"comb"`.
+            - :exc:`ValueError` – If :py:`domain` is a :class:`~.hdl.ClockDomain` and :py:`context` is provided and not :py:`None`.
+            - :exc:`ValueError` – If :py:`context` is an elaboratable that is not a direct or indirect submodule of :py:`toplevel`.
+            - :exc:`NameError` – If :py:`domain` is a :class:`str`, but there is no clock domain with this name in :py:`context` or :py:`toplevel`.
+
+    .. method:: delay(interval)
+        :async:
+
+        Wait until a time interval has elapsed.
+
+        This method returns a :class:`TriggerCombination` object that, when awaited, pauses the execution of the calling process or testbench by :py:`interval` seconds. The value captured by this trigger is :py:`True` if the delay has expired when the wait has completed, and :py:`False` otherwise. The returned object may be used to wait for multiple events.
+
+        The :py:`interval` may be zero, in which case the caller will be scheduled for execution immediately after all of the processes and testbenches scheduled for the current time step finish executing. In other words, if a call to :meth:`Simulator.advance` schedules a process or testbench and it performs :py:`await ctx.delay(0)`, this process or testbench will continue execution only during the next call to :meth:`Simulator.advance`.
+
+        .. note::
+
+            Although the behavior of :py:`await ctx.delay(0)` is well-defined, it may make waveforms difficult to understand and simulations hard to reason about.
+
+        :raises:
+            :exc:`ValueError` – If :py:`delay` is negative.
+
+    .. method:: changed(*signals)
+        :async:
+
+        Asynchronously wait until one of the signals change.
+
+        This method returns a :class:`TriggerCombination` object that, when awaited, pauses the execution of the calling process or testbench until any of the :py:`signals` change. The values captured by this trigger are the values of :py:`signals` at the time the wait has completed. The returned object may be used to wait for multiple events.
+
+        .. warning::
+
+            The simulation may produce *glitches*: transient changes to signals (e.g. from 0 to 1 and back to 0) during combinational propagation that are invisible in testbenches or waveform captures. Glitches will wake up **both processes and testbenches** that use this method to wait for a signal to change, and both processes and testbenches must be prepared to handle such spurious wakeups. The presence, count, and sequence in which glitches occur may also vary between simulation runs.
+
+            Testbenches that wait for a signal to change using an :py:`async for` loop will crash with a :exc:`BrokenTrigger` exception if they encounter a glitch. In contrast, processes will observe all of the transient values of the signal.
+
+    .. method:: edge(signal, polarity)
+        :async:
+
+        Asynchronously wait until a low-to-high or high-to-low transition of a signal occurs.
+
+        This method returns a :class:`TriggerCombination` object that, when awaited, pauses the execition of the calling process or testbench until the value of :py:`signal` (a single-bit signal or a single-bit slice of a signal) changes from :py:`not polarity` to :py:`polarity`. The value captured by this trigger is :py:`True` if the relevant transition of occurred at the time the wait has completed, and :py:`False` otherwise. The returned object may be used to wait for multiple events.
+
+        .. warning::
+
+            In most cases, this method should not be used to wait for a status signal to be asserted or deasserted in a testbench because it is likely to introduce a race condition. Instead, use :py:`await ctx.tick().until(signal == polarity)` whenever a suitable clock domain is available.
+
+        :raises:
+            - :exc:`TypeError` – If :py:`signal` is neither a single-bit :class:`Signal` nor a single-bit slice of a :class:`Signal`.
+            - :exc:`TypeError` – If the shape of :py:`signal` is a :class:`ShapeCastable`.
+            - :exc:`ValueError` – If :py:`polarity` is neither 0 nor 1.
+
+    .. method:: posedge(signal)
+        :async:
+
+        Asynchronously wait until a signal is asserted.
+
+        Equivalent to :meth:`edge(signal, 1) <edge>`.
+
+    .. method:: negedge(signal)
+        :async:
+
+        Asynchronously wait until a signal is deasserted.
+
+        Equivalent to :meth:`edge(signal, 0) <edge>`.
+
+
+.. autoexception:: BrokenTrigger
+
+
+.. autoexception:: DomainReset
+
+
+.. class:: TickTrigger(...)
+
+    A trigger that wakes up the caller when a clock domain is clocked or asynchronously reset.
+
+    .. todo:: write this, async goes here
+
+    .. method:: sample(*exprs)
+        :async:
+
+        Sample signals when this trigger is activated.
+
+        This method returns a new :class:`TickTrigger` object. When awaited, this object returns, in addition to the values that would be otherwise returned by :py:`await trigger`, the values of :py:`exprs` at exactly the moment at which the active clock edge, or the asynchronous reset (if applicable), has occurred.
+
+        Combining :meth:`~SimulatorContext.tick` with :meth:`sample` can be used to capture the state of a circuit after the active clock edge, but before propagation of signal values that have been updated by that clock edge: ::
+
+            async for clk_edge, rst_value, in_a_value, in_b_value in \
+                    ctx.tick().sample(in_a, in_b):
+                ...
+
+        Chaining calls to :meth:`sample` has the same effect as a single call with the combined list of arguments: ::
+
+            async for clk_edge, rst_value, in_a_value, in_b_value in \
+                    ctx.tick().sample(in_a).sample(in_b):
+                ...
+
+        .. note::
+
+            Chaining calls to this method is useful for composing behavior. The following (simplified for clarity) implementation of :meth:`until` takes advantage of it by first appending :py:`condition` to the end of the list of captured expressions and then removing its value from the end of the list of their values: ::
+
+                async def until(trigger, condition):
+                    async for clk_edge, rst_value, *values, done in await trigger.sample(condition):
+                        if done:
+                            return values
+
+    .. method:: until(condition)
+        :async:
+
+        Repeat this trigger until a condition is met.
+
+        This method awaits this trigger at least once, and returns a :class:`tuple` of the values that are :meth:`sample`\ d when :py:`condition` evaluates to a non-zero value. Values sampled during previous repeats are discarded.
+
+        Awaiting a :py:`trigger` returns values indicating the state of the clock and reset signals, while awaiting :py:`trigger.until(...)` does not:
+
+        .. code::
+
+            while True:
+                clk_edge, rst_value, *values, is_done_value = await trigger.sample(is_done) # never raises
+                if is_done_value:
+                    break
+            # `values` may be used after the loop finishes
+
+        .. code::
+
+            values = await trigger.until(is_done) # may raise `DomainReset`
+
+        :raises:
+            - :exc:`TypeError` – If the shape of :py:`condition` is a :class:`ShapeCastable`.
+            - :exc:`DomainReset` – If the clock domain has been synchronously or asynchronously reset during the wait.
+
+    .. method:: repeat(count)
+        :async:
+
+        Repeat this trigger a specific number of times.
+
+        This method awaits this trigger at least once, and returns a :class:`tuple` of the values that are :meth:`sample`\ d during the last repeat. Values sampled during previous repeats are discarded.
+
+        Awaiting a :py:`trigger` returns values indicating the state of the clock and reset signals, while awaiting :py:`trigger.repeat(...)` does not:
+
+        .. code::
+
+            for _ in range(3):
+                clk_edge, rst_value, *values = await trigger # never raises
+            # `values` may be used after the loop finishes
+
+        .. code::
+
+            values = await trigger.repeat(3) # may raise `DomainReset`
+
+        :raises:
+            - :exc:`ValueError` – If :py:`count` is less than 1.
+            - :exc:`DomainReset` – If the clock domain has been synchronously or asynchronously reset during the wait.
+
+
+.. class:: TriggerCombination(...)
+
+    A set of triggers, each of which will wake up the caller.
+
+    .. todo:: write this, await async for goes here
+
+    .. method:: sample(*exprs)
+        :async:
+
+        Sample signals when this trigger is activated.
+
+        This method returns a new :class:`TriggerCombination` object. When awaited, this object returns, in addition to the values that would be otherwise returned by :py:`await trigger`, the values of :py:`exprs` at exactly the moment at which the shortest delay expired or a signal has changed state.
+
+        Combining :meth:`~SimulatorContext.delay`, :meth:`~SimulatorContext.changed`, or :meth:`~SimulatorContext.edge` with :meth:`sample` can be used to capture the state of a circuit at the time of the event: ::
+
+            async for arst_edge, delay_expired, in_a_value, in_b_value in \
+                    ctx.posedge(arst).delay(1e-3).sample(in_a, in_b):
+                ...
+
+        Chaining calls to :meth:`sample` has the same effect as a single call with the combined list of arguments: ::
+
+            async for arst_edge, delay_expired, in_a_value, in_b_value in \
+                    ctx.posedge(arst).delay(1e-3).sample(in_a).sample(in_b):
+                ...
+
+        .. note::
+
+            Chaining calls to this method is useful for composing behavior. See the documentation for :meth:`TickTrigger.sample` for a detailed example.
+
+    .. method:: delay(interval)
+        :async:
+
+        Add a delay trigger to the set of triggers.
+
+        The behavior of the added trigger described in :meth:`SimulatorContext.delay`.
+
+    .. method:: changed(*signals)
+        :async:
+
+        Add a signal change trigger to the set of triggers.
+
+        The behavior of the added trigger described in :meth:`SimulatorContext.changed`.
+
+    .. method:: edge(signal, polarity)
+        :async:
+
+        Add a low-to-high or high-to-low transition trigger to the set of triggers.
+
+        The behavior of the added trigger described in :meth:`SimulatorContext.edge`.
+
+    .. method:: posedge(*signals)
+        :async:
+
+        Add a low-to-high transition to the set of triggers.
+
+        The behavior of the added trigger described in :meth:`SimulatorContext.posedge`.
+
+    .. method:: negedge(*signals)
+        :async:
+
+        Add a high-to-low transition to the set of triggers.
+
+        The behavior of the added trigger described in :meth:`SimulatorContext.negedge`.

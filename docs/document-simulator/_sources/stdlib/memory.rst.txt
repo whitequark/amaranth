@@ -182,9 +182,17 @@ Memory description
 ==================
 
 .. autoexception:: amaranth.hdl.AlreadyElaborated
-   :noindex:
+    :noindex:
+
+    ..
+        :canonical: amaranth.hdl.AlreadyElaborated
+        (not available until `amaranth.hdl` documents it)
 
 .. autoclass:: amaranth.hdl.MemoryData
+
+    ..
+        :canonical: amaranth.hdl.MemoryData
+        (not available until `amaranth.hdl` documents it)
 
 
 Memory component
