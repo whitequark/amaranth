@@ -7,8 +7,6 @@ The :mod:`amaranth.sim` module, also known as the simulator, makes it possible t
 
 .. todo::
 
-    - Document ``TickTrigger``
-    - Document ``TriggerCombination``
     - Update memory documentation with explanation of how to simulate memories
     - Check what happens when a testbench encounters a glitch and add a test
 
@@ -287,6 +285,8 @@ Reference
 .. autoexception:: BrokenTrigger
 
 .. autoexception:: DomainReset
+
+.. _sim-tick-trigger:
 
 .. autoclass:: TickTrigger
 
