@@ -409,8 +409,9 @@ using the <a class="reference internal" href="#amaranth.sim.SimulatorContext.cri
 <p>At each point in time, all of the non-waiting testbenches are executed in the order in
 which they were added. If two testbenches share state, or must manipulate the design in
 a coordinated way, they may rely on this execution order for correctness.</p>
-<dl class="simple">
-<dt><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.12)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></dt><dd><p>If the simulation has been advanced since its creation or last reset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.12)"><strong>RuntimeError</strong></a> – If the simulation has been advanced since its creation or last reset.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -449,8 +450,9 @@ if it is not intended to be a part of a circuit), with access to it synchronized
 <code class="code highlight py python docutils literal highlight-python"><span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="o">...</span><span class="p">)</span></code>. Such state is visible in a waveform viewer,
 simplifying debugging.</p>
 </div>
-<dl class="simple">
-<dt><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.12)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></dt><dd><p>If the simulation has been advanced since its creation or last reset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.12)"><strong>RuntimeError</strong></a> – If the simulation has been advanced since its creation or last reset.</p>
 </dd>
 </dl>
 </dd></dl>
