@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulator &mdash; Amaranth language &amp; toolchain 0.5.0.dev317 documentation</title>
+  <title>Simulator &mdash; Amaranth language &amp; toolchain 0.5.0.dev315 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/platformpicker.css" />
@@ -17,7 +17,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=1cab119d"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=8f2b1fee"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
         <script src="_static/platformpicker.js"></script>
@@ -41,7 +41,7 @@
               <img src="_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.5.0.dev317
+                0.5.0.dev315
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -120,12 +120,6 @@
   <section id="module-amaranth.sim">
 <span id="simulator"></span><h1>Simulator<a class="headerlink" href="#module-amaranth.sim" title="Permalink to this heading"></a></h1>
 <p>The <a class="reference internal" href="#module-amaranth.sim" title="amaranth.sim"><code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.sim</span></code></a> module, also known as the simulator, makes it possible to evaluate a design’s functionality in a virtual environment before it is implemented in hardware.</p>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<ul class="simple">
-<li><p>Check what happens when a testbench encounters a glitch and add a test</p></li>
-</ul>
-</div>
 <section id="simulating-circuits">
 <h2>Simulating circuits<a class="headerlink" href="#simulating-circuits" title="Permalink to this heading"></a></h2>
 <p>The following examples simulate one of the two designs below: synchronous counter running in the <code class="docutils literal notranslate"><span class="pre">sync</span></code> clock domain, and combinational adder. They assume familiarity with the <a class="reference internal" href="guide.html"><span class="doc">language guide</span></a>.</p>
@@ -379,8 +373,8 @@ the clock domain with that name is retrieved from the <code class="code highligh
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NameError" title="(in Python v3.12)"><strong>NameError</strong></a> – If <code class="code highlight py python docutils literal highlight-python"><span class="n">domain</span></code> is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> and the <code class="code highlight py python docutils literal highlight-python"><span class="n">toplevel</span></code> elaboratable does not have
-    a clock domain with that name.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NameError" title="(in Python v3.12)"><strong>NameError</strong></a> – If <code class="code highlight py python docutils literal highlight-python"><span class="n">domain</span></code> is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, the <code class="code highlight py python docutils literal highlight-python"><span class="n">toplevel</span></code> elaboratable does not have
+    a clock domain with that name, and <code class="code highlight py python docutils literal highlight-python"><span class="n">if_exists</span></code> is <code class="code highlight py python docutils literal highlight-python"><span class="kc">False</span></code>.</p></li>
 <li><p><strong>DriverConflict</strong> – If <code class="code highlight py python docutils literal highlight-python"><span class="n">domain</span></code> already has a clock driving it.</p></li>
 </ul>
 </dd>
@@ -850,13 +844,13 @@ sampled during previous repeats are discarded.</p>
 <p>Awaiting a <code class="code highlight py python docutils literal highlight-python"><span class="n">trigger</span></code> returns values indicating the state of the clock and reset signals,
 while awaiting <code class="code highlight py python docutils literal highlight-python"><span class="n">trigger</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="o">...</span><span class="p">)</span></code> does not:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="n">clk_edge</span><span class="p">,</span> <span class="n">rst_active</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">,</span> <span class="n">is_done_value</span> <span class="o">=</span> <span class="k">await</span> <span class="n">trigger</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">is_done</span><span class="p">)</span> <span class="c1"># never raises</span>
-    <span class="k">if</span> <span class="n">is_done_value</span><span class="p">:</span>
+    <span class="n">clk_edge</span><span class="p">,</span> <span class="n">rst_active</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">,</span> <span class="n">flag_value</span> <span class="o">=</span> <span class="k">await</span> <span class="n">trigger</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span> <span class="c1"># never raises</span>
+    <span class="k">if</span> <span class="n">flag_value</span><span class="p">:</span>
         <span class="k">break</span>
 <span class="c1"># `values` may be used after the loop finishes</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">values</span> <span class="o">=</span> <span class="k">await</span> <span class="n">trigger</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">is_done</span><span class="p">)</span> <span class="c1"># may raise `DomainReset`</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">values</span> <span class="o">=</span> <span class="k">await</span> <span class="n">trigger</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span> <span class="c1"># may raise `DomainReset`</span>
 </pre></div>
 </div>
 <dl class="field-list simple">

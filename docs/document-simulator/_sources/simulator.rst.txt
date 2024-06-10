@@ -5,10 +5,6 @@ Simulator
 
 The :mod:`amaranth.sim` module, also known as the simulator, makes it possible to evaluate a design's functionality in a virtual environment before it is implemented in hardware.
 
-.. todo::
-
-    - Check what happens when a testbench encounters a glitch and add a test
-
 
 Simulating circuits
 -------------------
