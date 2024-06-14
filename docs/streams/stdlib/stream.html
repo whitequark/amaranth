@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data streams &mdash; Amaranth language &amp; toolchain 0.5.0.dev325 documentation</title>
+  <title>Data streams &mdash; Amaranth language &amp; toolchain 0.5.0.dev321 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/platformpicker.css" />
@@ -17,7 +17,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=227b6f22"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=de0a7585"></script>
         <script src="../_static/doctools.js?v=888ff710"></script>
         <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
         <script src="../_static/platformpicker.js"></script>
@@ -41,7 +41,7 @@
               <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.5.0.dev325
+                0.5.0.dev321
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -120,17 +120,27 @@
 <p>The <a class="reference internal" href="#module-amaranth.lib.stream" title="amaranth.lib.stream"><code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.lib.stream</span></code></a> module provides a mechanism for unidirectional exchange of arbitrary data between modules.</p>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Write this section.</p>
-</div>
+<p>One of the most common flow control mechanisms is <em>ready/valid handshaking</em>, where a <em>producer</em> pushes data to a <em>consumer</em> whenever it becomes available, and the consumer signals to the producer whether it can process more data. In Amaranth, this mechanism is implemented using an <a class="reference internal" href="wiring.html#wiring"><span class="std std-ref">interface</span></a> with three members:</p>
+<ul class="simple">
+<li><p><code class="code highlight py python docutils literal highlight-python"><span class="n">payload</span></code> (driven by the producer), containing the data;</p></li>
+<li><p><code class="code highlight py python docutils literal highlight-python"><span class="n">valid</span></code> (driven by the producer), indicating that data is currently available in <code class="code highlight py python docutils literal highlight-python"><span class="n">payload</span></code>;</p></li>
+<li><p><code class="code highlight py python docutils literal highlight-python"><span class="n">ready</span></code> (driven by the consumer), indicating that the available data (if any) has been processed.</p></li>
+</ul>
+<p>This module provides such an interface, <a class="reference internal" href="#amaranth.lib.stream.Interface" title="amaranth.lib.stream.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">stream.Interface</span></code></a>, and defines the exact rules governing the flow of data through it.</p>
 </section>
 <section id="data-transfer-rules">
 <span id="stream-rules"></span><h2>Data transfer rules<a class="headerlink" href="#data-transfer-rules" title="Permalink to this heading"></a></h2>
-<div class="admonition-todo admonition" id="id2">
-<p class="admonition-title">Todo</p>
-<p>Write this section.</p>
-</div>
+<p>The producer and the consumer must be synchronized: they must belong to the same <a class="reference internal" href="../guide.html#lang-clockdomains"><span class="std std-ref">clock domain</span></a>, and any <a class="reference internal" href="../guide.html#lang-controlinserter"><span class="std std-ref">control flow modifiers</span></a> must be applied to both, in the same order.</p>
+<p>Data flows through a stream according to the following four rules:</p>
+<ol class="arabic simple">
+<li><p>On each cycle where both <code class="code highlight py python docutils literal highlight-python"><span class="n">valid</span></code> and <code class="code highlight py python docutils literal highlight-python"><span class="n">ready</span></code> are asserted, a transfer is performed: the contents of <code class="docutils literal notranslate"><span class="pre">payload</span></code> are conveyed from the producer to the consumer.</p></li>
+<li><p>Once the producer asserts <code class="code highlight py python docutils literal highlight-python"><span class="n">valid</span></code>, it must not deassert <code class="code highlight py python docutils literal highlight-python"><span class="n">valid</span></code> or change the contents of <code class="docutils literal notranslate"><span class="pre">payload</span></code> until a transfer is performed.</p></li>
+<li><p>The producer must not wait for <code class="code highlight py python docutils literal highlight-python"><span class="n">ready</span></code> to be asserted before asserting <code class="code highlight py python docutils literal highlight-python"><span class="n">valid</span></code>: any form of feedback from <code class="code highlight py python docutils literal highlight-python"><span class="n">ready</span></code> that causes <code class="code highlight py python docutils literal highlight-python"><span class="n">valid</span></code> to become asserted is prohibited.</p></li>
+<li><p>The consumer may assert or deassert <code class="code highlight py python docutils literal highlight-python"><span class="n">ready</span></code> at any time, including via combinational feedback from <code class="code highlight py python docutils literal highlight-python"><span class="n">valid</span></code>.</p></li>
+</ol>
+<p>Some producers and consumers may be designed without support for backpressure. Such producers must tie <code class="code highlight py python docutils literal highlight-python"><span class="n">ready</span></code> to <code class="code highlight py python docutils literal highlight-python"><span class="n">Const</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></code> by specifying <code class="code highlight py python docutils literal highlight-python"><span class="n">always_ready</span><span class="o">=</span><span class="kc">True</span></code> when constructing a stream, and consumers may (but are not required to) do the same. Similarly, some producers and consumers may be designed such that a payload is provided or must be provided on each cycle. Such consumers must tie <code class="code highlight py python docutils literal highlight-python"><span class="n">valid</span></code> to <code class="code highlight py python docutils literal highlight-python"><span class="n">Const</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></code> by specifying <code class="code highlight py python docutils literal highlight-python"><span class="n">always_valid</span><span class="o">=</span><span class="kc">True</span></code> when constructing a stream, and producers may (but are not required to) do the same.</p>
+<p>If these control signals are tied to <code class="code highlight py python docutils literal highlight-python"><span class="n">Const</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></code>, then the <a class="reference internal" href="wiring.html#amaranth.lib.wiring.connect" title="amaranth.lib.wiring.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">wiring.connect</span></code></a> function ensures that only compatible streams are connected together. For example, if the producer does not support backpressure (<code class="code highlight py python docutils literal highlight-python"><span class="n">ready</span></code> tied to <code class="code highlight py python docutils literal highlight-python"><span class="n">Const</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></code>), it can only be connected to consumers that do not require backpressure. However, consumers that do not require backpressure can be connected to producers with or without support for backpressure. The <code class="code highlight py python docutils literal highlight-python"><span class="n">valid</span></code> control signal is treated similarly.</p>
+<p>These rules ensure that producers and consumers that are developed independently can be safely used together, without unduly restricting the application-specific conditions that determine assertion of <code class="code highlight py python docutils literal highlight-python"><span class="n">valid</span></code> and <code class="code highlight py python docutils literal highlight-python"><span class="n">ready</span></code>.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
@@ -158,11 +168,11 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>“Minimal streams” as defined in <a class="reference external" href="https://amaranth-lang.org/rfcs/0061-minimal-streams.html">RFC 61</a> do not provide built-in helper functions for testing pending further work on the clock domain system. For the time being, you can copy the helper functions above to test your designs that use streams.</p>
+<p>“Minimal streams” as defined in <a class="reference external" href="https://amaranth-lang.org/rfcs/0061-minimal-streams.html">RFC 61</a> do not provide built-in helper functions for testing pending further work on the clock domain system. They will be provided in a later release. For the time being, you can copy the helper functions above to test your designs that use streams.</p>
 </div>
 <section id="serial-receiver">
 <h3>Serial receiver<a class="headerlink" href="#serial-receiver" title="Permalink to this heading"></a></h3>
-<p>The serial receiver captures the serial output of an external device and converts it to a stream of words. While the <code class="docutils literal notranslate"><span class="pre">ssel</span></code> signal is high, each low-to-high transition on the <code class="docutils literal notranslate"><span class="pre">sclk</span></code> input captures the value of the <code class="docutils literal notranslate"><span class="pre">sdat</span></code> signal; eight consecutive captured bits are assembled into a word (<abbr title="most significant bit">MSB</abbr> first and pushed into the pipeline for processing. If the <code class="docutils literal notranslate"><span class="pre">ssel</span></code> signal is low, no data transmission occurs and the transmitter and the receiver are instead synchronized with each other.</p>
+<p>The serial receiver captures the serial output of an external device and converts it to a stream of words. While the <code class="docutils literal notranslate"><span class="pre">ssel</span></code> signal is high, each low-to-high transition on the <code class="docutils literal notranslate"><span class="pre">sclk</span></code> input captures the value of the <code class="docutils literal notranslate"><span class="pre">sdat</span></code> signal; eight consecutive captured bits are assembled into a word (<abbr title="most significant bit">MSB</abbr> first) and pushed into the pipeline for processing. If the <code class="docutils literal notranslate"><span class="pre">ssel</span></code> signal is low, no data transmission occurs and the transmitter and the receiver are instead synchronized with each other.</p>
 <p>In this example, the external device does not provide a way to pause data transmission. If the pipeline isn’t ready to accept the next payload, it is necessary to discard data at some point; here, it is done in the serial receiver.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SerialReceiver</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
     <span class="n">ssel</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -199,9 +209,9 @@
             <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">valid</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">m</span>
-
-
-<span class="k">def</span> <span class="nf">test_serial_receiver</span><span class="p">():</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_serial_receiver</span><span class="p">():</span>
     <span class="n">dut</span> <span class="o">=</span> <span class="n">SerialReceiver</span><span class="p">()</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">testbench_input</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
@@ -267,9 +277,9 @@
                 <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="n">data</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">payload</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">m</span>
-
-
-<span class="k">def</span> <span class="nf">test_serial_transmitter</span><span class="p">():</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_serial_transmitter</span><span class="p">():</span>
     <span class="n">dut</span> <span class="o">=</span> <span class="n">SerialTransmitter</span><span class="p">()</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">testbench_input</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
@@ -312,9 +322,9 @@
             <span class="n">m</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">sync</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">o_stream</span><span class="o">.</span><span class="n">valid</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">m</span>
-
-
-<span class="k">def</span> <span class="nf">test_value_negator</span><span class="p">():</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_value_negator</span><span class="p">():</span>
     <span class="n">dut</span> <span class="o">=</span> <span class="n">ValueNegator</span><span class="p">()</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">testbench_input</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
@@ -338,7 +348,6 @@
 <h3>Complete pipeline<a class="headerlink" href="#complete-pipeline" title="Permalink to this heading"></a></h3>
 <p>The complete pipeline consists of a serial receiver, a value negator, a FIFO queue, and a serial transmitter connected in series. Without queueing, any momentary mismatch between the rate at which the serial data is produced and consumed would result in data loss. A FIFO queue from the <a class="reference internal" href="fifo.html#module-amaranth.lib.fifo" title="amaranth.lib.fifo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lib.fifo</span></code></a> standard library module is used to avoid this problem.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">amaranth.lib.fifo</span> <span class="kn">import</span> <span class="n">SyncFIFOBuffered</span>
-
 
 <span class="k">class</span> <span class="nc">ExamplePipeline</span><span class="p">(</span><span class="n">wiring</span><span class="o">.</span><span class="n">Component</span><span class="p">):</span>
     <span class="n">i_ssel</span><span class="p">:</span> <span class="n">In</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -380,9 +389,9 @@
         <span class="p">]</span>
 
         <span class="k">return</span> <span class="n">m</span>
-
-
-<span class="k">def</span> <span class="nf">test_example_pipeline</span><span class="p">():</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_example_pipeline</span><span class="p">():</span>
     <span class="n">dut</span> <span class="o">=</span> <span class="n">ExamplePipeline</span><span class="p">()</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">testbench_input</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
