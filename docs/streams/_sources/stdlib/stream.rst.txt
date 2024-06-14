@@ -121,6 +121,7 @@ In this example, the external device does not provide a way to pause data transm
                 m.d.sync += done.eq(0)
             with m.Elif(self.stream.ready):
                 m.d.sync += self.stream.valid.eq(0)
+            # Payload is discarded if `done & self.stream.valid & ~self.stream.ready`.
 
             return m
 
@@ -172,7 +173,7 @@ The serial protocol recognized by the receiver is illustrated with the following
                 "serial",
                 { name: "ssel",    wave: "01................0.." },
                 { name: "sclk",    wave: "0..101010101010101..." },
-                { name: "sdat",    wave: "0.1.0.1.0...1........" },
+                { name: "sdat",    wave: "0.=.=.=.=.=.=.=.=....", data: ["1", "0", "1", "0", "0", "0", "0", "1"] },
             ],
             {},
             [
