@@ -120,11 +120,11 @@
 <p>The <a class="reference internal" href="#module-amaranth.lib.stream" title="amaranth.lib.stream"><code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.lib.stream</span></code></a> module provides a mechanism for unidirectional exchange of arbitrary data between modules.</p>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
-<p>One of the most common flow control mechanisms is <em>ready/valid handshaking</em>, where a <em>producer</em> pushes data to a <em>consumer</em> whenever it becomes available, and the consumer signals to the producer whether it can process more data. In Amaranth, this mechanism is implemented using an <a class="reference internal" href="wiring.html#wiring"><span class="std std-ref">interface</span></a> with three members:</p>
+<p>One of the most common flow control mechanisms is <em>ready/valid handshaking</em>, where a <em>producer</em> pushes data to a <em>consumer</em> whenever it becomes available, and the consumer signals to the producer whether it can accept more data. In Amaranth, this mechanism is implemented using an <a class="reference internal" href="wiring.html#wiring"><span class="std std-ref">interface</span></a> with three members:</p>
 <ul class="simple">
 <li><p><code class="code highlight py python docutils literal highlight-python"><span class="n">payload</span></code> (driven by the producer), containing the data;</p></li>
 <li><p><code class="code highlight py python docutils literal highlight-python"><span class="n">valid</span></code> (driven by the producer), indicating that data is currently available in <code class="code highlight py python docutils literal highlight-python"><span class="n">payload</span></code>;</p></li>
-<li><p><code class="code highlight py python docutils literal highlight-python"><span class="n">ready</span></code> (driven by the consumer), indicating that the available data (if any) has been processed.</p></li>
+<li><p><code class="code highlight py python docutils literal highlight-python"><span class="n">ready</span></code> (driven by the consumer), indicating that data is accepted if available.</p></li>
 </ul>
 <p>This module provides such an interface, <a class="reference internal" href="#amaranth.lib.stream.Interface" title="amaranth.lib.stream.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">stream.Interface</span></code></a>, and defines the exact rules governing the flow of data through it.</p>
 </section>

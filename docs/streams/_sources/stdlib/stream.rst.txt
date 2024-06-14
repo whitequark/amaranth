@@ -9,11 +9,11 @@ The :mod:`amaranth.lib.stream` module provides a mechanism for unidirectional ex
 Introduction
 ============
 
-One of the most common flow control mechanisms is *ready/valid handshaking*, where a *producer* pushes data to a *consumer* whenever it becomes available, and the consumer signals to the producer whether it can process more data. In Amaranth, this mechanism is implemented using an :ref:`interface <wiring>` with three members:
+One of the most common flow control mechanisms is *ready/valid handshaking*, where a *producer* pushes data to a *consumer* whenever it becomes available, and the consumer signals to the producer whether it can accept more data. In Amaranth, this mechanism is implemented using an :ref:`interface <wiring>` with three members:
 
 - :py:`payload` (driven by the producer), containing the data;
 - :py:`valid` (driven by the producer), indicating that data is currently available in :py:`payload`;
-- :py:`ready` (driven by the consumer), indicating that the available data (if any) has been processed.
+- :py:`ready` (driven by the consumer), indicating that data is accepted if available.
 
 This module provides such an interface, :class:`stream.Interface <Interface>`, and defines the exact rules governing the flow of data through it.
 
