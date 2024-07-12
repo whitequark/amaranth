@@ -12,7 +12,10 @@ Language & toolchain
    install
    start
    tutorial
-   lang
+   guide
+   reference
    stdlib
+   simulator
    platform
    changes
+   contrib

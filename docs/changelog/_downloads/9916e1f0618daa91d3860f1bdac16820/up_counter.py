@@ -1,7 +1,9 @@
 from amaranth import *
+from amaranth.lib import wiring
+from amaranth.lib.wiring import In, Out
 
 
-class UpCounter(Elaboratable):
+class UpCounter(wiring.Component):
     """
     A 16-bit up counter with a fixed limit.
 
@@ -18,15 +20,15 @@ class UpCounter(Elaboratable):
     ovf : Signal, out
         ``ovf`` is asserted when the counter reaches its limit.
     """
+
+    en: In(1)
+    ovf: Out(1)
+
     def __init__(self, limit):
         self.limit = limit
-
-        # Ports
-        self.en  = Signal()
-        self.ovf = Signal()
-
-        # State
         self.count = Signal(16)
+
+        super().__init__()
 
     def elaborate(self, platform):
         m = Module()
@@ -45,29 +47,29 @@ from amaranth.sim import Simulator
 
 
 dut = UpCounter(25)
-def bench():
+async def bench(ctx):
     # Disabled counter should not overflow.
-    yield dut.en.eq(0)
+    ctx.set(dut.en, 0)
     for _ in range(30):
-        yield
-        assert not (yield dut.ovf)
+        await ctx.tick()
+        assert not ctx.get(dut.ovf)
 
     # Once enabled, the counter should overflow in 25 cycles.
-    yield dut.en.eq(1)
-    for _ in range(25):
-        yield
-        assert not (yield dut.ovf)
-    yield
-    assert (yield dut.ovf)
+    ctx.set(dut.en, 1)
+    for _ in range(24):
+        await ctx.tick()
+        assert not ctx.get(dut.ovf)
+    await ctx.tick()
+    assert ctx.get(dut.ovf)
 
     # The overflow should clear in one cycle.
-    yield
-    assert not (yield dut.ovf)
+    await ctx.tick()
+    assert not ctx.get(dut.ovf)
 
 
 sim = Simulator(dut)
 sim.add_clock(1e-6) # 1 MHz
-sim.add_sync_process(bench)
+sim.add_testbench(bench)
 with sim.write_vcd("up_counter.vcd"):
     sim.run()
 # --- CONVERT ---
@@ -76,4 +78,4 @@ from amaranth.back import verilog
 
 top = UpCounter(25)
 with open("up_counter.v", "w") as f:
-    f.write(verilog.convert(top, ports=[top.en, top.ovf]))
+    f.write(verilog.convert(top))
