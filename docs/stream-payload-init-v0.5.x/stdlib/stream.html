@@ -451,7 +451,8 @@ will be lifted in a later release.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>payload_shape</strong> (<a class="reference internal" href="../reference.html#amaranth.hdl.ShapeLike" title="amaranth.hdl.ShapeLike"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShapeLike</span></code></a>) – Shape of the payload.</p></li>
+<li><p><strong>payload_shape</strong> (<a class="reference internal" href="../reference.html#amaranth.hdl.ShapeLike" title="amaranth.hdl.ShapeLike"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShapeLike</span></code></a>) – Shape of the payload member.</p></li>
+<li><p><strong>payload_init</strong> (<a class="reference internal" href="../guide.html#lang-constcasting"><span class="std std-ref">constant-castable</span></a> object) – Initial value of the payload member.</p></li>
 <li><p><strong>always_valid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether the stream has a payload available each cycle.</p></li>
 <li><p><strong>always_ready</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether the stream has its payload accepted whenever it is available (i.e. whether it lacks
 support for backpressure).</p></li>
