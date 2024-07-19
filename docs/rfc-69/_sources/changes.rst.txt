@@ -44,6 +44,7 @@ Standard library changes
 .. currentmodule:: amaranth.lib
 
 * Added: :py:`payload_init=` argument in :class:`amaranth.lib.stream.Signature`.
+* Changed: (deprecated in 0.5) providing :meth:`io.PortLike.__add__` is now mandatory. (`RFC 69`_)
 * Removed: (deprecated in 0.5) :mod:`amaranth.lib.coding`. (`RFC 63`_)
 
 
@@ -68,7 +69,6 @@ Standard library changes
 * Added: :py:`len()` works on views of :class:`amaranth.lib.data.ArrayLayout`.
 * Added: views of :class:`amaranth.lib.data.ArrayLayout` are iterable.
 * Added: :class:`io.SimulationPort`. (`RFC 69`_)
-* Changed: providing :meth:`io.PortLike.__add__` is now mandatory. (`RFC 69`_)
 
 
 Version 0.5

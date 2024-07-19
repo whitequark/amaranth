@@ -171,6 +171,7 @@
 <h3>Standard library changes<a class="headerlink" href="#standard-library-changes" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Added: <code class="code highlight py python docutils literal highlight-python"><span class="n">payload_init</span><span class="o">=</span></code> argument in <a class="reference internal" href="stdlib/stream.html#amaranth.lib.stream.Signature" title="amaranth.lib.stream.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">amaranth.lib.stream.Signature</span></code></a>.</p></li>
+<li><p>Changed: (deprecated in 0.5) providing <a class="reference internal" href="stdlib/io.html#amaranth.lib.io.PortLike.__add__" title="amaranth.lib.io.PortLike.__add__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">io.PortLike.__add__()</span></code></a> is now mandatory. (<a class="reference external" href="https://amaranth-lang.org/rfcs/0069-simulation-port.html">RFC 69</a>)</p></li>
 <li><p>Removed: (deprecated in 0.5) <code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.lib.coding</span></code>. (<a class="reference external" href="https://amaranth-lang.org/rfcs/0063-remove-lib-coding.html">RFC 63</a>)</p></li>
 </ul>
 </section>
@@ -190,7 +191,6 @@
 <li><p>Added: <code class="code highlight py python docutils literal highlight-python"><span class="nb">len</span><span class="p">()</span></code> works on views of <a class="reference internal" href="stdlib/data.html#amaranth.lib.data.ArrayLayout" title="amaranth.lib.data.ArrayLayout"><code class="xref py py-class docutils literal notranslate"><span class="pre">amaranth.lib.data.ArrayLayout</span></code></a>.</p></li>
 <li><p>Added: views of <a class="reference internal" href="stdlib/data.html#amaranth.lib.data.ArrayLayout" title="amaranth.lib.data.ArrayLayout"><code class="xref py py-class docutils literal notranslate"><span class="pre">amaranth.lib.data.ArrayLayout</span></code></a> are iterable.</p></li>
 <li><p>Added: <a class="reference internal" href="stdlib/io.html#amaranth.lib.io.SimulationPort" title="amaranth.lib.io.SimulationPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">io.SimulationPort</span></code></a>. (<a class="reference external" href="https://amaranth-lang.org/rfcs/0069-simulation-port.html">RFC 69</a>)</p></li>
-<li><p>Changed: providing <a class="reference internal" href="stdlib/io.html#amaranth.lib.io.PortLike.__add__" title="amaranth.lib.io.PortLike.__add__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">io.PortLike.__add__()</span></code></a> is now mandatory. (<a class="reference external" href="https://amaranth-lang.org/rfcs/0069-simulation-port.html">RFC 69</a>)</p></li>
 </ul>
 </section>
 </section>
