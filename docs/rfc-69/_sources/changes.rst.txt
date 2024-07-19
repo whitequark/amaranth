@@ -23,14 +23,6 @@ Version 0.6 (unreleased)
 ========================
 
 
-Implemented RFCs
-----------------
-
-.. _RFC 69: https://amaranth-lang.org/rfcs/0069-simulation-port.html
-
-* `RFC 69`_: Add a ``lib.io.PortLike`` object usable in simulation
-
-
 Language changes
 ----------------
 
@@ -52,13 +44,19 @@ Standard library changes
 .. currentmodule:: amaranth.lib
 
 * Added: :py:`payload_init=` argument in :class:`amaranth.lib.stream.Signature`.
-* Added: :class:`io.SimulationPort`. (`RFC 69`_)
-* Changed: providing :meth:`io.PortLike.__add__` is now mandatory. (`RFC 69`_)
 * Removed: (deprecated in 0.5) :mod:`amaranth.lib.coding`. (`RFC 63`_)
 
 
 Version 0.5.1
 =============
+
+
+Implemented RFCs
+----------------
+
+.. _RFC 69: https://amaranth-lang.org/rfcs/0069-simulation-port.html
+
+* `RFC 69`_: Add a ``lib.io.PortLike`` object usable in simulation
 
 
 Standard library changes
@@ -69,6 +67,8 @@ Standard library changes
 * Added: views of :class:`amaranth.lib.data.ArrayLayout` can be indexed with negative integers or slices.
 * Added: :py:`len()` works on views of :class:`amaranth.lib.data.ArrayLayout`.
 * Added: views of :class:`amaranth.lib.data.ArrayLayout` are iterable.
+* Added: :class:`io.SimulationPort`. (`RFC 69`_)
+* Changed: providing :meth:`io.PortLike.__add__` is now mandatory. (`RFC 69`_)
 
 
 Version 0.5

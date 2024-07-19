@@ -65,12 +65,12 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Changelog</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#documentation-for-past-releases">Documentation for past releases</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#version-0-6-unreleased">Version 0.6 (unreleased)</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#implemented-rfcs">Implemented RFCs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#language-changes">Language changes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#standard-library-changes">Standard library changes</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#version-0-5-1">Version 0.5.1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#implemented-rfcs">Implemented RFCs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id1">Standard library changes</a></li>
 </ul>
 </li>
@@ -154,12 +154,6 @@
 </section>
 <section id="version-0-6-unreleased">
 <h2>Version 0.6 (unreleased)<a class="headerlink" href="#version-0-6-unreleased" title="Permalink to this heading"></a></h2>
-<section id="implemented-rfcs">
-<h3>Implemented RFCs<a class="headerlink" href="#implemented-rfcs" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p><a class="reference external" href="https://amaranth-lang.org/rfcs/0069-simulation-port.html">RFC 69</a>: Add a <code class="docutils literal notranslate"><span class="pre">lib.io.PortLike</span></code> object usable in simulation</p></li>
-</ul>
-</section>
 <section id="language-changes">
 <h3>Language changes<a class="headerlink" href="#language-changes" title="Permalink to this heading"></a></h3>
 <ul class="simple">
@@ -177,20 +171,26 @@
 <h3>Standard library changes<a class="headerlink" href="#standard-library-changes" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Added: <code class="code highlight py python docutils literal highlight-python"><span class="n">payload_init</span><span class="o">=</span></code> argument in <a class="reference internal" href="stdlib/stream.html#amaranth.lib.stream.Signature" title="amaranth.lib.stream.Signature"><code class="xref py py-class docutils literal notranslate"><span class="pre">amaranth.lib.stream.Signature</span></code></a>.</p></li>
-<li><p>Added: <a class="reference internal" href="stdlib/io.html#amaranth.lib.io.SimulationPort" title="amaranth.lib.io.SimulationPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">io.SimulationPort</span></code></a>. (<a class="reference external" href="https://amaranth-lang.org/rfcs/0069-simulation-port.html">RFC 69</a>)</p></li>
-<li><p>Changed: providing <a class="reference internal" href="stdlib/io.html#amaranth.lib.io.PortLike.__add__" title="amaranth.lib.io.PortLike.__add__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">io.PortLike.__add__()</span></code></a> is now mandatory. (<a class="reference external" href="https://amaranth-lang.org/rfcs/0069-simulation-port.html">RFC 69</a>)</p></li>
 <li><p>Removed: (deprecated in 0.5) <code class="xref py py-mod docutils literal notranslate"><span class="pre">amaranth.lib.coding</span></code>. (<a class="reference external" href="https://amaranth-lang.org/rfcs/0063-remove-lib-coding.html">RFC 63</a>)</p></li>
 </ul>
 </section>
 </section>
 <section id="version-0-5-1">
 <h2>Version 0.5.1<a class="headerlink" href="#version-0-5-1" title="Permalink to this heading"></a></h2>
+<section id="implemented-rfcs">
+<h3>Implemented RFCs<a class="headerlink" href="#implemented-rfcs" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://amaranth-lang.org/rfcs/0069-simulation-port.html">RFC 69</a>: Add a <code class="docutils literal notranslate"><span class="pre">lib.io.PortLike</span></code> object usable in simulation</p></li>
+</ul>
+</section>
 <section id="id1">
 <h3>Standard library changes<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Added: views of <a class="reference internal" href="stdlib/data.html#amaranth.lib.data.ArrayLayout" title="amaranth.lib.data.ArrayLayout"><code class="xref py py-class docutils literal notranslate"><span class="pre">amaranth.lib.data.ArrayLayout</span></code></a> can be indexed with negative integers or slices.</p></li>
 <li><p>Added: <code class="code highlight py python docutils literal highlight-python"><span class="nb">len</span><span class="p">()</span></code> works on views of <a class="reference internal" href="stdlib/data.html#amaranth.lib.data.ArrayLayout" title="amaranth.lib.data.ArrayLayout"><code class="xref py py-class docutils literal notranslate"><span class="pre">amaranth.lib.data.ArrayLayout</span></code></a>.</p></li>
 <li><p>Added: views of <a class="reference internal" href="stdlib/data.html#amaranth.lib.data.ArrayLayout" title="amaranth.lib.data.ArrayLayout"><code class="xref py py-class docutils literal notranslate"><span class="pre">amaranth.lib.data.ArrayLayout</span></code></a> are iterable.</p></li>
+<li><p>Added: <a class="reference internal" href="stdlib/io.html#amaranth.lib.io.SimulationPort" title="amaranth.lib.io.SimulationPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">io.SimulationPort</span></code></a>. (<a class="reference external" href="https://amaranth-lang.org/rfcs/0069-simulation-port.html">RFC 69</a>)</p></li>
+<li><p>Changed: providing <a class="reference internal" href="stdlib/io.html#amaranth.lib.io.PortLike.__add__" title="amaranth.lib.io.PortLike.__add__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">io.PortLike.__add__()</span></code></a> is now mandatory. (<a class="reference external" href="https://amaranth-lang.org/rfcs/0069-simulation-port.html">RFC 69</a>)</p></li>
 </ul>
 </section>
 </section>
