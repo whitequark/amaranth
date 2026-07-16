@@ -33,7 +33,7 @@ Version 0.5.9
 Platform integration changes
 ----------------------------
 
-* Fixed: ECP5 DDR buffer output enable latency to match output latency
+* Fixed: ECP5 DDR buffer output enable latency to match output latency.
 
 
 Version 0.5.8
